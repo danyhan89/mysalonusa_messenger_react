@@ -6,13 +6,13 @@
   "main": "index.js",
   "scripts": {
     "precommit": "lint-staged",
-    "dev": "webpack-dev-server --colors --progress --config ./build/dev.config.js",
-    "build": "rimraf dist && webpack -p --colors --progress --config ./build/build.config.js"
+    "dev":
+      "webpack-dev-server --colors --progress --config ./build/dev.config.js",
+    "build":
+      "rimraf dist && NODE_ENV=production webpack -p --colors --progress --config ./build/build.config.js"
   },
   "lint-staged": {
-    "src/**/*.{js,css,scss,json}": [
-      "prettier --write"
-    ]
+    "src/**/*.{js,css,scss,json}": ["prettier --write"]
   },
   "author": "My salon",
   "license": "ISC",
@@ -28,6 +28,7 @@
     "babel-preset-react": "^6.24.1",
     "css-loader": "^0.28.7",
     "extract-text-webpack-plugin": "^3.0.1",
+    "html-webpack-plugin": "^2.30.1",
     "husky": "^0.14.3",
     "lint-staged": "^4.2.3",
     "node-sass": "^4.5.3",
