@@ -1,3 +1,4 @@
+const path = require("path");
 const rules = require("./rules");
 const plugins = require("./plugins");
 
@@ -8,9 +9,8 @@ module.exports = {
     rules
   },
   plugins,
-  devServer: {
-    publicPath: "/assets",
-    port: 8080,
-    historyApiFallback: true
+  output: {
+    path: path.resolve(__dirname, "../dist"),
+    filename: "bundle.js"
   }
 };

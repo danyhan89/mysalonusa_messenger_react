@@ -1,6 +1,12 @@
-const Cmp = () => {
+import React from "react";
 
+import "bootstrap/scss/bootstrap-reboot.scss";
+import "bootstrap/scss/bootstrap-grid.scss";
 
-    return 'string'
-}
-export default Cmp
+import "./index.scss";
+
+const App = () => {
+  return <div>app!!!!</div>;
+};
+
+export default App;
