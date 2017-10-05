@@ -6,7 +6,7 @@ import "bootstrap/scss/bootstrap-grid.scss";
 import "./index.scss";
 
 const App = () => {
-  return <div>app!!!!</div>;
+  return <div>app!</div>;
 };
 
 export default App;
