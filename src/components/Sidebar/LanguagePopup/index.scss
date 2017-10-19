@@ -1,0 +1,20 @@
+.languagePopup {
+  position: fixed;
+  top: 10vh;
+  bottom: 10vh;
+  left: 10vw;
+  right: 10vw;
+  padding: 10px;
+  border-radius: 2px;
+  border: 1px solid lighten(gray, 10%);
+}
+
+.langItem {
+  padding: 10px;
+
+  cursor: pointer;
+
+  &:hover {
+    background: lighten(black, 90%);
+  }
+}

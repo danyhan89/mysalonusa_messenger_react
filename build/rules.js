@@ -15,6 +15,24 @@ module.exports = [
   { test: /\.css$/, use: compileStyles(["style-loader", "css-loader"]) },
   {
     test: /\.scss$/,
+    include: /node_modules/,
     use: compileStyles(["style-loader", "css-loader", "sass-loader"])
+  },
+  {
+    test: /\.scss$/,
+    exclude: /node_modules/,
+    use: compileStyles([
+      "style-loader",
+      {
+        loader: "css-loader",
+        options: {
+          modules: true,
+          localIdentName: dev
+            ? "[local]__[path]-[name]--[hash:base64:5]"
+            : "[hash:base64:6]"
+        }
+      },
+      "sass-loader"
+    ])
   }
 ];
