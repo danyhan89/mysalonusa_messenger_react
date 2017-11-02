@@ -12,6 +12,7 @@ module.exports = {
   resolve,
   plugins,
   output: {
+    publicPath: "/",
     path: path.resolve(__dirname, "../dist"),
     filename: "bundle.[hash].js"
   }
