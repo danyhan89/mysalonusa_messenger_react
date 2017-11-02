@@ -1,3 +1,3 @@
 export default {
-  hello: "hi - vo"
+  welcome: "Vietnamese - Welcome to My Salon USA, {city}."
 };

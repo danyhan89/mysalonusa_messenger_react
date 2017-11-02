@@ -1,5 +1,6 @@
 const rules = require("./rules");
 const plugins = require("./plugins");
+const resolve = require("./resolve");
 
 module.exports = {
   entry: "./index.js",
@@ -7,6 +8,7 @@ module.exports = {
   module: {
     rules
   },
+  resolve,
   plugins,
   devServer: {
     publicPath: "/assets",

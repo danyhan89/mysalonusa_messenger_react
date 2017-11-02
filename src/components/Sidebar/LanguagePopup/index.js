@@ -1,8 +1,8 @@
 import React from "react";
 
-import styles from "./index.scss";
+import LANGUAGES from "src/languages";
 
-import LANGUAGES, { isValid } from "../../../languages";
+import styles from "./index.scss";
 
 const LanguagePopup = ({ onChange }) => {
   return (

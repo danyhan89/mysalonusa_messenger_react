@@ -1,3 +1,4 @@
 export default {
-  hello: `Hello, {name}`
+  welcome: " Welcome to My Salon USA, {city}.",
+  selectChatroom: "Please select chatroom"
 };
