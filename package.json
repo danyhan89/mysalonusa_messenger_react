@@ -9,7 +9,7 @@
     "dev":
       "webpack-dev-server --colors --progress --config ./build/dev.config.js",
     "build":
-      "rimraf dist && NODE_ENV=production webpack -p --colors --progress --config ./build/build.config.js && cp _redirects ./dist"
+      "rimraf dist && SERVER_URL=http://localhost:3000 NODE_ENV=production webpack -p --colors --progress --config ./build/build.config.js && cp _redirects ./dist"
   },
   "lint-staged": {
     "src/**/*.{js,css,scss,json}": ["prettier --write"]
@@ -21,7 +21,8 @@
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-intl": "^2.4.0",
-    "react-router-dom": "^4.2.2"
+    "react-router-dom": "^4.2.2",
+    "socket.io-client": "^2.0.4"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

@@ -14,6 +14,11 @@ import styles from "./index.scss";
 
 import messages from "./messages";
 
+import io from "socket.io-client";
+
+const socket = io(process.env.SERVER_URL);
+global.socket = socket;
+
 const App = () => {
   return (
     <Router>
