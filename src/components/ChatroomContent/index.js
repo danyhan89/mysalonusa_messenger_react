@@ -22,14 +22,15 @@ class ChatroomContent extends Component {
     this.onTextChange = this.onTextChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
 
-    const { lang, state, community } = props;
+    const { state: chosenState } = props;
 
-    this.socket = connect(state);
+    this.socket = connect(chosenState);
 
     this.socket.on("publish", message => {
       message = JSON.parse(message);
 
-      if (message.community == community || community === "combined") {
+      const community = message.community || {};
+      if (community.name == props.community || props.community === "combined") {
         this.pushMessage(message);
       }
     });
@@ -73,8 +74,9 @@ class ChatroomContent extends Component {
       "message",
       JSON.stringify({
         state,
-        community,
-        text
+        community: { name: community },
+        nickname: "placeholder",
+        message: text
       })
     );
   }
@@ -95,8 +97,8 @@ class ChatroomContent extends Component {
           <button type="submit">send</button>
         </form>
         <div>
-          {this.state.messages.map(message => (
-            <div key={message.timestamp}>{message.text}</div>
+          {this.state.messages.map(msg => (
+            <div key={msg.id}>{msg.message}</div>
           ))}
         </div>
       </div>

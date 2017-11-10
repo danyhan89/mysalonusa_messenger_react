@@ -1,11 +1,11 @@
 import en from "./en";
-import kr from "./kr";
+import ko from "./ko";
 import vo from "./vo";
 import mo from "./mo";
 
 export default {
   en,
-  kr,
+  ko,
   vo,
   mo
 };

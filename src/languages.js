@@ -1,6 +1,6 @@
 const languages = [
   { name: "English", value: "en" },
-  { name: "Korean", value: "kr" },
+  { name: "Korean", value: "ko" },
   { name: "Mongolian", value: "mo" },
   { name: "Vietnamese", value: "vo" }
 ];
