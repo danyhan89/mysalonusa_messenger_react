@@ -14,20 +14,15 @@ import styles from "./index.scss";
 
 import messages from "./messages";
 
-import io from "socket.io-client";
-
-const socket = io(process.env.SERVER_URL);
-global.socket = socket;
-
 const App = () => {
   return (
     <Router>
       <div className={`${styles.app} container-fluid`}>
         <Route
-          path="/:lang?/:city?/:community?"
+          path="/:lang?/:state?/:community?"
           render={({ match, history }) => {
-            const { lang, city, community } = match.params;
-            const props = { history, lang, city, community };
+            const { lang, state, community } = match.params;
+            const props = { history, lang, state, community };
 
             const msg = messages[lang];
 
@@ -36,7 +31,7 @@ const App = () => {
                 <div className="row" style={{ height: "100%" }}>
                   <Sidebar {...props} />
                   {community ? (
-                    <ChatroomContent {...props} />
+                    <ChatroomContent {...props} key={community} />
                   ) : (
                     <Content {...props} />
                   )}

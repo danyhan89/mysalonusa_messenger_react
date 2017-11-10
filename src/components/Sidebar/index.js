@@ -3,11 +3,11 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 
 import { isValid as isValidLang } from "src/languages";
-import { isValid as isValidCity } from "src/cities";
+import { isValid as isValidState } from "src/states";
 import { isValid as isValidCommunity } from "src/communities";
 
 import LanguagePopup from "./LanguagePopup";
-import CitiesPopup from "./CitiesPopup";
+import StatesPopup from "./StatesPopup";
 import ChatroomSelect from "../ChatroomSelect";
 
 import styles from "./index.scss";
@@ -17,7 +17,7 @@ const remove = name => global.localStorage.removeItem(name);
 const set = (name, value) => global.localStorage.setItem(name, value);
 
 let storedLanguage = get("lang");
-let storedCity = get("city");
+let storedState = get("state");
 let storedCommunity = get("community");
 
 if (!isValidLang(storedLanguage)) {
@@ -25,9 +25,9 @@ if (!isValidLang(storedLanguage)) {
   remove("lang");
 }
 
-if (!isValidCity(storedCity)) {
-  storedCity = null;
-  remove("city");
+if (!isValidState(storedState)) {
+  storedState = null;
+  remove("state");
 }
 
 const storeLanguage = lang => {
@@ -39,12 +39,12 @@ const storeLanguage = lang => {
   }
 };
 
-const storeCity = city => {
-  if (isValidCity(city)) {
-    set("city", city);
-    storedCity = city;
+const storeState = state => {
+  if (isValidState(state)) {
+    set("state", state);
+    storedState = state;
   } else {
-    remove("city");
+    remove("state");
   }
 };
 
@@ -59,12 +59,12 @@ const storeCommunity = community => {
 class Sidebar extends Component {
   componentDidMount() {
     this.maybeStoreLanguage(this.props);
-    this.maybeStoreCity(this.props);
+    this.maybeStoreState(this.props);
     this.maybeStoreCommunity(this.props);
   }
   componentWillReceiveProps(nextProps) {
     this.maybeStoreLanguage(nextProps);
-    this.maybeStoreCity(nextProps);
+    this.maybeStoreState(nextProps);
     this.maybeStoreCommunity(nextProps);
   }
   maybeStoreLanguage(props) {
@@ -72,9 +72,9 @@ class Sidebar extends Component {
       storeLanguage(props.lang);
     }
   }
-  maybeStoreCity(props) {
-    if (props.city && storedCity != props.city) {
-      storeCity(props.city);
+  maybeStoreState(props) {
+    if (props.state && storedState != props.state) {
+      storeState(props.state);
     }
   }
   maybeStoreCommunity(props) {
@@ -83,7 +83,7 @@ class Sidebar extends Component {
     }
   }
   render() {
-    const { lang, city, community } = this.props;
+    const { lang, state, community } = this.props;
 
     if (!lang && storedLanguage) {
       return <Redirect to={`/${storedLanguage}`} />;
@@ -92,15 +92,15 @@ class Sidebar extends Component {
       return <Redirect to="/" />;
     }
 
-    if (!city && storedCity) {
-      return <Redirect to={`/${lang}/${storedCity}`} />;
+    if (!state && storedState) {
+      return <Redirect to={`/${lang}/${storedState}`} />;
     }
-    if (city && !isValidCity(city)) {
+    if (state && !isValidState(state)) {
       return <Redirect to={`/${lang}`} />;
     }
 
     if (community && !isValidCommunity(community)) {
-      return <Redirect to={`/${lang}/${city}`} />;
+      return <Redirect to={`/${lang}/${state}`} />;
     }
 
     if (community != storedCommunity) {
@@ -108,55 +108,55 @@ class Sidebar extends Component {
 
       if (isValidCommunity(community)) {
         storeCommunity(community);
-        return <Redirect to={`/${lang}/${city}/${community}`} />;
+        return <Redirect to={`/${lang}/${state}/${community}`} />;
       } else if (community) {
-        return <Redirect to={`/${lang}/${city}`} />;
+        return <Redirect to={`/${lang}/${state}`} />;
       }
     }
 
     return (
       <div className={`col-4 col-md-2 ${styles.sidebar}`}>
         {this.renderLanguagePopup()}
-        {this.renderCitiesPopup()}
+        {this.renderStatesPopup()}
         {this.renderChatroomSelect()}
       </div>
     );
   }
   renderChatroomSelect() {
-    const { history, lang, city, community } = this.props;
-    if (!lang || !city) {
+    const { history, lang, state, community } = this.props;
+    if (!lang || !state) {
       return null;
     }
     return (
       <ChatroomSelect
         community={community}
         lang={lang}
-        city={city}
+        state={state}
         onChange={community => {
           if (!community) {
-            history.push(`/${lang}/${city}/`);
+            history.push(`/${lang}/${state}/`);
           } else {
             storeCommunity(community);
-            history.push(`/${lang}/${city}/${community}`);
+            history.push(`/${lang}/${state}/${community}`);
           }
         }}
       />
     );
   }
-  renderCitiesPopup() {
-    const { history, lang, city } = this.props;
+  renderStatesPopup() {
+    const { history, lang, state } = this.props;
     if (!lang) {
       return null;
     }
 
-    if (city) {
+    if (state) {
       return null;
     }
 
     return (
-      <CitiesPopup
-        onChange={city => {
-          history.push(`/${lang}/${city}`);
+      <StatesPopup
+        onChange={state => {
+          history.push(`/${lang}/${state}`);
         }}
       />
     );

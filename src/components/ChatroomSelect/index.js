@@ -10,7 +10,7 @@ const emptyFn = () => {};
 
 const ChatroomSelect = ({
   onChange = emptyFn,
-  city,
+  state,
   community: currentCommunity,
   lang,
   ...props
@@ -18,7 +18,7 @@ const ChatroomSelect = ({
   return (
     <div {...props}>
       <div>
-        <Label values={{ city }}>welcome</Label>
+        <Label values={{ state }}>welcome</Label>
       </div>
       <div>
         <Label defaultMessage="Please select chatroom">selectChatroom</Label>

@@ -1,3 +1,3 @@
 export default {
-  welcome: "Mongolian - Welcome to My Salon USA, {city}."
+  welcome: "Mongolian - Welcome to My Salon USA, {state}."
 };

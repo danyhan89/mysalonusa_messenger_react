@@ -1,4 +1,4 @@
-.citiesPopup {
+.statesPopup {
   position: fixed;
   top: 10vh;
   bottom: 10vh;
@@ -9,7 +9,7 @@
   border: 1px solid lighten(gray, 10%);
 }
 
-.cityItem {
+.stateItem {
   padding: 10px;
 
   cursor: pointer;

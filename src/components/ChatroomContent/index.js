@@ -1,11 +1,19 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+
+import io from "socket.io-client";
 import styles from "./index.scss";
 
 import communities from "src/communities";
 import Label from "@app/Label";
 
 const emptyFn = () => {};
+
+const connect = state => {
+  const socketURL = process.env.SERVER_URL + "/" + state;
+
+  return io(socketURL);
+};
 
 class ChatroomContent extends Component {
   constructor(props) {
@@ -14,18 +22,27 @@ class ChatroomContent extends Component {
     this.onTextChange = this.onTextChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
 
-    const { lang, city, community } = props;
+    const { lang, state, community } = props;
 
-    socket.on("publish", message => {
+    this.socket = connect(state);
+
+    this.socket.on("publish", message => {
       message = JSON.parse(message);
-      if (message.city == city) {
+
+      if (message.community == community || community === "combined") {
         this.pushMessage(message);
       }
     });
+
     this.state = {
       text: "",
       messages: []
     };
+  }
+
+  componentWillUnmount() {
+    this.socket.close();
+    this.socket = null;
   }
 
   onSubmit(event) {
@@ -50,14 +67,14 @@ class ChatroomContent extends Component {
   }
 
   send(text) {
-    const { city } = this.props;
+    const { state, community } = this.props;
 
-    global.socket.emit(
+    this.socket.emit(
       "message",
       JSON.stringify({
-        city,
-        text,
-        timestamp: Date.now()
+        state,
+        community,
+        text
       })
     );
   }
@@ -88,7 +105,7 @@ class ChatroomContent extends Component {
 }
 
 ChatroomContent.propTypes = {
-  city: PropTypes.string.isRequired,
+  state: PropTypes.string.isRequired,
   community: PropTypes.string.isRequired,
   lang: PropTypes.string.isRequired
 };
