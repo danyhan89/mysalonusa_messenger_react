@@ -15,6 +15,22 @@ const connect = state => {
   return io(socketURL);
 };
 
+const fetchChats = query => {
+  query.limit = query.limit || 50;
+
+  const queryString = Object.keys(query)
+    .map(key => {
+      const value = query[key];
+      return `${key}=${value}`;
+    })
+    .join("&");
+  return fetch(
+    `//${process.env.SERVER_URL}/fetchChats?${queryString}`
+  ).then(response => {
+    return response.json();
+  });
+};
+
 class ChatroomContent extends Component {
   constructor(props) {
     super(props);
@@ -37,8 +53,19 @@ class ChatroomContent extends Component {
 
     this.state = {
       text: "",
+      skip: 0,
       messages: []
     };
+
+    fetchChats({
+      skip: this.state.skip,
+      state: props.state,
+      community: props.community
+    }).then(chats => {
+      this.setState({
+        messages: chats.reverse()
+      });
+    });
   }
 
   componentWillUnmount() {
@@ -74,33 +101,37 @@ class ChatroomContent extends Component {
       "message",
       JSON.stringify({
         state,
-        community: { name: community },
+        community: {
+          name: community
+        },
         nickname: "placeholder",
         message: text
       })
     );
   }
   clearText() {
-    this.setState({ text: "" });
+    this.setState({
+      text: ""
+    });
   }
 
   render() {
     return (
       <div className={`col-8 col-md-10 ${styles.content}`}>
         chatroom content
+        <div>
+          {this.state.messages.map(msg => (
+            <div key={msg.id}> {msg.message} </div>
+          ))}
+        </div>
         <form onSubmit={this.onSubmit}>
           <input
             type="text"
             onChange={this.onTextChange}
             value={this.state.text}
           />
-          <button type="submit">send</button>
+          <button type="submit"> send </button>{" "}
         </form>
-        <div>
-          {this.state.messages.map(msg => (
-            <div key={msg.id}>{msg.message}</div>
-          ))}
-        </div>
       </div>
     );
   }
