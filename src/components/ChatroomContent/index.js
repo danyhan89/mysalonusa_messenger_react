@@ -25,7 +25,7 @@ const fetchChats = query => {
     })
     .join("&");
   return fetch(
-    `//${process.env.SERVER_URL}/fetchChats?${queryString}`
+    `${process.env.SERVER_URL}/fetchChats?${queryString}`
   ).then(response => {
     return response.json();
   });
