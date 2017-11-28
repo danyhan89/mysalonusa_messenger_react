@@ -7,10 +7,15 @@ import styles from "./index.scss";
 import communities from "src/communities";
 import Label from "@app/Label";
 
+import { isValid as isValidState } from "src/states";
+
 const emptyFn = () => {};
 
 const connect = state => {
-  const socketURL = process.env.SERVER_URL + "/" + state;
+  if (!state || !isValidState(state)) {
+    throw "No valid state";
+  }
+  const socketURL = process.env.SERVER_URL + "/" + state.toLowerCase();
 
   return io(socketURL);
 };
