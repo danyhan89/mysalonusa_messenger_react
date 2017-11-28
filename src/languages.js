@@ -8,6 +8,9 @@ const languages = [
 export default languages;
 
 const isValid = lang => {
+  if (!lang) {
+    return false;
+  }
   return !!languages.filter(l => l.name == lang || l.value == lang)[0];
 };
 
