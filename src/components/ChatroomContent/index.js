@@ -24,6 +24,7 @@ const fetchChats = query => {
       return `${key}=${value}`;
     })
     .join("&");
+
   return fetch(
     `${process.env.SERVER_URL}/fetchChats?${queryString}`
   ).then(response => {
