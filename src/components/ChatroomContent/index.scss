@@ -1,5 +1,9 @@
+@import "~@app/colors.scss";
+
 .content {
   padding: 10px;
+  display: flex;
+  flex-flow: column;
 }
 
 .communityItem {
@@ -9,5 +13,80 @@
 
   &:hover {
     background: lighten(black, 90%);
+  }
+}
+
+.messages {
+  flex: 1;
+  display: flex;
+  flex-flow: column;
+  align-items: flex-start;
+  overflow: auto;
+}
+
+.form {
+  display: flex;
+}
+
+.flex1 {
+  flex: 1;
+}
+
+$MARGIN_TOP: 5px;
+
+.message {
+  border-radius: 10px;
+  padding: 7px;
+
+  margin-top: $MARGIN_TOP;
+  background: $accent-color;
+  color: $primary-color-text;
+}
+
+.myMessage {
+  align-self: flex-end;
+  background: $primary-color-dark;
+}
+
+.input {
+  flex: 1;
+  margin-right: $MARGIN_TOP;
+}
+.input,
+.submitButton {
+  margin-top: $MARGIN_TOP;
+  outline: none;
+  border-radius: 5px;
+  border: 1px solid rgba($primary-color-dark, 0.8);
+  transition: all 0.2s;
+  padding: 5px;
+  color: $primary-color;
+  &:focus {
+    outline: none;
+    box-shadow: 1px 2px 3px -1px rgba(0, 0, 0, 0.2);
+    border: 1px solid $accent-color;
+  }
+}
+
+.submitButton {
+  cursor: pointer;
+  &:not(.disabled):focus {
+    color: $accent-color;
+  }
+
+  &:not(.disabled):active {
+    position: relative;
+    top: 1px;
+  }
+
+  &:not(.disabled) {
+    border: 1px solid $accent-color;
+    color: $accent-color;
+  }
+
+  &.disabled {
+    &:focus {
+      color: $primary-color;
+    }
   }
 }

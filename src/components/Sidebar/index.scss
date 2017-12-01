@@ -1,3 +1,7 @@
+@import "~@app/colors.scss";
 .sidebar {
   color: inherit;
+  background: $primary-color;
+  color: $primary-color-text;
+  padding: 0px;
 }

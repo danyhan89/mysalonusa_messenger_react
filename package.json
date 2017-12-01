@@ -6,23 +6,24 @@
   "main": "index.js",
   "scripts": {
     "precommit": "lint-staged",
-    "dev":
-      "SERVER_URL=https://mysalonusa-messenger-node-serv.herokuapp.com webpack-dev-server --colors --progress --config ./build/dev.config.js",
-    "build":
-      "rimraf dist && SERVER_URL=https://mysalonusa-messenger-node-serv.herokuapp.com NODE_ENV=production webpack -p --colors --progress --config ./build/build.config.js && cp _redirects ./dist"
+    "dev": "SERVER_URL=http://localhost:3000 webpack-dev-server --colors --progress --config ./build/dev.config.js",
+    "build": "rimraf dist && SERVER_URL=https://mysalonusa-messenger-node-serv.herokuapp.com NODE_ENV=production webpack -p --colors --progress --config ./build/build.config.js && cp _redirects ./dist"
   },
   "lint-staged": {
-    "src/**/*.{js,css,scss,json}": ["prettier --write"]
+    "src/**/*.{js,css,scss,json}": [
+      "prettier --write"
+    ]
   },
   "author": "My salon",
   "license": "ISC",
   "dependencies": {
-    "bootstrap": "4.0.0-beta",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0",
+    "bootstrap": "4.0.0-beta.2",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
     "react-intl": "^2.4.0",
     "react-router-dom": "^4.2.2",
-    "socket.io-client": "^2.0.4"
+    "socket.io-client": "^2.0.4",
+    "uuid": "^3.1.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

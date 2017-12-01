@@ -2,6 +2,7 @@ import React from "react";
 
 import join from "@app/join";
 import Label from "@app/Label";
+import Text from "@app/Text";
 
 import communities from "src/communities";
 import styles from "./index.scss";

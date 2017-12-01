@@ -1,7 +1,10 @@
+@import "~@app/colors.scss";
 .selectedCommunity {
-  background: gray;
+  color: $accent-color;
+  background: $primary-color-dark;
 }
 
 .communityItem {
   cursor: pointer;
+  padding: 5px 10px;
 }

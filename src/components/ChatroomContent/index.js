@@ -2,14 +2,25 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 import io from "socket.io-client";
-import styles from "./index.scss";
+import uuidv4 from "uuid/v4";
 
 import communities from "src/communities";
 import Label from "@app/Label";
+import join from "@app/join";
 
 import { isValid as isValidState } from "src/states";
 
+import styles from "./index.scss";
+
+const STORED_NICKNAME = global.localStorage.getItem("nickname");
+const NICKNAME = STORED_NICKNAME || uuidv4();
+if (!STORED_NICKNAME) {
+  global.localStorage.setItem("nickname", NICKNAME);
+}
+
 const emptyFn = () => {};
+
+const SPACER = <div className={styles.flex1} />;
 
 const connect = state => {
   if (!state || !isValidState(state)) {
@@ -63,14 +74,24 @@ class ChatroomContent extends Component {
       messages: []
     };
 
+    this.messagesRef = node => {
+      this.messagesNode = node;
+    };
+  }
+
+  componentDidMount() {
+    const { props } = this;
     fetchChats({
       skip: this.state.skip,
       state: props.state,
       community: props.community
     }).then(chats => {
-      this.setState({
-        messages: chats.reverse()
-      });
+      this.setState(
+        {
+          messages: chats.reverse()
+        },
+        this.scrollToBottom
+      );
     });
   }
 
@@ -82,14 +103,24 @@ class ChatroomContent extends Component {
   onSubmit(event) {
     event.preventDefault();
 
+    if (!this.state.text) {
+      return;
+    }
     this.send(this.state.text);
     this.clearText();
   }
 
   pushMessage(message) {
-    this.setState({
-      messages: [...this.state.messages, message]
-    });
+    this.setState(
+      {
+        messages: [...this.state.messages, message]
+      },
+      this.scrollToBottom
+    );
+  }
+
+  scrollToBottom() {
+    this.messagesNode.scrollTop += this.messagesNode.scrollHeight;
   }
 
   onTextChange(event) {
@@ -110,7 +141,7 @@ class ChatroomContent extends Component {
         community: {
           name: community
         },
-        nickname: "placeholder",
+        nickname: NICKNAME,
         message: text
       })
     );
@@ -121,22 +152,45 @@ class ChatroomContent extends Component {
     });
   }
 
+  itsMe(message) {
+    return message.nickname === NICKNAME;
+  }
+
   render() {
     return (
       <div className={`col-8 col-md-10 ${styles.content}`}>
         chatroom content
-        <div>
+        <div className={styles.messages} ref={this.messagesRef}>
+          {SPACER}
           {this.state.messages.map(msg => (
-            <div key={msg.id}> {msg.message} </div>
+            <div
+              key={msg.id}
+              className={join(
+                styles.message,
+                this.itsMe(msg) && styles.myMessage
+              )}
+            >
+              {msg.message}
+            </div>
           ))}
         </div>
-        <form onSubmit={this.onSubmit}>
+        <form onSubmit={this.onSubmit} className={styles.form}>
           <input
             type="text"
             onChange={this.onTextChange}
             value={this.state.text}
+            className={styles.input}
+            autoFocus
           />
-          <button type="submit"> send </button>{" "}
+          <button
+            type="submit"
+            className={join(
+              styles.submitButton,
+              !this.state.text && styles.disabled
+            )}
+          >
+            Send
+          </button>{" "}
         </form>
       </div>
     );
