@@ -9,6 +9,7 @@ import { IntlProvider } from "react-intl";
 
 import Sidebar from "./components/Sidebar";
 import Content from "./components/Content";
+import CenterContainer from "./components/CenterContainer";
 import ChatroomContent from "./components/ChatroomContent";
 import styles from "./index.scss";
 
@@ -21,7 +22,16 @@ const App = () => {
         <Route
           path="/:lang?/:state?/:community?"
           render={({ match, history }) => {
-            const { lang, state, community } = match.params;
+            let { lang, state, community } = match.params;
+            if (lang) {
+              lang = lang.toLowerCase();
+            }
+            if (state) {
+              state = state.toLowerCase();
+            }
+            if (community) {
+              community = community.toLowerCase();
+            }
             const props = { history, lang, state, community };
 
             const msg = messages[lang];
@@ -30,11 +40,13 @@ const App = () => {
               <IntlProvider locale="en" messages={msg}>
                 <div className="row" style={{ height: "100%" }}>
                   <Sidebar {...props} />
-                  {community ? (
-                    <ChatroomContent {...props} key={community} />
-                  ) : (
-                    <Content {...props} />
-                  )}
+                  <CenterContainer {...props}>
+                    {community ? (
+                      <ChatroomContent {...props} key={community} />
+                    ) : (
+                      <Content {...props} />
+                    )}
+                  </CenterContainer>
                 </div>
               </IntlProvider>
             );

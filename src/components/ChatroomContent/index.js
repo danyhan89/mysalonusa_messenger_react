@@ -8,6 +8,8 @@ import communities from "src/communities";
 import Label from "@app/Label";
 import join from "@app/join";
 
+import { fetchChats } from "src/api";
+
 import { isValid as isValidState } from "src/states";
 
 import styles from "./index.scss";
@@ -31,23 +33,6 @@ const connect = state => {
   return io(socketURL);
 };
 
-const fetchChats = query => {
-  query.limit = query.limit || 50;
-
-  const queryString = Object.keys(query)
-    .map(key => {
-      const value = query[key];
-      return `${key}=${value}`;
-    })
-    .join("&");
-
-  return fetch(
-    `${process.env.SERVER_URL}/fetchChats?${queryString}`
-  ).then(response => {
-    return response.json();
-  });
-};
-
 class ChatroomContent extends Component {
   constructor(props) {
     super(props);
@@ -57,16 +42,7 @@ class ChatroomContent extends Component {
 
     const { state: chosenState } = props;
 
-    this.socket = connect(chosenState);
-
-    this.socket.on("publish", message => {
-      message = JSON.parse(message);
-
-      const community = message.community || {};
-      if (community.name == props.community || props.community === "combined") {
-        this.pushMessage(message);
-      }
-    });
+    this.openSocket(chosenState);
 
     this.state = {
       text: "",
@@ -77,6 +53,26 @@ class ChatroomContent extends Component {
     this.messagesRef = node => {
       this.messagesNode = node;
     };
+  }
+
+  openSocket(chosenState, props = this.props) {
+    this.socket = connect(chosenState);
+
+    this.socket.on("publish", message => {
+      message = JSON.parse(message);
+
+      const community = message.community || {};
+      if (community.name == props.community || props.community === "combined") {
+        this.pushMessage(message);
+      }
+    });
+  }
+
+  closeSocket() {
+    if (this.socket) {
+      this.socket.close();
+      this.socket = null;
+    }
   }
 
   componentDidMount() {
@@ -96,8 +92,7 @@ class ChatroomContent extends Component {
   }
 
   componentWillUnmount() {
-    this.socket.close();
-    this.socket = null;
+    this.closeSocket();
   }
 
   onSubmit(event) {
@@ -158,13 +153,12 @@ class ChatroomContent extends Component {
 
   render() {
     return (
-      <div className={`col-8 col-md-10 ${styles.content}`}>
-        chatroom content
+      <div className={`col-12 ${styles.content}`}>
         <div className={styles.messages} ref={this.messagesRef}>
           {SPACER}
-          {this.state.messages.map(msg => (
+          {this.state.messages.map((msg, index) => (
             <div
-              key={msg.id}
+              key={msg.id || index}
               className={join(
                 styles.message,
                 this.itsMe(msg) && styles.myMessage

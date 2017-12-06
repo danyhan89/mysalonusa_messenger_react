@@ -1,0 +1,25 @@
+@import "~@app/colors.scss";
+
+.checkedIcon {
+  fill: $accent-color;
+}
+.uncheckedIcon {
+  fill: $primary-color;
+}
+
+.icon {
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+.list {
+  outline: none;
+  padding: 0px;
+  list-style-type: none;
+}
+.option {
+  padding: 5px 15px;
+}
+.selectedOption {
+  background: rgba(white, 0.5);
+}

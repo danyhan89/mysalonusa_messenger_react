@@ -1,0 +1,28 @@
+@import "~@app/colors.scss";
+
+.postAJob {
+  background: $primary-color;
+  color: white;
+
+  padding: 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background: $accent-color;
+  }
+}
+
+.overlay {
+  position: fixed;
+  z-index: 100;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba($primary-color-light, 1);
+}

@@ -40,7 +40,7 @@ const ChatroomSelect = ({
               }}
               value={community.value}
             >
-              {community.label}
+              {community.label} chatroom
             </div>
           );
         })}

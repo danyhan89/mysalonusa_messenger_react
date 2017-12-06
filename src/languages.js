@@ -14,4 +14,10 @@ const isValid = lang => {
   return !!languages.filter(l => l.name == lang || l.value == lang)[0];
 };
 
+export const getLanguageName = value =>
+  languages.filter(l => l.name == value || l.value == value)[0].name;
+
+export const getLanguage = value =>
+  languages.filter(l => l.name == value || l.value == value)[0];
+
 export { isValid };

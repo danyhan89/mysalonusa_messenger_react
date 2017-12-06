@@ -1,0 +1,63 @@
+@import "~@app/colors.scss";
+
+.form {
+  color: $primary-color-dark;
+  display: flex;
+  flex-flow: column;
+  align-items: flex-start;
+}
+
+.actionButton {
+  margin-top: 30px;
+  border-radius: 5px;
+  padding: 10px;
+  color: white;
+  background: $accent-color;
+  font-size: 20px;
+  cursor: pointer;
+  min-width: 100px;
+  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+
+  &:active {
+    position: relative;
+    top: 1px;
+  }
+
+  &.disabled {
+    background: $primary-color-light;
+  }
+}
+
+.rotate {
+  fill: white;
+  vertical-align: middle;
+  animation: spin 1s infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.input,
+.textarea {
+  border: 1px solid $primary-color;
+  border-radius: 5px;
+  padding: 15px;
+  min-width: 300px;
+  color: $primary-color-dark;
+
+  &:focus {
+    outline: none;
+    border: 1px solid $accent-color;
+  }
+}
+
+.textarea {
+  min-width: 450px;
+}
