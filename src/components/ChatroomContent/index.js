@@ -39,6 +39,7 @@ class ChatroomContent extends Component {
 
     this.onTextChange = this.onTextChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.renderMessage = this.renderMessage.bind(this);
 
     const { state: chosenState } = props;
 
@@ -133,9 +134,7 @@ class ChatroomContent extends Component {
       "message",
       JSON.stringify({
         state,
-        community: {
-          name: community
-        },
+        community,
         nickname: NICKNAME,
         message: text
       })
@@ -156,17 +155,7 @@ class ChatroomContent extends Component {
       <div className={`col-12 ${styles.content}`}>
         <div className={styles.messages} ref={this.messagesRef}>
           {SPACER}
-          {this.state.messages.map((msg, index) => (
-            <div
-              key={msg.id || index}
-              className={join(
-                styles.message,
-                this.itsMe(msg) && styles.myMessage
-              )}
-            >
-              {msg.message}
-            </div>
-          ))}
+          {this.state.messages.map(this.renderMessage)}
         </div>
         <form onSubmit={this.onSubmit} className={styles.form}>
           <input
@@ -189,6 +178,23 @@ class ChatroomContent extends Component {
       </div>
     );
   }
+
+  renderMessage(msg, index) {
+    const message = msg.type == 'job'?
+      JSON.parse(msg.message).message:
+      msg.message
+      
+    return <div
+      key={msg.id || index}
+      className={join(
+        styles.message,
+        this.itsMe(msg) && styles.myMessage
+      )}
+    >
+      {message}
+    </div>
+  }
+  
 }
 
 ChatroomContent.propTypes = {

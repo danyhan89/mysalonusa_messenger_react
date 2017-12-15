@@ -73,7 +73,7 @@ const renderPreview = ({ state }) => {
       <Label>email</Label>: {state.email}
     </div>,
     <div key="jobDescription">
-      <Label>jobDescription</Label>: {state.jobDescription}
+      <Label>jobDescription</Label>: {state.description}
     </div>
   ];
 };
@@ -157,7 +157,7 @@ const STEPS = [
     }
   },
   {
-    key: "jobDescription",
+    key: "description",
     isValid: value => !!value,
     render: ({ onChange, value }) => {
       return [
@@ -202,12 +202,13 @@ class PostJobForm extends Component {
     super(props);
 
     this.state = {
-      currentStep: 6,
+      uniqueNickname: global.localStorage.getItem("nickname"),
+      currentStep: 0,
       community: getCommunity(props.community).value,
       state: props.state,
       nickname: "",
       email: "",
-      jobDescription: ""
+      description: ""
     };
   }
 
@@ -230,8 +231,10 @@ class PostJobForm extends Component {
   }
   postJob() {
     const { currentStep, ...job } = this.state;
-    createJob(job).then(() => {
-      console.log("success");
+    createJob(job).then((result) => {
+      if (result.success) {
+        this.props.onSuccess(job)
+      }
     });
   }
 

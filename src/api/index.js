@@ -18,6 +18,9 @@ export const fetchChats = query => {
 export const createJob = job => {
   return fetch(`${process.env.SERVER_URL}/createJob`, {
     method: "POST",
+    headers: {
+      'Content-Type': 'application/json'
+    },
     body: JSON.stringify(job)
   }).then(response => {
     return response.json();

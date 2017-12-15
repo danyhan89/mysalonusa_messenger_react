@@ -21,7 +21,7 @@ class PostAJob extends Component {
     super(props);
 
     this.state = {
-      on: true
+      on: false
     };
     this.toggle = this.toggle.bind(this);
   }
@@ -49,7 +49,11 @@ class PostAJob extends Component {
     const { lang, state, community } = this.props;
     return (
       <Overlay>
-        <PostJobForm lang={lang} state={state} community={community} />
+        <PostJobForm onSuccess={() => {
+          this.setState({
+            on: false
+          })
+        }} lang={lang} state={state} community={community} />
       </Overlay>
     );
   }
