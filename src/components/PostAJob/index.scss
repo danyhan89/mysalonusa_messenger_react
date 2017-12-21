@@ -1,15 +1,26 @@
 @import "~@app/colors.scss";
-
 .postAJob {
   background: $primary-color;
   color: white;
-
   padding: 12px;
   cursor: pointer;
   transition: background 0.2s;
-
   &:hover {
     background: $accent-color;
+  }
+}
+
+.closeIcon {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  fill: $accent-color;
+  color: $accent-color;
+  transition: all 0.2s;
+  &:hover,
+  &:active {
+    fill: darken($accent-color, 20%);
+    color: darken($accent-color, 20%);
   }
 }
 
@@ -23,6 +34,5 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
   background: rgba($primary-color-light, 1);
 }

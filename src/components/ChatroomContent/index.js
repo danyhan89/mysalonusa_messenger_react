@@ -12,6 +12,9 @@ import { fetchChats } from "src/api";
 
 import { isValid as isValidState } from "src/states";
 
+import JOB_ICON from './jobIcon'
+import APPLY_ICON from './applyIcon'
+
 import styles from "./index.scss";
 
 const STORED_NICKNAME = global.localStorage.getItem("nickname");
@@ -20,7 +23,7 @@ if (!STORED_NICKNAME) {
   global.localStorage.setItem("nickname", NICKNAME);
 }
 
-const emptyFn = () => {};
+const emptyFn = () => { };
 
 const SPACER = <div className={styles.flex1} />;
 
@@ -179,22 +182,55 @@ class ChatroomContent extends Component {
     );
   }
 
-  renderMessage(msg, index) {
-    const message = msg.type == 'job'?
-      JSON.parse(msg.message).message:
-      msg.message
-      
-    return <div
-      key={msg.id || index}
-      className={join(
-        styles.message,
-        this.itsMe(msg) && styles.myMessage
-      )}
-    >
-      {message}
-    </div>
+  renderJobMessage(job, msg) {
+    const itsMe = this.itsMe(msg)
+    return (
+
+      <div
+        key={job.id || index}
+        className={`br3 ${join(styles.jobMessage, styles.message, itsMe && styles.myMessage)}`}
+      >
+        <div className="f3 flex items-center">{JOB_ICON({ size: 32 })} <Label>jobPost</Label>
+        </div>
+        <div >
+          <Label>jobEmail</Label>: {job.email}
+        </div>
+        <div >
+          <Label>jobNickname</Label>: {job.nickname}
+        </div>
+        <div className="mt3">
+          <Label>jobDescription</Label>:
+        </div>
+        <div>
+          {job.description}
+        </div>
+
+        {!itsMe ? <div className={`br3 ma3 pa3 f3 flex items-center ${styles.apply}`}>
+          {APPLY_ICON({ size: 32 })} <Label>APPLY</Label>
+        </div> : null}
+      </div>
+    );
   }
-  
+
+  renderMessage(msg, index) {
+    const isJob = msg.chat_type == 1
+
+    if (isJob) {
+      return this.renderJobMessage(JSON.parse(msg.message), msg)
+    }
+    const message =
+      msg.message;
+
+    return (
+      <div
+        key={msg.id || index}
+        className={`br3 ${join(styles.message, this.itsMe(msg) && styles.myMessage)}`}
+      >
+
+        {message}
+      </div>
+    );
+  }
 }
 
 ChatroomContent.propTypes = {

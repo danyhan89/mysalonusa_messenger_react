@@ -1,7 +1,7 @@
 import React from "react";
 
-import "bootstrap/scss/bootstrap-reboot.scss";
 import "bootstrap/scss/bootstrap-grid.scss";
+import "tachyons/css/tachyons.css";
 
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
@@ -44,8 +44,8 @@ const App = () => {
                     {community ? (
                       <ChatroomContent {...props} key={community} />
                     ) : (
-                      <Content {...props} />
-                    )}
+                        <Content {...props} />
+                      )}
                   </CenterContainer>
                 </div>
               </IntlProvider>

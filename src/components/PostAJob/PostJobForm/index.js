@@ -41,11 +41,12 @@ class Question extends Component {
   }
 }
 
-const Button = ({ disabled, children = "Next", onClick }) => {
+const Button = ({ disabled, tabIndex, className, children = "Next", onClick }) => {
   return (
     <button
+      tabIndex={tabIndex}
       disabled={disabled}
-      className={join(styles.actionButton, disabled && styles.disabled)}
+      className={join(className, styles.actionButton, disabled && styles.disabled)}
       onClick={onClick}
     >
       {children}
@@ -181,7 +182,7 @@ const STEPS = [
   },
   {
     key: "preview",
-    buttonLabel: "Create",
+    buttonLabel: <Label>create</Label>,
     submit: true,
     render: renderPreview
   },
@@ -190,7 +191,7 @@ const STEPS = [
     locked: true,
     buttonLabel: (
       <span>
-        <LoadingIcon /> Creating
+        <LoadingIcon /> <Label>creating</Label>
       </span>
     ),
     render: renderPreview
@@ -210,6 +211,16 @@ class PostJobForm extends Component {
       email: "",
       description: ""
     };
+  }
+
+  prev() {
+    let { currentStep } = this.state;
+
+    currentStep--
+
+    this.setState({
+      currentStep
+    })
   }
 
   next() {
@@ -239,9 +250,12 @@ class PostJobForm extends Component {
   }
 
   render() {
-    const step = STEPS[this.state.currentStep];
+    const { currentStep } = this.state
+
+    const step = STEPS[currentStep];
     const stepValue = this.state[step.key];
     const isValid = step.isValid || returnTrue;
+    const hasPrev = !step.locked;
     const valid = isValid(stepValue);
 
     const onChange = value => {
@@ -252,10 +266,16 @@ class PostJobForm extends Component {
 
     return (
       <div className={join(styles.form)}>
+        {this.props.children}
         {step.render({ value: stepValue, onChange, state: this.state })}
-        <Button disabled={!valid} onClick={() => this.next()}>
-          {step.buttonLabel || "Next"}
-        </Button>
+        <div>
+          {currentStep > 0 && hasPrev ? <Button className={styles.prevButton} onClick={() => this.prev()}>
+            <Label>prev</Label>
+          </Button> : null}
+          <Button disabled={!valid} onClick={() => this.next()}>
+            {step.buttonLabel || <Label>next</Label>}
+          </Button>
+        </div>
       </div>
     );
   }
