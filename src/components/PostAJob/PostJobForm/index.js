@@ -41,12 +41,22 @@ class Question extends Component {
   }
 }
 
-const Button = ({ disabled, tabIndex, className, children = "Next", onClick }) => {
+const Button = ({
+  disabled,
+  tabIndex,
+  className,
+  children = "Next",
+  onClick
+}) => {
   return (
     <button
       tabIndex={tabIndex}
       disabled={disabled}
-      className={join(className, styles.actionButton, disabled && styles.disabled)}
+      className={join(
+        className,
+        styles.actionButton,
+        disabled && styles.disabled
+      )}
       onClick={onClick}
     >
       {children}
@@ -216,11 +226,11 @@ class PostJobForm extends Component {
   prev() {
     let { currentStep } = this.state;
 
-    currentStep--
+    currentStep--;
 
     this.setState({
       currentStep
-    })
+    });
   }
 
   next() {
@@ -242,15 +252,15 @@ class PostJobForm extends Component {
   }
   postJob() {
     const { currentStep, ...job } = this.state;
-    createJob(job).then((result) => {
+    createJob(job).then(result => {
       if (result.success) {
-        this.props.onSuccess(job)
+        this.props.onSuccess(job);
       }
     });
   }
 
   render() {
-    const { currentStep } = this.state
+    const { currentStep } = this.state;
 
     const step = STEPS[currentStep];
     const stepValue = this.state[step.key];
@@ -269,9 +279,11 @@ class PostJobForm extends Component {
         {this.props.children}
         {step.render({ value: stepValue, onChange, state: this.state })}
         <div>
-          {currentStep > 0 && hasPrev ? <Button className={styles.prevButton} onClick={() => this.prev()}>
-            <Label>prev</Label>
-          </Button> : null}
+          {currentStep > 0 && hasPrev ? (
+            <Button className={styles.prevButton} onClick={() => this.prev()}>
+              <Label>prev</Label>
+            </Button>
+          ) : null}
           <Button disabled={!valid} onClick={() => this.next()}>
             {step.buttonLabel || <Label>next</Label>}
           </Button>

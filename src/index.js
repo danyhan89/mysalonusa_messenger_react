@@ -44,8 +44,8 @@ const App = () => {
                     {community ? (
                       <ChatroomContent {...props} key={community} />
                     ) : (
-                        <Content {...props} />
-                      )}
+                      <Content {...props} />
+                    )}
                   </CenterContainer>
                 </div>
               </IntlProvider>
