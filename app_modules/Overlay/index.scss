@@ -1,0 +1,27 @@
+@import "~@app/colors.scss";
+.overlay {
+  position: fixed;
+  z-index: 100;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba($primary-color-light, 1);
+}
+
+.closeIcon {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  fill: $accent-color;
+  color: $accent-color;
+  transition: all 0.2s;
+  &:hover,
+  &:active {
+    fill: darken($accent-color, 20%);
+    color: darken($accent-color, 20%);
+  }
+}

@@ -40,7 +40,6 @@ $MARGIN_TOP: 5px;
 
 .jobMessage {
   align-self: stretch;
-  margin-right: 10px;
   fill: white;
   background: $accent-color-2;
 }
@@ -61,41 +60,8 @@ $MARGIN_TOP: 5px;
 
 .input {
   flex: 1;
-  margin-right: $MARGIN_TOP;
-}
-
-.input,
-.submitButton {
-  margin-top: $MARGIN_TOP;
-  outline: none;
-  border-radius: 5px;
-  border: 1px solid rgba($primary-color-dark, 0.8);
-  transition: all 0.2s;
-  padding: 5px;
-  color: $primary-color;
-  &:focus {
-    outline: none;
-    box-shadow: 1px 2px 3px -1px rgba(0, 0, 0, 0.2);
-    border: 1px solid $accent-color;
-  }
 }
 
 .submitButton {
   cursor: pointer;
-  &:not(.disabled):focus {
-    color: $accent-color;
-  }
-  &:not(.disabled):active {
-    position: relative;
-    top: 1px;
-  }
-  &:not(.disabled) {
-    border: 1px solid $accent-color;
-    color: $accent-color;
-  }
-  &.disabled {
-    &:focus {
-      color: $primary-color;
-    }
-  }
 }

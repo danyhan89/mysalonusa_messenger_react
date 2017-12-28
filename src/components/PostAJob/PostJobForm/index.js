@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import isEmail from "is-email";
 import Label from "@app/Label";
 import join from "@app/join";
-
+import ActionButton from "@app/ActionButton";
+import LoadingIcon from "@app/LoadingIcon";
 import { createJob } from "src/api";
 
 import communities, { getCommunity } from "src/communities";
@@ -10,7 +11,6 @@ import states from "src/states";
 import styles from "./index.scss";
 
 import OptionList from "../OptionList";
-import LoadingIcon from "./LoadingIcon";
 
 const preventDefault = e => e.preventDefault();
 
@@ -49,18 +49,14 @@ const Button = ({
   onClick
 }) => {
   return (
-    <button
+    <ActionButton
       tabIndex={tabIndex}
       disabled={disabled}
-      className={join(
-        className,
-        styles.actionButton,
-        disabled && styles.disabled
-      )}
+      className={className}
       onClick={onClick}
     >
       {children}
-    </button>
+    </ActionButton>
   );
 };
 
@@ -278,7 +274,7 @@ class PostJobForm extends Component {
       <div className={join(styles.form)}>
         {this.props.children}
         {step.render({ value: stepValue, onChange, state: this.state })}
-        <div>
+        <div className="mt3" >
           {currentStep > 0 && hasPrev ? (
             <Button className={styles.prevButton} onClick={() => this.prev()}>
               <Label>prev</Label>

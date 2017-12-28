@@ -7,6 +7,8 @@ import uuidv4 from "uuid/v4";
 import communities from "src/communities";
 import Label from "@app/Label";
 import join from "@app/join";
+import Input from "@app/Input";
+import Button from "@app/Button";
 
 import { fetchChats } from "src/api";
 
@@ -14,6 +16,8 @@ import { isValid as isValidState } from "src/states";
 
 import JOB_ICON from "./jobIcon";
 import APPLY_ICON from "./applyIcon";
+
+import ApplyOverlay from './ApplyOverlay'
 
 import styles from "./index.scss";
 
@@ -23,7 +27,7 @@ if (!STORED_NICKNAME) {
   global.localStorage.setItem("nickname", NICKNAME);
 }
 
-const emptyFn = () => {};
+const emptyFn = () => { };
 
 const SPACER = <div className={styles.flex1} />;
 
@@ -122,8 +126,7 @@ class ChatroomContent extends Component {
     this.messagesNode.scrollTop += this.messagesNode.scrollHeight;
   }
 
-  onTextChange(event) {
-    const text = event.target.value;
+  onTextChange(text) {
 
     this.setState({
       text
@@ -153,6 +156,19 @@ class ChatroomContent extends Component {
     return message.nickname === NICKNAME;
   }
 
+  renderApplyOverlay() {
+
+    if (!this.state.applyForJob) {
+      return null
+    }
+
+    return <ApplyOverlay job={this.state.applyForJob} onDismiss={() => {
+      this.setState({
+        applyForJob: null
+      })
+    }} />
+  }
+
   render() {
     return (
       <div className={`col-12 ${styles.content}`}>
@@ -160,26 +176,26 @@ class ChatroomContent extends Component {
           {SPACER}
           {this.state.messages.map(this.renderMessage)}
         </div>
+        {this.renderApplyOverlay()}
         <form onSubmit={this.onSubmit} className={styles.form}>
-          <input
-            type="text"
+          <Input
             onChange={this.onTextChange}
             value={this.state.text}
-            className={styles.input}
-            autoFocus
+            className={`${styles.input} mt2 mr2`}
           />
-          <button
-            type="submit"
-            className={join(
-              styles.submitButton,
-              !this.state.text && styles.disabled
-            )}
+          <Button
+            disabled={!this.state.text}
+            className={`br3 pa3 mt2`}
           >
-            Send
-          </button>{" "}
+            <Label>Send</Label>
+          </Button>
         </form>
       </div>
     );
+  }
+
+  onApply(job, message) {
+    this.setState({ applyForJob: job })
   }
 
   renderJobMessage(job, msg) {
@@ -208,7 +224,7 @@ class ChatroomContent extends Component {
         <div>{job.description}</div>
 
         {!itsMe ? (
-          <div className={`br3 ma3 pa3 f3 flex items-center ${styles.apply}`}>
+          <div onClick={this.onApply.bind(this, job, msg)} className={`br3 ma3 pa3 f3 flex items-center ${styles.apply}`}>
             {APPLY_ICON({ size: 32 })} <Label>APPLY</Label>
           </div>
         ) : null}

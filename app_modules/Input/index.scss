@@ -1,0 +1,12 @@
+@import '~@app/colors.scss';
+.input {
+  outline: none;
+  border: 1px solid rgba($primary-color-dark, 0.8);
+  transition: all 0.2s;
+  color: $primary-color;
+  &:focus {
+    outline: none;
+    box-shadow: 1px 2px 3px -1px rgba(0, 0, 0, 0.2);
+    border: 1px solid $accent-color;
+  }
+}
