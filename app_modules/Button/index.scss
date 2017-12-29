@@ -21,8 +21,10 @@
     color: $accent-color;
   }
   &.disabled {
+    border: 1px solid $secondary-text-color;
+    color: $secondary-text-color;
     &:focus {
-      color: $primary-color;
+      color: $secondary-text-color; //$primary-color;
     }
   }
 }

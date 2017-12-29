@@ -19,6 +19,7 @@
   fill: $accent-color;
   color: $accent-color;
   transition: all 0.2s;
+  cursor: pointer;
   &:hover,
   &:active {
     fill: darken($accent-color, 20%);

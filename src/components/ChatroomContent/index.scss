@@ -31,9 +31,21 @@
 }
 
 $MARGIN_TOP: 5px;
+.apply {
+  background: $accent-color;
+  cursor: pointer;
+  &:active {
+    position: relative;
+    top: 1px;
+  }
+}
+
+.flexEnd {
+  align-self: flex-end;
+  text-align: end;
+}
+
 .message {
-  padding: 7px;
-  margin-top: $MARGIN_TOP;
   background: $accent-color;
   color: $primary-color-text;
 }
@@ -44,17 +56,7 @@ $MARGIN_TOP: 5px;
   background: $accent-color-2;
 }
 
-.apply {
-  background: $accent-color;
-  cursor: pointer;
-  &:active {
-    position: relative;
-    top: 1px;
-  }
-}
-
 .myMessage {
-  align-self: flex-end;
   background: $primary-color-dark;
 }
 

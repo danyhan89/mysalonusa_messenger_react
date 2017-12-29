@@ -29,7 +29,7 @@ export const createJob = job => {
 
 export const applyForJob = ({ message, email, job }) => {
   if (!message || !email || !job) {
-    throw 'Specify message, email and job'
+    throw "Specify message, email and job";
   }
 
   return fetch(`${process.env.SERVER_URL}/applyForJob`, {
@@ -41,6 +41,6 @@ export const applyForJob = ({ message, email, job }) => {
   }).then(response => {
     return response.json();
   });
-}
+};
 
 global.createJob = createJob;

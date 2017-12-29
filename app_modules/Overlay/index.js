@@ -1,6 +1,7 @@
 import React from 'react'
 
 import Label from '@app/Label'
+import join from '@app/join'
 
 import styles from './index.scss'
 
@@ -24,8 +25,9 @@ const renderCloseIcon = ({ onClick }) => (
 );
 
 
-const Overlay = ({ children, onClick, closeable, onClose }) => {
+const Overlay = ({ tag, children, onClick, closeable, onClose, className, ...props }) => {
 
+  const Tag = tag || 'div'
   const onClickHandler = onClick ? (event) => {
     stopPropagation(event);
     onClick(event)
@@ -40,11 +42,11 @@ const Overlay = ({ children, onClick, closeable, onClose }) => {
   }
 
   return (
-    <div onClick={onClickHandler} className={styles.overlay}>
+    <Tag {...props} onClick={onClickHandler} className={join(styles.overlay, className)}>
       {children}
 
       {closeIcon}
-    </div>
+    </Tag>
   );
 };
 

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import join from "@app/join";
 import Label from "@app/Label";
-import Overlay from '@app/Overlay'
+import Overlay from "@app/Overlay";
 
 import PostJobForm from "./PostJobForm";
 
@@ -26,7 +26,7 @@ class PostAJob extends Component {
   }
   render() {
     const { props } = this;
-    const className = join(props.className, styles.postAJob);
+    const className = join(props.className, styles.postAJob, 'pa3 f4');
 
     return (
       <div className={className} onClick={this.toggle}>
@@ -42,10 +42,12 @@ class PostAJob extends Component {
 
     const { lang, state, community } = this.props;
     return (
-      <Overlay closeable onClose={() => {
-        this.setState({ on: false })
-      }}>
-
+      <Overlay
+        closeable
+        onClose={() => {
+          this.setState({ on: false });
+        }}
+      >
         <PostJobForm
           onSuccess={() => {
             this.setState({

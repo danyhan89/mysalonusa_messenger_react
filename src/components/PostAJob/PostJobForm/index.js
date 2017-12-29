@@ -213,7 +213,7 @@ class PostJobForm extends Component {
       currentStep: 0,
       community: getCommunity(props.community).value,
       state: props.state,
-      nickname: "",
+      nickname: global.localStorage.getItem('alias') || '',
       email: "",
       description: ""
     };
@@ -274,7 +274,7 @@ class PostJobForm extends Component {
       <div className={join(styles.form)}>
         {this.props.children}
         {step.render({ value: stepValue, onChange, state: this.state })}
-        <div className="mt3" >
+        <div className="mt3">
           {currentStep > 0 && hasPrev ? (
             <Button className={styles.prevButton} onClick={() => this.prev()}>
               <Label>prev</Label>
