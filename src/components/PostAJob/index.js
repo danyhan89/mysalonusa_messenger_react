@@ -26,7 +26,7 @@ class PostAJob extends Component {
   }
   render() {
     const { props } = this;
-    const className = join(props.className, styles.postAJob, 'pa3 f4');
+    const className = join(props.className, styles.postAJob, "pa3 f4");
 
     return (
       <div className={className} onClick={this.toggle}>

@@ -30,6 +30,45 @@
   flex: 1;
 }
 
+.loader {
+  transform: translate3d(-50%, -100px, 0px);
+  left: 50%;
+  background: $accent-color;
+  color: white;
+  opacity: 0;
+  transition: opacity 0.2s;
+  z-index: 100;
+}
+
+@keyframes slideDown {
+  0% {
+    transform: translate3d(-50%, -100%, 0px);
+  }
+  50% {
+    transform: translate3d(-50%, 8%, 0px);
+  }
+  65% {
+    transform: translate3d(-50%, -4%, 0px);
+  }
+  80% {
+    transform: translate3d(-50%, 4%, 0px);
+  }
+  95% {
+    transform: translate3d(-50%, -2%, 0px);
+  }
+  100% {
+    transform: translate3d(-50%, 0%, 0px);
+  }
+}
+
+.loaderVisible {
+  animation-name: slideDown;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+  opacity: 1;
+  transform: translate3d(-50%, 0px, 0px);
+}
+
 $MARGIN_TOP: 5px;
 .apply {
   background: $accent-color;

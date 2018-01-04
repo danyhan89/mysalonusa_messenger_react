@@ -1,0 +1,18 @@
+@import "~@app/colors.scss";
+.separator {}
+
+.separatorLine {
+  height: 1px;
+  background: $accent-color;
+  z-index: -1;
+  top: 50%;
+}
+
+.separatorContentWrapper {
+  background: white;
+}
+
+.separatorContent {
+  background: $accent-color;
+  color: white;
+}

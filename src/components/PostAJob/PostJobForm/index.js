@@ -213,7 +213,7 @@ class PostJobForm extends Component {
       currentStep: 0,
       community: getCommunity(props.community).value,
       state: props.state,
-      nickname: global.localStorage.getItem('alias') || '',
+      nickname: global.localStorage.getItem("alias") || "",
       email: "",
       description: ""
     };
