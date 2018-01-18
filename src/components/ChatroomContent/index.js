@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-import { DateTime } from 'luxon'
+import { DateTime } from "luxon";
 
 import io from "socket.io-client";
 import uuidv4 from "uuid/v4";
@@ -20,7 +20,7 @@ import { fetchChats } from "src/api";
 
 import { isValid as isValidState } from "src/states";
 
-import Separator from './Separator'
+import Separator from "./Separator";
 import JOB_ICON from "./jobIcon";
 import APPLY_ICON from "./applyIcon";
 
@@ -36,7 +36,7 @@ if (!STORED_NICKNAME) {
   global.localStorage.setItem("nickname", NICKNAME);
 }
 
-const emptyFn = () => { };
+const emptyFn = () => {};
 
 const SPACER = <div className={styles.flex1} />;
 
@@ -49,25 +49,25 @@ const connect = state => {
   return io(socketURL);
 };
 
-const LIMIT = 50
+const LIMIT = 50;
 
 const isValidAlias = alias => alias.length >= 1;
 
-const timezoneOffset = new Date().getTimezoneOffset()
+const timezoneOffset = new Date().getTimezoneOffset();
 
-const renderDate = (dateString) => {
-  const date = DateTime.fromISO(dateString).plus({ minutes: -timezoneOffset })
+const renderDate = dateString => {
+  const date = DateTime.fromISO(dateString).plus({ minutes: -timezoneOffset });
 
-  return date.toLocaleString(DateTime.DATETIME_SHORT)
-}
+  return date.toLocaleString(DateTime.DATETIME_SHORT);
+};
 
-const getDayFormat = (dateString) => {
-  const date = DateTime.fromISO(dateString).plus({ minutes: -timezoneOffset })
+const getDayFormat = dateString => {
+  const date = DateTime.fromISO(dateString).plus({ minutes: -timezoneOffset });
 
-  return date.toLocaleString()
-}
+  return date.toLocaleString();
+};
 
-global.DateTime = DateTime
+global.DateTime = DateTime;
 
 class ChatroomContent extends Component {
   constructor(props) {
@@ -80,7 +80,7 @@ class ChatroomContent extends Component {
 
     const { state: chosenState } = props;
 
-    this.beforeId = null
+    this.beforeId = null;
 
     this.openSocket(chosenState);
 
@@ -91,14 +91,18 @@ class ChatroomContent extends Component {
       messages: []
     };
 
-
     this.messagesRef = node => {
-
       if (node) {
-        node.addEventListener('scroll', this.onMessagesScroll, { passive: true })
+        node.addEventListener("scroll", this.onMessagesScroll, {
+          passive: true
+        });
       } else {
         if (this.messagesNode) {
-          this.messagesNode.removeEventListener('scroll', this.onMessagesScroll, { passive: true })
+          this.messagesNode.removeEventListener(
+            "scroll",
+            this.onMessagesScroll,
+            { passive: true }
+          );
         }
       }
 
@@ -107,45 +111,45 @@ class ChatroomContent extends Component {
   }
 
   onMessagesScroll(event) {
-    const target = event.target
+    const target = event.target;
 
     if (target.scrollTop == 0) {
-
-      const scrollTop = target.scrollHeight
+      const scrollTop = target.scrollHeight;
 
       this.fetchMore(() => {
-        target.scrollTop = target.scrollHeight - scrollTop
-      })
+        target.scrollTop = target.scrollHeight - scrollTop;
+      });
     }
   }
 
   fetchMore(callback) {
-    const { props } = this
+    const { props } = this;
 
-    const beforeId = this.state.messages.length ? this.state.messages[0].id : null
+    const beforeId = this.state.messages.length
+      ? this.state.messages[0].id
+      : null;
 
     if (beforeId && this.beforeId && this.beforeId <= beforeId) {
-
-      return
+      return;
     }
 
-    this.beforeId = beforeId
+    this.beforeId = beforeId;
 
-    this.setState({ loading: true })
+    this.setState({ loading: true });
     fetchChats({
       limit: LIMIT,
       beforeId,
       state: props.state,
       community: props.community
     }).then(chats => {
-
-      chats = chats.reverse()
-      const messages = chats.concat(this.state.messages)
+      chats = chats.reverse();
+      const messages = chats.concat(this.state.messages);
       this.setState(
         {
           loading: false,
           messages
-        }, callback
+        },
+        callback
       );
     });
   }
@@ -172,7 +176,7 @@ class ChatroomContent extends Component {
 
   componentDidMount() {
     const { props } = this;
-    this.setState({ loading: true })
+    this.setState({ loading: true });
     fetchChats({
       limit: LIMIT,
       state: props.state,
@@ -334,9 +338,14 @@ class ChatroomContent extends Component {
   }
 
   renderLoader() {
-    const visibleCls = this.state.loading ? styles.loaderVisible : ''
+    const visibleCls = this.state.loading ? styles.loaderVisible : "";
 
-    return <div className={`absolute ${styles.loader} br3 pa2 ${visibleCls}`}> <LoadingIcon /> <Label>loading</Label>....</div>
+    return (
+      <div className={`absolute ${styles.loader} br3 pa2 ${visibleCls}`}>
+        {" "}
+        <LoadingIcon /> <Label>loading</Label>....
+      </div>
+    );
   }
 
   render() {
@@ -413,36 +422,37 @@ class ChatroomContent extends Component {
   renderMessage(msg, index) {
     const isJob = msg.chat_type == 1;
 
-    const dateString = getDayFormat(msg.created_at)
+    const dateString = getDayFormat(msg.created_at);
 
-    const dateSeparator = this.prevDate && this.prevDate != dateString ?
-      <Separator date={dateString} key={`${dateString}-separator`} />
+    const dateSeparator =
+      this.prevDate && this.prevDate != dateString ? (
+        <Separator date={dateString} key={`${dateString}-separator`} />
+      ) : null;
 
-      : null
+    this.prevDate = dateString;
 
-    this.prevDate = dateString
-
-    let renderResult
+    let renderResult;
     if (isJob) {
       renderResult = this.renderJobMessage(JSON.parse(msg.message), msg);
     } else {
       const { message, nickname, alias } = msg;
       const me = this.itsMe(msg);
-      renderResult =
+      renderResult = (
         <div
           key={msg.id || index}
           className={`mt2 ${join(me && styles.flexEnd)}`}
         >
           {alias || <Label>unknown</Label>} ({renderDate(msg.created_at)}):
-        <div
+          <div
             className={join("pa2 br3", styles.message, me && styles.myMessage)}
           >
             {message}
           </div>
         </div>
+      );
     }
 
-    return dateSeparator ? [dateSeparator, renderResult] : renderResult
+    return dateSeparator ? [dateSeparator, renderResult] : renderResult;
   }
 }
 
