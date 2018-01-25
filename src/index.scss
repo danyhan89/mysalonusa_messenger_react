@@ -1,8 +1,7 @@
 @import "~bootstrap/scss/bootstrap-reboot.scss";
 @import "~bootstrap/scss/bootstrap-grid.scss";
-
 .app {
   height: 100vh;
   width: 100vw;
-  overflow: auto;
+  overflow: hidden;
 }

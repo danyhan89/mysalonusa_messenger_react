@@ -36,7 +36,7 @@ if (!STORED_NICKNAME) {
   global.localStorage.setItem("nickname", NICKNAME);
 }
 
-const emptyFn = () => {};
+const emptyFn = () => { };
 
 const SPACER = <div className={styles.flex1} />;
 
@@ -350,15 +350,15 @@ class ChatroomContent extends Component {
 
   render() {
     return (
-      <div className={`col-12 ${styles.content} relative`}>
+      <div className={` ${styles.content} relative`}>
         {this.renderLoader()}
-        <div className={styles.messages} ref={this.messagesRef}>
+        <div className={`${styles.messages} ph2 pt2`} ref={this.messagesRef}>
           {SPACER}
           {this.state.messages.map(this.renderMessage)}
         </div>
         {this.renderAliasOverlay()}
         {this.renderApplyOverlay()}
-        <form onSubmit={this.onSubmit} className={styles.form}>
+        <form onSubmit={this.onSubmit} className={`${styles.form} pb2 ph2`}>
           <Input
             onChange={this.onTextChange}
             value={this.state.text}
@@ -383,7 +383,7 @@ class ChatroomContent extends Component {
         key={job.id || index}
         className={join(` mt2`, itsMe && styles.flexEnd)}
       >
-        {job.alias || <Label>unknown</Label>} ({renderDate(job.created_at)}):
+        {job.nickname || <Label>unknown</Label>} ({renderDate(job.created_at)}):
         <div
           className={join(
             "br3 pa2",
@@ -442,9 +442,9 @@ class ChatroomContent extends Component {
           key={msg.id || index}
           className={`mt2 ${join(me && styles.flexEnd)}`}
         >
-          {alias || <Label>unknown</Label>} ({renderDate(msg.created_at)}):
+          <div className="f7">{alias || <Label>unknown</Label>} ({renderDate(msg.created_at)}):</div>
           <div
-            className={join("pa2 br3", styles.message, me && styles.myMessage)}
+            className={join("pa1 br3", styles.message, me && styles.myMessage)}
           >
             {message}
           </div>

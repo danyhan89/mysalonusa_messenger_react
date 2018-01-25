@@ -1,0 +1,18 @@
+@import "~@app/colors.scss";
+.statesPopup {
+  position: fixed;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  overflow: auto;
+  color: $primary-text-color;
+}
+
+.stateItem {
+  padding: 10px;
+  cursor: pointer;
+  &:hover {
+    background: lighten(black, 90%);
+  }
+}

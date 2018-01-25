@@ -10,5 +10,7 @@ export default {
   jobPost: "Job Post",
   close: "Close",
   prev: "Previous",
-  next: "Next"
+  next: "Next",
+  chooseState: 'Choose your state',
+  chooseLanguage: 'Choose your language'
 };

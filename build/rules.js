@@ -6,11 +6,12 @@ const compileStyles = loaders =>
   dev
     ? loaders
     : ExtractTextPlugin.extract({
-        fallback: "style-loader",
-        use: loaders.slice(1)
-      });
+      fallback: "style-loader",
+      use: loaders.slice(1)
+    });
 
 module.exports = [
+  { test: /\.png$/, use: 'url-loader?mimetype=image/png' },
   { test: /\.js$/, use: "babel-loader", exclude: /node_modules/ },
   { test: /\.css$/, use: compileStyles(["style-loader", "css-loader"]) },
   {

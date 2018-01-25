@@ -6,9 +6,8 @@ import { isValid as isValidLang } from "src/languages";
 import { isValid as isValidState } from "src/states";
 import { isValid as isValidCommunity } from "src/communities";
 
-import LanguagePopup from "./LanguagePopup";
-import StatesPopup from "./StatesPopup";
 import ChatroomSelect from "../ChatroomSelect";
+import Footer from "../Footer";
 
 import styles from "./index.scss";
 
@@ -114,11 +113,13 @@ class Sidebar extends Component {
       }
     }
 
+    const className = `w-25 flex flex-column pa2 ${styles.sidebar}`
+
     return (
-      <div className={`col-4 col-md-2 ${styles.sidebar}`}>
-        {this.renderLanguagePopup()}
-        {this.renderStatesPopup()}
+      <div className={className}
+      >
         {this.renderChatroomSelect()}
+        <Footer {...this.props} />
       </div>
     );
   }
@@ -132,6 +133,7 @@ class Sidebar extends Component {
         community={community}
         lang={lang}
         state={state}
+        className={styles.chatroomSelect}
         onChange={community => {
           if (!community) {
             history.push(`/${lang}/${state}/`);
@@ -139,39 +141,6 @@ class Sidebar extends Component {
             storeCommunity(community);
             history.push(`/${lang}/${state}/${community}`);
           }
-        }}
-      />
-    );
-  }
-  renderStatesPopup() {
-    const { history, lang, state } = this.props;
-    if (!lang) {
-      return null;
-    }
-
-    if (state) {
-      return null;
-    }
-
-    return (
-      <StatesPopup
-        onChange={state => {
-          history.push(`/${lang}/${state}`);
-        }}
-      />
-    );
-  }
-  renderLanguagePopup() {
-    if (this.props.lang) {
-      return null;
-    }
-
-    const { history } = this.props;
-
-    return (
-      <LanguagePopup
-        onChange={lang => {
-          history.push(`/${lang}`);
         }}
       />
     );

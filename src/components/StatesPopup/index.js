@@ -1,13 +1,16 @@
 import React from "react";
-
-import STATES from "src/states";
+import Label from '@app/Label'
+import STATES, { names } from "src/states";
 
 import styles from "./index.scss";
 
 const StatesPopup = ({ onChange }) => {
   return (
-    <div className={styles.statesPopup}>
-      {STATES.map(state => (
+    <div className={`${styles.statesPopup} flex items-center flex-column justify-center`}>
+      <div className="mb3 f4">
+        <Label>chooseState</Label>:
+      </div>
+      {STATES.map((state, index) => (
         <div
           key={state}
           className={styles.stateItem}
@@ -15,7 +18,7 @@ const StatesPopup = ({ onChange }) => {
             onChange(state);
           }}
         >
-          {state}
+          {state} - {names[index]}
         </div>
       ))}
     </div>
