@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { findDOMNode } from 'react-dom'
+import { findDOMNode } from "react-dom";
 
 import { DateTime } from "luxon";
 
@@ -25,8 +25,8 @@ import { isValid as isValidState } from "src/states";
 import Separator from "./Separator";
 import JOB_ICON from "./jobIcon";
 import APPLY_ICON from "./applyIcon";
-import DELETE_ICON from './deleteIcon'
-import EDIT_ICON from './editIcon'
+import DELETE_ICON from "./deleteIcon";
+import EDIT_ICON from "./editIcon";
 
 import ApplyOverlay from "./ApplyOverlay";
 
@@ -40,7 +40,7 @@ if (!STORED_NICKNAME) {
   global.localStorage.setItem("nickname", NICKNAME);
 }
 
-const emptyFn = () => { };
+const emptyFn = () => {};
 
 const SPACER = <div className={styles.flex1} />;
 
@@ -86,9 +86,9 @@ class ChatroomContent extends Component {
 
     this.beforeId = null;
 
-    this.inputRef = (cmp) => {
-      this.inputNode = cmp ? findDOMNode(cmp) : null
-    }
+    this.inputRef = cmp => {
+      this.inputNode = cmp ? findDOMNode(cmp) : null;
+    };
 
     this.openSocket(chosenState);
 
@@ -175,18 +175,17 @@ class ChatroomContent extends Component {
       }
     });
 
-    this.socket.on('edit', message => {
-
+    this.socket.on("edit", message => {
       message = JSON.parse(message);
       const community = message.community || {};
       if (community.name == props.community || props.community === "combined") {
         this.pushEditedMessage(message);
       }
-    })
+    });
 
-    this.socket.on('delete', id => {
-      this.pushDeletedMessage(id)
-    })
+    this.socket.on("delete", id => {
+      this.pushDeletedMessage(id);
+    });
   }
 
   closeSocket() {
@@ -244,7 +243,7 @@ class ChatroomContent extends Component {
       },
       () => {
         if (this.itsMe(message)) {
-          this.scrollToBottom()
+          this.scrollToBottom();
         }
       }
     );
@@ -254,22 +253,22 @@ class ChatroomContent extends Component {
     this.setState({
       messages: this.state.messages.map(msg => {
         if (msg.id === message.id) {
-          return message
+          return message;
         }
-        return msg
+        return msg;
       })
-    })
+    });
   }
 
   pushDeletedMessage(id) {
     this.setState({
       messages: this.state.messages.filter(msg => {
         if (msg.id === id) {
-          return false
+          return false;
         }
-        return true
+        return true;
       })
-    })
+    });
   }
 
   scrollToBottom() {
@@ -284,18 +283,18 @@ class ChatroomContent extends Component {
 
   send(text) {
     const { state, community } = this.props;
-    const { editMessage } = this.state
+    const { editMessage } = this.state;
 
     if (editMessage) {
       const newMessage = {
         ...editMessage,
         message: text
-      }
+      };
       this.setState({
         editMessage: null
-      })
-      this.socket.emit('editMessage', JSON.stringify(newMessage))
-      return
+      });
+      this.socket.emit("editMessage", JSON.stringify(newMessage));
+      return;
     }
 
     this.socket.emit(
@@ -318,25 +317,27 @@ class ChatroomContent extends Component {
   deleteMessage(msg) {
     this.setState({
       deleteMessage: msg
-    })
-
+    });
   }
 
   doDelete(id) {
-    this.socket.emit('deleteMessage', id)
+    this.socket.emit("deleteMessage", id);
   }
 
   editMessage(msg) {
     if (this.isJob(msg)) {
-      return
+      return;
     }
 
-    this.setState({
-      editMessage: msg,
-      text: msg.message
-    }, () => {
-      this.inputNode.focus()
-    })
+    this.setState(
+      {
+        editMessage: msg,
+        text: msg.message
+      },
+      () => {
+        this.inputNode.focus();
+      }
+    );
   }
 
   itsMe(message) {
@@ -433,23 +434,20 @@ class ChatroomContent extends Component {
     };
 
     return (
-      <Popup
-      >
+      <Popup>
         <div className="mb3">
           <Label>confirmDeleteMessage</Label>
         </div>
 
         <div className="flex flex-row justify-center">
-          <ActionButton onClick={onClose}
-            className="ma2 mr0"
-          >
+          <ActionButton onClick={onClose} className="ma2 mr0">
             <Label>no</Label>
           </ActionButton>
           <ActionButton
             className="ma2"
             onClick={() => {
-              this.doDelete(this.state.deleteMessage.id)
-              onClose()
+              this.doDelete(this.state.deleteMessage.id);
+              onClose();
             }}
           >
             <Label>yes</Label>
@@ -471,16 +469,24 @@ class ChatroomContent extends Component {
   }
 
   render() {
-    const empty = !this.state.messages.length && !this.state.loading
-    const style = {}
+    const empty = !this.state.messages.length && !this.state.loading;
+    const style = {};
     if (empty) {
-      style.display = 'block'
+      style.display = "block";
     }
     return (
       <div className={` ${styles.content} relative`}>
         {this.renderLoader()}
-        <div className={`${styles.messages} ph2 pt2`} style={style} ref={this.messagesRef}>
-          {empty ? <div className="tc gray f4 pa3"><Label>noMessages</Label></div> : null}
+        <div
+          className={`${styles.messages} ph2 pt2`}
+          style={style}
+          ref={this.messagesRef}
+        >
+          {empty ? (
+            <div className="tc gray f4 pa3">
+              <Label>noMessages</Label>
+            </div>
+          ) : null}
           {SPACER}
           {!empty ? this.state.messages.map(this.renderMessage) : null}
         </div>
@@ -521,7 +527,7 @@ class ChatroomContent extends Component {
             styles.jobMessage,
             styles.message,
             itsMe && styles.myMessage,
-            itsMe ? 'ml5' : null
+            itsMe ? "ml5" : null
           )}
         >
           <div className="f4 f3-ns flex items-center">
@@ -541,7 +547,9 @@ class ChatroomContent extends Component {
           {!itsMe ? (
             <div
               onClick={this.onApply.bind(this, job, msg)}
-              className={`br3 ma1 ma3-ns pa1 pa3-ns f4 f3-ns flex items-center ${styles.apply}`}
+              className={`br3 ma1 ma3-ns pa1 pa3-ns f4 f3-ns flex items-center ${
+                styles.apply
+              }`}
             >
               {APPLY_ICON({ size: 32 })} <Label>APPLY</Label>
             </div>
@@ -554,30 +562,30 @@ class ChatroomContent extends Component {
   }
 
   isJob(message) {
-    return message.chat_type == 1
+    return message.chat_type == 1;
   }
 
   canDeleteMessage(message) {
-    const isJob = this.isJob(message)
-    const now = DateTime.utc()
+    const isJob = this.isJob(message);
+    const now = DateTime.utc();
     const twoDaysBefore = now.plus({ seconds: 20 });
 
-    const createdAt = DateTime.fromISO(message.created_at)
+    const createdAt = DateTime.fromISO(message.created_at);
 
     //todo
-    return true
+    return true;
     if (createdAt < twoDaysBefore) {
-      return false
+      return false;
     }
-    return true
+    return true;
   }
 
   canEditMessage(message) {
-    return this.canDeleteMessage(message)
+    return this.canDeleteMessage(message);
   }
 
   renderMessage(msg, index) {
-    const isJob = this.isJob(msg)
+    const isJob = this.isJob(msg);
 
     const dateString = getDayFormat(msg.created_at);
 
@@ -591,21 +599,27 @@ class ChatroomContent extends Component {
     let renderResult;
     const key = msg.id || index;
     const me = this.itsMe(msg);
-    const canEdit = this.canEditMessage(msg)
-    const canDelete = this.canDeleteMessage(msg)
+    const canEdit = this.canEditMessage(msg);
+    const canDelete = this.canDeleteMessage(msg);
 
-    const icons = me ? [
-      DELETE_ICON({
-        size: 30,
-        onClick: this.deleteMessage.bind(this, msg),
-        className: `${styles.deleteIcon} ${!canDelete ? 'o-50' : ''} absolute top-0 left-0`
-      }),
-      EDIT_ICON({
-        size: 30,
-        onClick: this.editMessage.bind(this, msg),
-        className: `${styles.editIcon} ${!canEdit ? 'o-50' : ''} absolute top-0 left-0`
-      })
-    ] : null
+    const icons = me
+      ? [
+          DELETE_ICON({
+            size: 30,
+            onClick: this.deleteMessage.bind(this, msg),
+            className: `${styles.deleteIcon} ${
+              !canDelete ? "o-50" : ""
+            } absolute top-0 left-0`
+          }),
+          EDIT_ICON({
+            size: 30,
+            onClick: this.editMessage.bind(this, msg),
+            className: `${styles.editIcon} ${
+              !canEdit ? "o-50" : ""
+            } absolute top-0 left-0`
+          })
+        ]
+      : null;
 
     if (isJob) {
       renderResult = this.renderJobMessage(JSON.parse(msg.message), msg, icons);
@@ -617,7 +631,11 @@ class ChatroomContent extends Component {
             {alias || <Label>unknown</Label>} ({renderDate(msg.created_at)}):
           </div>
           <div
-            className={join("pa1 br3 relative ml5", styles.message, me && styles.myMessage)}
+            className={join(
+              "pa1 br3 relative ml5",
+              styles.message,
+              me && styles.myMessage
+            )}
           >
             {icons}
             {message}
@@ -626,9 +644,11 @@ class ChatroomContent extends Component {
       );
     }
 
-    renderResult = <div key={key} className={`relative mt2 ${join(me && styles.flexEnd)}`}>
-      {renderResult}
-    </div>
+    renderResult = (
+      <div key={key} className={`relative mt2 ${join(me && styles.flexEnd)}`}>
+        {renderResult}
+      </div>
+    );
 
     return dateSeparator ? [dateSeparator, renderResult] : renderResult;
   }

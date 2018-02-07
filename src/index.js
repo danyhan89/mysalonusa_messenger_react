@@ -21,8 +21,7 @@ import messages from "./messages";
 
 const Layout = props => {
   const { community, state, language } = props;
-  const key = `${community}-${state}-${language}`
-
+  const key = `${community}-${state}-${language}`;
 
   return (
     <div className="flex flex-column" style={{ height: "100%" }}>
@@ -32,8 +31,8 @@ const Layout = props => {
           {community ? (
             <ChatroomContent {...props} key={key} />
           ) : (
-              <Content {...props} />
-            )}
+            <Content {...props} />
+          )}
         </CenterContainer>
       </div>
     </div>

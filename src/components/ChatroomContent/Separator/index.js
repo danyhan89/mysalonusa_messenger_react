@@ -5,7 +5,9 @@ export default ({ date }) => (
     <div className={`${styles.separatorLine} w-100 absolute`} />
 
     <div className={`${styles.separatorContentWrapper} pa1 pa2-ns dib`}>
-      <div className={`${styles.separatorContent} br3 pa1 pa2-ns dib`}>{date}</div>
+      <div className={`${styles.separatorContent} br3 pa1 pa2-ns dib`}>
+        {date}
+      </div>
     </div>
   </div>
 );

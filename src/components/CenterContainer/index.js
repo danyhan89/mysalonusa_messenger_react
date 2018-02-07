@@ -5,25 +5,24 @@ import PostAJob from "../PostAJob";
 
 import styles from "./index.scss";
 
-
 class CenterContainer extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       opened: false
-    }
-    this.toggleMenu = this.toggleMenu.bind(this)
+    };
+    this.toggleMenu = this.toggleMenu.bind(this);
   }
 
   toggleMenu() {
     requestAnimationFrame(() => {
       this.setState({
         opened: !this.state.opened
-      })
-    })
+      });
+    });
   }
   render() {
-    const { children, className, lang, state, community } = this.props
+    const { children, className, lang, state, community } = this.props;
 
     return (
       <div
@@ -35,11 +34,16 @@ class CenterContainer extends React.Component {
         )}
       >
         {community && (
-          <PostAJob toggleMenu={this.toggleMenu} lang={lang} state={state} community={community} />
+          <PostAJob
+            toggleMenu={this.toggleMenu}
+            lang={lang}
+            state={state}
+            community={community}
+          />
         )}
         {children}
       </div>
     );
   }
 }
-export default CenterContainer
+export default CenterContainer;
