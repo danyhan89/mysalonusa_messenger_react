@@ -5,6 +5,26 @@
   flex: 1;
 }
 
+.editIcon {
+  transform: translateX(-100%);
+}
+
+.deleteIcon {
+  transform: translateX(-200%);
+}
+
+.editIcon,
+.deleteIcon {
+  fill: $primary-color;
+  cursor: pointer;
+  &:hover {
+    fill: lighten($primary-color, 10%);
+  }
+  &:active {
+    top: 1px;
+  }
+}
+
 .communityItem {
   padding: 10px;
   cursor: pointer;

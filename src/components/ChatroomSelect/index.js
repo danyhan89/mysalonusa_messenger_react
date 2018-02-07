@@ -7,7 +7,7 @@ import Text from "@app/Text";
 import communities from "src/communities";
 import styles from "./index.scss";
 
-const emptyFn = () => { };
+const emptyFn = () => {};
 
 const ChatroomSelect = ({
   onChange = emptyFn,
@@ -32,7 +32,7 @@ const ChatroomSelect = ({
             <div
               key={community.value}
               className={join(
-                'mb2 pa2 pl3',
+                "mb2 pa2 pl3",
                 styles.communityItem,
                 isSelected && styles.selectedCommunity
               )}
@@ -46,7 +46,10 @@ const ChatroomSelect = ({
           );
         })}
         {currentCommunity && (
-          <div onClick={() => onChange()} className="mt3"> Goto main page</div>
+          <div onClick={() => onChange()} className="mt3">
+            {" "}
+            Goto main page
+          </div>
         )}
       </div>
     </div>

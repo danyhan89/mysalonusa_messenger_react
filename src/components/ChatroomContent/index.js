@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { findDOMNode } from 'react-dom'
 
 import { DateTime } from "luxon";
 
@@ -15,6 +16,7 @@ import Input from "@app/Input";
 import Button from "@app/Button";
 import ActionButton from "@app/ActionButton";
 import Overlay from "@app/Overlay";
+import Popup from "@app/Popup";
 
 import { fetchChats } from "src/api";
 
@@ -23,6 +25,8 @@ import { isValid as isValidState } from "src/states";
 import Separator from "./Separator";
 import JOB_ICON from "./jobIcon";
 import APPLY_ICON from "./applyIcon";
+import DELETE_ICON from './deleteIcon'
+import EDIT_ICON from './editIcon'
 
 import ApplyOverlay from "./ApplyOverlay";
 
@@ -82,9 +86,14 @@ class ChatroomContent extends Component {
 
     this.beforeId = null;
 
+    this.inputRef = (cmp) => {
+      this.inputNode = cmp ? findDOMNode(cmp) : null
+    }
+
     this.openSocket(chosenState);
 
     this.state = {
+      loading: true,
       alias: "",
       text: "",
       skip: 0,
@@ -165,6 +174,19 @@ class ChatroomContent extends Component {
         this.pushMessage(message);
       }
     });
+
+    this.socket.on('edit', message => {
+
+      message = JSON.parse(message);
+      const community = message.community || {};
+      if (community.name == props.community || props.community === "combined") {
+        this.pushEditedMessage(message);
+      }
+    })
+
+    this.socket.on('delete', id => {
+      this.pushDeletedMessage(id)
+    })
   }
 
   closeSocket() {
@@ -176,7 +198,7 @@ class ChatroomContent extends Component {
 
   componentDidMount() {
     const { props } = this;
-    this.setState({ loading: true });
+
     fetchChats({
       limit: LIMIT,
       state: props.state,
@@ -220,8 +242,34 @@ class ChatroomContent extends Component {
       {
         messages: [...this.state.messages, message]
       },
-      this.scrollToBottom
+      () => {
+        if (this.itsMe(message)) {
+          this.scrollToBottom()
+        }
+      }
     );
+  }
+
+  pushEditedMessage(message) {
+    this.setState({
+      messages: this.state.messages.map(msg => {
+        if (msg.id === message.id) {
+          return message
+        }
+        return msg
+      })
+    })
+  }
+
+  pushDeletedMessage(id) {
+    this.setState({
+      messages: this.state.messages.filter(msg => {
+        if (msg.id === id) {
+          return false
+        }
+        return true
+      })
+    })
   }
 
   scrollToBottom() {
@@ -236,6 +284,19 @@ class ChatroomContent extends Component {
 
   send(text) {
     const { state, community } = this.props;
+    const { editMessage } = this.state
+
+    if (editMessage) {
+      const newMessage = {
+        ...editMessage,
+        message: text
+      }
+      this.setState({
+        editMessage: null
+      })
+      this.socket.emit('editMessage', JSON.stringify(newMessage))
+      return
+    }
 
     this.socket.emit(
       "message",
@@ -252,6 +313,30 @@ class ChatroomContent extends Component {
     this.setState({
       text: ""
     });
+  }
+
+  deleteMessage(msg) {
+    this.setState({
+      deleteMessage: msg
+    })
+
+  }
+
+  doDelete(id) {
+    this.socket.emit('deleteMessage', id)
+  }
+
+  editMessage(msg) {
+    if (this.isJob(msg)) {
+      return
+    }
+
+    this.setState({
+      editMessage: msg,
+      text: msg.message
+    }, () => {
+      this.inputNode.focus()
+    })
   }
 
   itsMe(message) {
@@ -337,6 +422,43 @@ class ChatroomContent extends Component {
     );
   }
 
+  renderDeletePopup() {
+    if (!this.state.deleteMessage) {
+      return null;
+    }
+    const onClose = () => {
+      this.setState({
+        deleteMessage: null
+      });
+    };
+
+    return (
+      <Popup
+      >
+        <div className="mb3">
+          <Label>confirmDeleteMessage</Label>
+        </div>
+
+        <div className="flex flex-row justify-center">
+          <ActionButton onClick={onClose}
+            className="ma2 mr0"
+          >
+            <Label>no</Label>
+          </ActionButton>
+          <ActionButton
+            className="ma2"
+            onClick={() => {
+              this.doDelete(this.state.deleteMessage.id)
+              onClose()
+            }}
+          >
+            <Label>yes</Label>
+          </ActionButton>
+        </div>
+      </Popup>
+    );
+  }
+
   renderLoader() {
     const visibleCls = this.state.loading ? styles.loaderVisible : "";
 
@@ -349,22 +471,30 @@ class ChatroomContent extends Component {
   }
 
   render() {
+    const empty = !this.state.messages.length && !this.state.loading
+    const style = {}
+    if (empty) {
+      style.display = 'block'
+    }
     return (
       <div className={` ${styles.content} relative`}>
         {this.renderLoader()}
-        <div className={`${styles.messages} ph2 pt2`} ref={this.messagesRef}>
+        <div className={`${styles.messages} ph2 pt2`} style={style} ref={this.messagesRef}>
+          {empty ? <div className="tc gray f4 pa3"><Label>noMessages</Label></div> : null}
           {SPACER}
-          {this.state.messages.map(this.renderMessage)}
+          {!empty ? this.state.messages.map(this.renderMessage) : null}
         </div>
         {this.renderAliasOverlay()}
+        {this.renderDeletePopup()}
         {this.renderApplyOverlay()}
         <form onSubmit={this.onSubmit} className={`${styles.form} pb2 ph2`}>
           <Input
+            ref={this.inputRef}
             onChange={this.onTextChange}
             value={this.state.text}
             className={`${styles.input} mt2 mr2`}
           />
-          <Button disabled={!this.state.text} className={`br3 pa3 mt2`}>
+          <Button disabled={!this.state.text} className={`br3 ph3 mt2`}>
             <Label>Send</Label>
           </Button>
         </form>
@@ -376,23 +506,25 @@ class ChatroomContent extends Component {
     this.setState({ applyForJob: job });
   }
 
-  renderJobMessage(job, msg) {
+  renderJobMessage(job, msg, children) {
     const itsMe = this.itsMe(msg);
     return (
       <div
         key={job.id || index}
-        className={join(` mt2`, itsMe && styles.flexEnd)}
+        className={join(`  mt2`, itsMe && styles.flexEnd)}
       >
         {job.nickname || <Label>unknown</Label>} ({renderDate(job.created_at)}):
         <div
           className={join(
-            "br3 pa2",
+            "br3 pa2 relative",
+
             styles.jobMessage,
             styles.message,
-            itsMe && styles.myMessage
+            itsMe && styles.myMessage,
+            itsMe ? 'ml5' : null
           )}
         >
-          <div className="f3 flex items-center">
+          <div className="f4 f3-ns flex items-center">
             {JOB_ICON({ size: 32 })} <Label>jobPost</Label>
           </div>
           <div>
@@ -409,18 +541,43 @@ class ChatroomContent extends Component {
           {!itsMe ? (
             <div
               onClick={this.onApply.bind(this, job, msg)}
-              className={`br3 ma3 pa3 f3 flex items-center ${styles.apply}`}
+              className={`br3 ma1 ma3-ns pa1 pa3-ns f4 f3-ns flex items-center ${styles.apply}`}
             >
               {APPLY_ICON({ size: 32 })} <Label>APPLY</Label>
             </div>
           ) : null}
+
+          {children}
         </div>
       </div>
     );
   }
 
+  isJob(message) {
+    return message.chat_type == 1
+  }
+
+  canDeleteMessage(message) {
+    const isJob = this.isJob(message)
+    const now = DateTime.utc()
+    const twoDaysBefore = now.plus({ seconds: 20 });
+
+    const createdAt = DateTime.fromISO(message.created_at)
+
+    //todo
+    return true
+    if (createdAt < twoDaysBefore) {
+      return false
+    }
+    return true
+  }
+
+  canEditMessage(message) {
+    return this.canDeleteMessage(message)
+  }
+
   renderMessage(msg, index) {
-    const isJob = msg.chat_type == 1;
+    const isJob = this.isJob(msg)
 
     const dateString = getDayFormat(msg.created_at);
 
@@ -432,25 +589,46 @@ class ChatroomContent extends Component {
     this.prevDate = dateString;
 
     let renderResult;
+    const key = msg.id || index;
+    const me = this.itsMe(msg);
+    const canEdit = this.canEditMessage(msg)
+    const canDelete = this.canDeleteMessage(msg)
+
+    const icons = me ? [
+      DELETE_ICON({
+        size: 30,
+        onClick: this.deleteMessage.bind(this, msg),
+        className: `${styles.deleteIcon} ${!canDelete ? 'o-50' : ''} absolute top-0 left-0`
+      }),
+      EDIT_ICON({
+        size: 30,
+        onClick: this.editMessage.bind(this, msg),
+        className: `${styles.editIcon} ${!canEdit ? 'o-50' : ''} absolute top-0 left-0`
+      })
+    ] : null
+
     if (isJob) {
-      renderResult = this.renderJobMessage(JSON.parse(msg.message), msg);
+      renderResult = this.renderJobMessage(JSON.parse(msg.message), msg, icons);
     } else {
       const { message, nickname, alias } = msg;
-      const me = this.itsMe(msg);
       renderResult = (
-        <div
-          key={msg.id || index}
-          className={`mt2 ${join(me && styles.flexEnd)}`}
-        >
-          <div className="f7">{alias || <Label>unknown</Label>} ({renderDate(msg.created_at)}):</div>
+        <div>
+          <div className="f7">
+            {alias || <Label>unknown</Label>} ({renderDate(msg.created_at)}):
+          </div>
           <div
-            className={join("pa1 br3", styles.message, me && styles.myMessage)}
+            className={join("pa1 br3 relative ml5", styles.message, me && styles.myMessage)}
           >
+            {icons}
             {message}
           </div>
         </div>
       );
     }
+
+    renderResult = <div key={key} className={`relative mt2 ${join(me && styles.flexEnd)}`}>
+      {renderResult}
+    </div>
 
     return dateSeparator ? [dateSeparator, renderResult] : renderResult;
   }

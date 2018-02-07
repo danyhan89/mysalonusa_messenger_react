@@ -26,11 +26,18 @@ class PostAJob extends Component {
   }
   render() {
     const { props } = this;
-    const className = join(props.className, styles.postAJob, "pa3 f4");
+    const className = join(props.className, styles.container, "flex items-center  f4 white");
 
     return (
-      <div className={className} onClick={this.toggle}>
-        {this.renderOverlay()}Post a job
+      <div className={className}>
+        <div tabIndex={-1} onBlur={this.props.toggleMenu} className={`pa3 dib dn-ns ${styles.menuButton}`} style={{ lineHeight: 0 }} onMouseDown={this.props.toggleMenu}>
+          <svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+          </svg>
+        </div>
+        <div className={`${styles.postAJob} ph2 pa3-ns`} onClick={this.toggle}>
+          {this.renderOverlay()}<Label>postAJob</Label>
+        </div>
       </div>
     );
   }

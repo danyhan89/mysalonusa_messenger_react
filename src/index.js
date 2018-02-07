@@ -19,21 +19,26 @@ import styles from "./index.scss";
 
 import messages from "./messages";
 
-const Layout = (props) => {
-  const { community } = props
-  return <div className="flex flex-column" style={{ height: "100%" }}>
-    <div className="flex-auto flex flex-flow">
-      <Sidebar {...props} />
-      <CenterContainer {...props}>
-        {community ? (
-          <ChatroomContent {...props} key={community} />
-        ) : (
-            <Content {...props} />
-          )}
-      </CenterContainer>
+const Layout = props => {
+  const { community, state, language } = props;
+  const key = `${community}-${state}-${language}`
+
+
+  return (
+    <div className="flex flex-column" style={{ height: "100%" }}>
+      <div className="flex-auto flex-ns flex-flow">
+        <Sidebar {...props} />
+        <CenterContainer {...props}>
+          {community ? (
+            <ChatroomContent {...props} key={key} />
+          ) : (
+              <Content {...props} />
+            )}
+        </CenterContainer>
+      </div>
     </div>
-  </div>
-}
+  );
+};
 
 const App = () => {
   return (
@@ -57,20 +62,26 @@ const App = () => {
             const msg = messages[lang];
 
             if (!lang) {
-              return <LanguagePopup onChange={lang => {
-                history.push(`/${lang}`);
-              }} />
+              return (
+                <LanguagePopup
+                  onChange={lang => {
+                    history.push(`/${lang}`);
+                  }}
+                />
+              );
             }
 
-            let content
+            let content;
             if (!state) {
-              content = <StatesPopup
-                onChange={state => {
-                  history.push(`/${lang}/${state}`);
-                }}
-              />
+              content = (
+                <StatesPopup
+                  onChange={state => {
+                    history.push(`/${lang}/${state}`);
+                  }}
+                />
+              );
             } else {
-              content = <Layout {...props} />
+              content = <Layout {...props} />;
             }
 
             return (

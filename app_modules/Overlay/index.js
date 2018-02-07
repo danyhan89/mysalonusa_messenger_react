@@ -1,4 +1,5 @@
 import React from 'react'
+import { createPortal } from 'react-dom'
 
 import Label from '@app/Label'
 import join from '@app/join'
@@ -42,11 +43,11 @@ const Overlay = ({ tag, children, onClick, closeable, onClose, className, ...pro
   }
 
   return (
-    <Tag {...props} onClick={onClickHandler} className={join(styles.overlay, className)}>
+    createPortal(<Tag {...props} onClick={onClickHandler} className={join(styles.overlay, className)}>
       {children}
 
       {closeIcon}
-    </Tag>
+    </Tag>, document.getElementById('overlay'))
   );
 };
 

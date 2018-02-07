@@ -1,10 +1,21 @@
 @import "~@app/colors.scss";
-.postAJob {
+.container {
   background: $primary-color;
-  color: white;
   cursor: pointer;
+}
+
+.postAJob {
+  display: inline-block;
   transition: background 0.2s;
   &:hover {
     background: $accent-color;
+  }
+}
+
+.menuButton {
+  fill: white;
+  &:active {
+    fill: $primary-color;
+    background: $primary-color-light;
   }
 }

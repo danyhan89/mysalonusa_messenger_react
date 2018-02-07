@@ -8,9 +8,14 @@ export default {
   emailForPosting: "What email do you want to post job?",
   jobDescription: "Job description",
   jobPost: "Job Post",
+  postAJob: 'Post a Job',
   close: "Close",
   prev: "Previous",
   next: "Next",
-  chooseState: 'Choose your state',
-  chooseLanguage: 'Choose your language'
+  noMessages: 'No messages just yet',
+  chooseState: "Choose your state",
+  no: 'No',
+  yes: 'Yes',
+  confirmDeleteMessage: 'Are you sure you want to delete the message?',
+  chooseLanguage: "Choose your language"
 };

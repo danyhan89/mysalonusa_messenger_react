@@ -11,7 +11,7 @@ const Button = ({ type, className, disabled, ...props }) => {
     {...props}
     type={type || "submit"}
     disabled={disabled}
-    className={join(`${styles.button} br3 pa3 `, className, disabled && styles.disabled)}
+    className={join(`${styles.button} br3 ph3 pv2 `, className, disabled && styles.disabled)}
   />
 }
 export default Button

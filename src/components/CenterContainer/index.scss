@@ -1,1 +1,11 @@
-.centerContainer {}
+.centerContainer {
+  will-change: transform;
+  backface-visibility: hidden;
+  transition: transform 0.35s ease;
+  height: 100vh;
+  transform: translate3d(0px, 0px, 0px);
+}
+
+.toggled {
+  transform: translate3d(75%, 0px, 0px);
+}
