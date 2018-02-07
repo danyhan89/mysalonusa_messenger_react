@@ -7,7 +7,8 @@
   "scripts": {
     "precommit": "lint-staged",
     "dev": "SERVER_URL=http://localhost:3000 webpack-dev-server --colors --progress --config ./build/dev.config.js",
-    "build": "rimraf dist && SERVER_URL=https://mysalonusa-messenger-node-serv.herokuapp.com NODE_ENV=production webpack -p --colors --progress --config ./build/build.config.js && cp _redirects ./dist"
+    "build": "rimraf dist && SERVER_URL=https://mysalonusa-messenger-node-serv.herokuapp.com NODE_ENV=production webpack -p --colors --progress --config ./build/build.config.js && cp _redirects ./dist",
+    "local-build": "rimraf dist && SERVER_URL=http://localhost:3000 NODE_ENV=production webpack -p --colors --progress --config ./build/build.config.js && cp _redirects ./dist"
   },
   "lint-staged": {
     "src/**/*.{js,css,scss,json}": [
