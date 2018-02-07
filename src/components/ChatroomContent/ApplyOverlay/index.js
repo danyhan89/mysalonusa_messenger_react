@@ -21,8 +21,8 @@ class ApplyOverlay extends Component {
     super(props);
 
     this.state = {
-      message: "1234567891234567819",
-      email: "test@test.",
+      message: "",
+      email: "",
       sending: false
     };
   }
@@ -71,8 +71,8 @@ class ApplyOverlay extends Component {
     const actionIcon = this.state.sending ? (
       <LoadingIcon size={32} />
     ) : (
-      APPLY_ICON({ size: 32 })
-    );
+        APPLY_ICON({ size: 32 })
+      );
 
     return (
       <Overlay closeable onClose={onDismiss}>
@@ -118,6 +118,7 @@ class ApplyOverlay extends Component {
             value={this.state.message}
             autoFocus={false}
             tag="textarea"
+            placeholder="Message here - longer than 20 characters"
             rows={5}
             className={`f4 w-100`}
           />
