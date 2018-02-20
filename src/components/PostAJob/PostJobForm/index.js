@@ -188,7 +188,8 @@ const STEPS = [
   },
   {
     key: "preview",
-    buttonLabel: ({ defaultValues }) => defaultValues ? <Label>update</Label> : <Label>create</Label>,
+    buttonLabel: ({ defaultValues }) =>
+      defaultValues ? <Label>update</Label> : <Label>create</Label>,
     submit: true,
     render: renderPreview
   },
@@ -208,7 +209,7 @@ class PostJobForm extends Component {
   constructor(props) {
     super(props);
 
-    const { defaultValues } = props
+    const { defaultValues } = props;
 
     this.state = {
       uniqueNickname: global.localStorage.getItem("nickname"),
@@ -217,11 +218,11 @@ class PostJobForm extends Component {
       community: getCommunity(props.community).value,
       state: props.state,
       nickname: global.localStorage.getItem("alias") || "",
-      email: defaultValues ? defaultValues.email : '',
-      description: defaultValues ? defaultValues.description : ''
+      email: defaultValues ? defaultValues.email : "",
+      description: defaultValues ? defaultValues.description : ""
     };
     if (defaultValues) {
-      this.state.id = defaultValues.id
+      this.state.id = defaultValues.id;
     }
   }
 
@@ -278,7 +279,10 @@ class PostJobForm extends Component {
       });
     };
 
-    const buttonLabel = typeof step.buttonLabel == 'function' ? step.buttonLabel(this.props) : step.buttonLabel
+    const buttonLabel =
+      typeof step.buttonLabel == "function"
+        ? step.buttonLabel(this.props)
+        : step.buttonLabel;
 
     return (
       <div className={join(styles.form)}>

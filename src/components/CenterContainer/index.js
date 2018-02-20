@@ -1,7 +1,7 @@
 import React from "react";
 import join from "@app/join";
 import Label from "@app/Label";
-import TabPanel from '@app/TabPanel'
+import TabPanel from "@app/TabPanel";
 
 import PostAJob from "../PostAJob";
 import JobList from "../JobList";
@@ -28,7 +28,7 @@ class CenterContainer extends React.Component {
     });
   }
   render() {
-    const { props } = this
+    const { props } = this;
     const { className, lang, state, community } = props;
 
     const key = `${community}-${state}-${lang}`;
@@ -36,10 +36,9 @@ class CenterContainer extends React.Component {
     const children = community ? (
       <ChatroomContent {...props} key={key} />
     ) : (
-        <Content {...props} />
-      )
+      <Content {...props} />
+    );
     return (
-
       <div
         className={join(
           className,
@@ -48,13 +47,26 @@ class CenterContainer extends React.Component {
           "flex flex-column w-75-ns w-100 relative bg-white"
         )}
       >
-        <TabPanel className="" >
+        <TabPanel className="">
           <JobList tabTitle={<Label>jobs</Label>} />
           <div tabTitle="children">{children}</div>
-          <div tabTitle={<div style={{
-            color: 'red'
-          }}>xxx</div>} style={{ color: 'red' }}>tab one</div>
-          <div tabTitle="2" style={{ color: 'blue' }}>tab two</div>
+          <div
+            tabTitle={
+              <div
+                style={{
+                  color: "red"
+                }}
+              >
+                xxx
+              </div>
+            }
+            style={{ color: "red" }}
+          >
+            tab one
+          </div>
+          <div tabTitle="2" style={{ color: "blue" }}>
+            tab two
+          </div>
           <div tabTitle="3">tab three</div>
           {community ? (
             <PostAJob
@@ -66,8 +78,6 @@ class CenterContainer extends React.Component {
             />
           ) : null}
         </TabPanel>
-
-
       </div>
     );
   }
