@@ -4,7 +4,7 @@ import Label from "@app/Label";
 import join from "@app/join";
 import ActionButton from "@app/ActionButton";
 import LoadingIcon from "@app/LoadingIcon";
-import { createJob } from "src/api";
+import { createJob, editJob } from "src/api";
 
 import communities, { getCommunity } from "src/communities";
 import states from "src/states";
@@ -188,7 +188,7 @@ const STEPS = [
   },
   {
     key: "preview",
-    buttonLabel: <Label>create</Label>,
+    buttonLabel: ({ defaultValues }) => defaultValues ? <Label>update</Label> : <Label>create</Label>,
     submit: true,
     render: renderPreview
   },
@@ -208,15 +208,21 @@ class PostJobForm extends Component {
   constructor(props) {
     super(props);
 
+    const { defaultValues } = props
+
     this.state = {
       uniqueNickname: global.localStorage.getItem("nickname"),
-      currentStep: 0,
+      currentStep: defaultValues ? 2 : 0,
+      minStep: defaultValues ? 2 : 0,
       community: getCommunity(props.community).value,
       state: props.state,
       nickname: global.localStorage.getItem("alias") || "",
-      email: "",
-      description: ""
+      email: defaultValues ? defaultValues.email : '',
+      description: defaultValues ? defaultValues.description : ''
     };
+    if (defaultValues) {
+      this.state.id = defaultValues.id
+    }
   }
 
   prev() {
@@ -248,7 +254,9 @@ class PostJobForm extends Component {
   }
   postJob() {
     const { currentStep, ...job } = this.state;
-    createJob(job).then(result => {
+
+    const apiMethod = this.props.defaultValues ? editJob : createJob;
+    apiMethod(job).then(result => {
       if (result.success) {
         this.props.onSuccess(job);
       }
@@ -261,7 +269,7 @@ class PostJobForm extends Component {
     const step = STEPS[currentStep];
     const stepValue = this.state[step.key];
     const isValid = step.isValid || returnTrue;
-    const hasPrev = !step.locked;
+    const hasPrev = !step.locked && currentStep > this.props.minStep;
     const valid = isValid(stepValue);
 
     const onChange = value => {
@@ -269,6 +277,8 @@ class PostJobForm extends Component {
         [step.key]: value
       });
     };
+
+    const buttonLabel = typeof step.buttonLabel == 'function' ? step.buttonLabel(this.props) : step.buttonLabel
 
     return (
       <div className={join(styles.form)}>
@@ -281,7 +291,7 @@ class PostJobForm extends Component {
             </Button>
           ) : null}
           <Button disabled={!valid} onClick={() => this.next()}>
-            {step.buttonLabel || <Label>next</Label>}
+            {buttonLabel || <Label>next</Label>}
           </Button>
         </div>
       </div>

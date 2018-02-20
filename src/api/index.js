@@ -27,6 +27,18 @@ export const createJob = job => {
   });
 };
 
+export const editJob = job => {
+  return fetch(`${process.env.SERVER_URL}/editJob`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(job)
+  }).then(response => {
+    return response.json();
+  });
+};
+
 export const applyForJob = ({ message, email, job }) => {
   if (!message || !email || !job) {
     throw "Specify message, email and job";

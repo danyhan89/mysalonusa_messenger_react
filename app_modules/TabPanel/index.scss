@@ -1,0 +1,31 @@
+@import "~@app/colors.scss";
+.tabStrip {
+  background: $primary-color;
+  color: white;
+}
+
+.tabPanel {
+  flex: 1;
+}
+
+.tabBody {
+  flex: 1;
+  overflow: auto;
+  &>* {
+    flex: 1;
+    display: flex;
+  }
+}
+
+.tab {
+  color: white;
+  &:hover {
+    color: white;
+    background: $accent-color;
+  }
+}
+
+.activeTab {
+  background: white;
+  color: $primary-color;
+}

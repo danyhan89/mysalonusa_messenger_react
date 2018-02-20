@@ -11,29 +11,19 @@ import Sidebar from "./components/Sidebar";
 import LanguagePopup from "./components/LanguagePopup";
 import StatesPopup from "./components/StatesPopup";
 
-import Content from "./components/Content";
 import CenterContainer from "./components/CenterContainer";
-import ChatroomContent from "./components/ChatroomContent";
+
 import Footer from "./components/Footer";
 import styles from "./index.scss";
 
 import messages from "./messages";
 
 const Layout = props => {
-  const { community, state, language } = props;
-  const key = `${community}-${state}-${language}`;
-
   return (
     <div className="flex flex-column" style={{ height: "100%" }}>
       <div className="flex-auto flex-ns flex-flow">
         <Sidebar {...props} />
-        <CenterContainer {...props}>
-          {community ? (
-            <ChatroomContent {...props} key={key} />
-          ) : (
-            <Content {...props} />
-          )}
-        </CenterContainer>
+        <CenterContainer {...props} />
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import React from "react";
 export default ({ size = 24, ...props } = { size: 24 }) => (
   <svg
     {...props}
+    key="editIcon"
     height={size || 24}
     viewBox="0 0 24 24"
     width={size || 24}
