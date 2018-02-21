@@ -36,8 +36,8 @@ class CenterContainer extends React.Component {
     const children = community ? (
       <ChatroomContent {...props} key={key} />
     ) : (
-        <Content {...props} />
-      );
+      <Content {...props} />
+    );
     return (
       <div
         className={join(
