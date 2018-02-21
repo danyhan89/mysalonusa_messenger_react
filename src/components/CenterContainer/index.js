@@ -5,7 +5,7 @@ import TabPanel from "@app/TabPanel";
 
 import PostAJob from "../PostAJob";
 import JobList from "../JobList";
-
+//
 import Content from "../Content";
 import ChatroomContent from "../ChatroomContent";
 
@@ -36,8 +36,8 @@ class CenterContainer extends React.Component {
     const children = community ? (
       <ChatroomContent {...props} key={key} />
     ) : (
-      <Content {...props} />
-    );
+        <Content {...props} />
+      );
     return (
       <div
         className={join(
