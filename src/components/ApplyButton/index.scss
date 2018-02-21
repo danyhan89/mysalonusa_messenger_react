@@ -1,0 +1,11 @@
+@import "~@app/colors.scss";
+.apply {
+  background: $accent-color;
+  color: white;
+  fill: white;
+  cursor: pointer;
+  &:active {
+    position: relative;
+    top: 1px;
+  }
+}

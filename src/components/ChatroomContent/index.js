@@ -20,15 +20,16 @@ import Popup from "@app/Popup";
 
 import { fetchChats } from "src/api";
 
+import ApplyButton from 'src/components/ApplyButton'
+
 import { isValid as isValidState } from "src/states";
 
 import Separator from "./Separator";
 import JOB_ICON from "./jobIcon";
-import APPLY_ICON from "./applyIcon";
 import DELETE_ICON from "./deleteIcon";
 import EDIT_ICON from "./editIcon";
 
-import ApplyOverlay from "./ApplyOverlay";
+import ApplyOverlay from "../ApplyOverlay";
 import PostJobForm from "../PostAJob/PostJobForm";
 
 import styles from "./index.scss";
@@ -41,7 +42,7 @@ if (!STORED_NICKNAME) {
   global.localStorage.setItem("nickname", NICKNAME);
 }
 
-const emptyFn = () => {};
+const emptyFn = () => { };
 
 const SPACER = <div className={styles.flex1} />;
 
@@ -587,14 +588,8 @@ class ChatroomContent extends Component {
           <div>{job.description}</div>
 
           {!itsMe ? (
-            <div
-              onClick={this.onApply.bind(this, job, msg)}
-              className={`br3 ma1 ma3-ns pa1 pa3-ns f4 f3-ns flex items-center ${
-                styles.apply
-              }`}
-            >
-              {APPLY_ICON({ size: 32 })} <Label>APPLY</Label>
-            </div>
+            <ApplyButton
+              onClick={this.onApply.bind(this, job, msg)} />
           ) : null}
 
           {children}
@@ -646,21 +641,21 @@ class ChatroomContent extends Component {
 
     const icons = me
       ? [
-          DELETE_ICON({
-            size: 30,
-            onClick: this.deleteMessage.bind(this, msg),
-            className: `${styles.deleteIcon} ${
-              !canDelete ? "o-50" : ""
+        DELETE_ICON({
+          size: 30,
+          onClick: this.deleteMessage.bind(this, msg),
+          className: `${styles.deleteIcon} ${
+            !canDelete ? "o-50" : ""
             } absolute top-0 left-0`
-          }),
-          EDIT_ICON({
-            size: 30,
-            onClick: this.editMessage.bind(this, msg),
-            className: `${styles.editIcon} ${
-              !canEdit ? "o-50" : ""
+        }),
+        EDIT_ICON({
+          size: 30,
+          onClick: this.editMessage.bind(this, msg),
+          className: `${styles.editIcon} ${
+            !canEdit ? "o-50" : ""
             } absolute top-0 left-0`
-          })
-        ]
+        })
+      ]
       : null;
 
     if (isJob) {

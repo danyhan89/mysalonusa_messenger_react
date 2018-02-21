@@ -89,15 +89,6 @@
 }
 
 $MARGIN_TOP: 5px;
-.apply {
-  background: $accent-color;
-  cursor: pointer;
-  &:active {
-    position: relative;
-    top: 1px;
-  }
-}
-
 .flexEnd {
   align-self: flex-end;
   text-align: end;

@@ -1,6 +1,7 @@
 @import "~@app/colors.scss";
 .overlay {
   position: fixed;
+  overflow: auto;
   z-index: 100;
   top: 0px;
   left: 0px;

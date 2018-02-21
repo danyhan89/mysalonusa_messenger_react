@@ -11,8 +11,8 @@ import LoadingIcon from "@app/LoadingIcon";
 
 import { applyForJob } from "src/api";
 
-import JOB_ICON from "../jobIcon";
-import APPLY_ICON from "../applyIcon";
+import JOB_ICON from "src/components/ChatroomContent/jobIcon";
+import APPLY_ICON from "src/components/ApplyButton/applyIcon";
 
 import styles from "./index.scss";
 
@@ -71,12 +71,12 @@ class ApplyOverlay extends Component {
     const actionIcon = this.state.sending ? (
       <LoadingIcon size={32} />
     ) : (
-      APPLY_ICON({ size: 32 })
-    );
+        APPLY_ICON({ size: 32 })
+      );
 
     return (
       <Overlay closeable onClose={onDismiss}>
-        <div style={{ minWidth: "50vw" }} className={`br3`}>
+        <div style={{ minWidth: "50vw" }} className={`mw7 br3`}>
           <div className="f3 flex items-center">
             {JOB_ICON({ size: 32 })} <Label>jobPost</Label>
           </div>

@@ -1,0 +1,17 @@
+.jobList {}
+
+.job,
+.jobTitle,
+.jobDescription {
+  border-color: #cbcbcb;
+}
+
+.jobTitle,
+.jobDescription {
+  border-bottom-width: 1px;
+  border-bottom-style: dashed;
+}
+
+.jobDescription {
+  flex: 1;
+}

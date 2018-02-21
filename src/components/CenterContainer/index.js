@@ -36,8 +36,8 @@ class CenterContainer extends React.Component {
     const children = community ? (
       <ChatroomContent {...props} key={key} />
     ) : (
-      <Content {...props} />
-    );
+        <Content {...props} />
+      );
     return (
       <div
         className={join(
@@ -48,7 +48,7 @@ class CenterContainer extends React.Component {
         )}
       >
         <TabPanel className="">
-          <JobList tabTitle={<Label>jobs</Label>} />
+          <JobList state={state} community={community} tabTitle={<Label>jobs</Label>} />
           <div tabTitle="children">{children}</div>
           <div
             tabTitle={
