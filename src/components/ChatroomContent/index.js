@@ -20,7 +20,7 @@ import Popup from "@app/Popup";
 
 import { fetchChats } from "src/api";
 
-import ApplyButton from 'src/components/ApplyButton'
+import ApplyButton from "src/components/ApplyButton";
 
 import { isValid as isValidState } from "src/states";
 
@@ -42,7 +42,7 @@ if (!STORED_NICKNAME) {
   global.localStorage.setItem("nickname", NICKNAME);
 }
 
-const emptyFn = () => { };
+const emptyFn = () => {};
 
 const SPACER = <div className={styles.flex1} />;
 
@@ -588,8 +588,7 @@ class ChatroomContent extends Component {
           <div>{job.description}</div>
 
           {!itsMe ? (
-            <ApplyButton
-              onClick={this.onApply.bind(this, job, msg)} />
+            <ApplyButton onClick={this.onApply.bind(this, job, msg)} />
           ) : null}
 
           {children}
@@ -641,21 +640,21 @@ class ChatroomContent extends Component {
 
     const icons = me
       ? [
-        DELETE_ICON({
-          size: 30,
-          onClick: this.deleteMessage.bind(this, msg),
-          className: `${styles.deleteIcon} ${
-            !canDelete ? "o-50" : ""
+          DELETE_ICON({
+            size: 30,
+            onClick: this.deleteMessage.bind(this, msg),
+            className: `${styles.deleteIcon} ${
+              !canDelete ? "o-50" : ""
             } absolute top-0 left-0`
-        }),
-        EDIT_ICON({
-          size: 30,
-          onClick: this.editMessage.bind(this, msg),
-          className: `${styles.editIcon} ${
-            !canEdit ? "o-50" : ""
+          }),
+          EDIT_ICON({
+            size: 30,
+            onClick: this.editMessage.bind(this, msg),
+            className: `${styles.editIcon} ${
+              !canEdit ? "o-50" : ""
             } absolute top-0 left-0`
-        })
-      ]
+          })
+        ]
       : null;
 
     if (isJob) {

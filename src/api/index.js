@@ -2,9 +2,10 @@ const fetch = (url, options) => {
   return global.fetch(`${process.env.SERVER_URL}${url}`, {
     headers: {
       "Content-Type": "application/json"
-    }, ...options
-  })
-}
+    },
+    ...options
+  });
+};
 
 export const fetchJobs = query => {
   query.limit = query.limit || 50;
@@ -16,11 +17,9 @@ export const fetchJobs = query => {
     })
     .join("&");
 
-  return fetch(`/fetchJobs?${queryString}`).then(
-    response => {
-      return response.json();
-    }
-  );
+  return fetch(`/fetchJobs?${queryString}`).then(response => {
+    return response.json();
+  });
 };
 export const fetchChats = query => {
   query.limit = query.limit || 50;
@@ -32,11 +31,9 @@ export const fetchChats = query => {
     })
     .join("&");
 
-  return fetch(`/fetchChats?${queryString}`).then(
-    response => {
-      return response.json();
-    }
-  );
+  return fetch(`/fetchChats?${queryString}`).then(response => {
+    return response.json();
+  });
 };
 
 export const createJob = job => {
@@ -72,5 +69,5 @@ export const applyForJob = ({ message, email, job }) => {
   });
 };
 
-global.fetchJobs = fetchJobs
+global.fetchJobs = fetchJobs;
 global.createJob = createJob;
