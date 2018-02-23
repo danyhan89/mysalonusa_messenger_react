@@ -1,4 +1,5 @@
 .jobList {
+  flex: none;
 }
 
 .job,
@@ -15,4 +16,12 @@
 
 .jobDescription {
   flex: 1;
+  overflow: auto;
+}
+
+.job {
+  //width: 30vw;
+  height: 30vw;
+  min-height: 300px;
+  min-width: 200px;
 }

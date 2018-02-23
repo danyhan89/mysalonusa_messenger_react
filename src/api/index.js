@@ -18,7 +18,12 @@ export const fetchJobs = query => {
     .join("&");
 
   return fetch(`/fetchJobs?${queryString}`).then(response => {
-    return response.json();
+    return response.json().then(jobs => {
+      return {
+        jobs,
+        totalCount: response.headers.get('X-Total-Count') * 1
+      }
+    })
   });
 };
 export const fetchChats = query => {

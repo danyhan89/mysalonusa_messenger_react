@@ -1,0 +1,40 @@
+@import "~@app/colors.scss";
+.pagination {
+  border: 1px solid #cbcbcb;
+  align-self: flex-start;
+  flex-shrink: 0;
+}
+
+.pageBlock {
+  border: none;
+  &:not(:first-child) {
+    border-left: 1px solid #cbcbcb;
+  }
+  appearance: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  &:focus {
+    outline: none;
+    background: rgba($accent-color, 0.2);
+  }
+  &.disabled {
+    opacity: 0.3
+  }
+}
+
+.navButton,
+.page {
+  &:not(.disabled) {
+    cursor: pointer;
+  }
+}
+
+.currentPage {
+  color: white;
+  background: $accent-color;
+  &:focus {
+    background: $accent-color;
+  }
+}
