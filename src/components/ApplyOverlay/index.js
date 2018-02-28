@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types";
 
 import isEmail from "is-email";
 
@@ -30,12 +30,12 @@ class ApplyOverlay extends Component {
 
   componentDidMount() {
     incrementJobView(this.props.job).then(response => {
-      const { views } = response
+      const { views } = response;
 
       if (this.props.updateJobViews) {
-        this.props.updateJobViews(this.props.job, views)
+        this.props.updateJobViews(this.props.job, views);
       }
-    })
+    });
   }
 
   isSendDisabled() {
@@ -82,16 +82,15 @@ class ApplyOverlay extends Component {
     const actionIcon = this.state.sending ? (
       <LoadingIcon size={32} />
     ) : (
-        APPLY_ICON({ size: 32 })
-      );
+      APPLY_ICON({ size: 32 })
+    );
 
-
-    let otherChildren
+    let otherChildren;
     if (!readOnly) {
       otherChildren = [
         <div key="label">
           <Label>yourEmail</Label>:
-          </div>,
+        </div>,
 
         <Input
           key="emailField"
@@ -105,7 +104,7 @@ class ApplyOverlay extends Component {
         />,
         <div className="mt3" key="message">
           <Label>yourMessage</Label>:
-          </div>,
+        </div>,
 
         <Input
           key="messageField"
@@ -130,12 +129,15 @@ class ApplyOverlay extends Component {
         >
           {actionIcon} <Label>SEND</Label>
         </ActionButton>
-      ]
+      ];
     }
 
     return (
       <Overlay closeable onClose={onDismiss}>
-        <div style={{ minWidth: "50vw", maxHeight: '90vh' }} className={`mw7 br3`}>
+        <div
+          style={{ minWidth: "50vw", maxHeight: "90vh" }}
+          className={`mw7 br3`}
+        >
           <div className="f3 flex items-center mt3">
             {JOB_ICON({ size: 32 })} <Label>jobPost</Label>
           </div>
@@ -160,6 +162,6 @@ class ApplyOverlay extends Component {
 
 ApplyOverlay.propTypes = {
   readOnly: PropTypes.bool
-}
+};
 
 export default ApplyOverlay;

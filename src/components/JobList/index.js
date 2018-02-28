@@ -5,8 +5,8 @@ import join from "@app/join";
 
 import { fetchJobs } from "src/api";
 
-import Button from '@app/Button'
-import Label from '@app/Label'
+import Button from "@app/Button";
+import Label from "@app/Label";
 
 import ApplyButton from "src/components/ApplyButton";
 import ApplyOverlay from "src/components/ApplyOverlay";
@@ -27,8 +27,8 @@ class JobList extends React.Component {
     };
 
     this.onSkipChange = this.onSkipChange.bind(this);
-    this.renderJobs = this.renderJobs.bind(this)
-    this.updateJobViews = this.updateJobViews.bind(this)
+    this.renderJobs = this.renderJobs.bind(this);
+    this.updateJobViews = this.updateJobViews.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -93,13 +93,15 @@ class JobList extends React.Component {
 
     return (
       <div className={join("pa3 flex flex-column", styles.jobList, className)}>
-        {pagination ? <PaginationToolbar
-          skip={skip}
-          className="mb3"
-          totalCount={totalCount}
-          limit={limit}
-          onSkipChange={this.onSkipChange}
-        /> : null}
+        {pagination ? (
+          <PaginationToolbar
+            skip={skip}
+            className="mb3"
+            totalCount={totalCount}
+            limit={limit}
+            onSkipChange={this.onSkipChange}
+          />
+        ) : null}
         {this.renderJobs()}
         {!this.state.initialLoading && pagination ? (
           <PaginationToolbar
@@ -115,18 +117,20 @@ class JobList extends React.Component {
   }
 
   renderJobs() {
-    const { jobs } = this.state
+    const { jobs } = this.state;
     if (this.props.renderJobs) {
-      return this.props.renderJobs(jobs, this.state.totalCount)
+      return this.props.renderJobs(jobs, this.state.totalCount);
     }
-    return <div className="w-100 center inline-flex flex-wrap ">
-      {jobs.map(this.renderJob, this)}
-    </div>
+    return (
+      <div className="w-100 center inline-flex flex-wrap ">
+        {jobs.map(this.renderJob, this)}
+      </div>
+    );
   }
 
   renderJob(job, index) {
     if (this.props.renderJob) {
-      return this.props.renderJob(job, index)
+      return this.props.renderJob(job, index);
     }
     return (
       <div
@@ -136,7 +140,12 @@ class JobList extends React.Component {
           styles.job
         )}
       >
-        <div className={join("pa3 bb", styles.jobTitle)}>{job.title} <div>({job.views || 0} <Label>views</Label>)</div></div>
+        <div className={join("pa3 bb", styles.jobTitle)}>
+          {job.title}{" "}
+          <div>
+            ({job.views || 0} <Label>views</Label>)
+          </div>
+        </div>
         <div className={join("pa3 bb", styles.jobDescription)}>
           {job.description}
         </div>
@@ -157,25 +166,26 @@ class JobList extends React.Component {
                 viewOnly: true
               });
             }}
-          ><Label>viewDetails</Label></Button>
-
+          >
+            <Label>viewDetails</Label>
+          </Button>
         </div>
       </div>
     );
   }
 
   updateJobViews(job, views) {
-    const { jobs } = this.state
+    const { jobs } = this.state;
 
     this.setState({
       jobs: jobs.map(j => {
         if (j.id == job.id) {
-          j = { ...j, views }
+          j = { ...j, views };
         }
 
-        return j
+        return j;
       })
-    })
+    });
   }
 
   renderApplyOverlay() {

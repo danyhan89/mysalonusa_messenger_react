@@ -110,13 +110,13 @@ class PaginationToolbar extends React.Component {
 
     const items = [
       this.renderNavButton({
-        key: 'first',
+        key: "first",
         disabled: currentPage <= 1,
         onClick: () => this.gotoPage(1),
         children: <FirstIcon />
       }),
       this.renderNavButton({
-        key: 'prev',
+        key: "prev",
         disabled: !hasPrevPage,
         onClick: () => this.gotoPrevPage(),
         children: <PrevIcon />
@@ -124,13 +124,13 @@ class PaginationToolbar extends React.Component {
       ...middlePages,
 
       this.renderNavButton({
-        key: 'next',
+        key: "next",
         disabled: !hasNextPage,
         onClick: () => this.gotoNextPage(),
         children: <NextIcon />
       }),
       this.renderNavButton({
-        key: 'last',
+        key: "last",
         disabled: currentPage >= maxPage,
         onClick: () => this.gotoPage(maxPage),
         children: <LastIcon />
@@ -193,8 +193,8 @@ class PaginationToolbar extends React.Component {
 }
 
 PaginationToolbar.defaultProps = {
-  onPageChange: () => { },
-  onSkipChange: () => { },
+  onPageChange: () => {},
+  onSkipChange: () => {},
   pagesToShow: 3
 };
 

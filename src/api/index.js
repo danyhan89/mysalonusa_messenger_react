@@ -51,7 +51,6 @@ export const createJob = job => {
   });
 };
 
-
 export const incrementJobView = ({ id }) => {
   return fetch(`/incrementJobView`, {
     method: "PATCH",
