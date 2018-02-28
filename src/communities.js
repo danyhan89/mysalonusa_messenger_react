@@ -1,5 +1,5 @@
 const communities = [
-  { label: "All", value: "combined" },
+  { label: "English", value: "en" },
   { label: "Korean", value: "ko" },
   { label: "Mongolian", value: "mo" },
   { label: "Vietnamese", value: "vo" }

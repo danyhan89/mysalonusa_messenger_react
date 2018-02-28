@@ -1,0 +1,24 @@
+@import "~@app/colors.scss";
+.dashboard {
+  overflow: auto;
+}
+
+.headLine {
+  //border-bottom: 1px solid $accent-color;
+}
+
+.jobTitle {
+  font-weight: 500;
+}
+
+.jobDescription {
+  font-weight: 300;
+}
+
+.communityItem {
+  padding: 10px;
+  cursor: pointer;
+  &:hover {
+    color: $accent-color;
+  }
+}

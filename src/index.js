@@ -34,7 +34,7 @@ const App = () => {
     <Router>
       <div className={`${styles.app}`}>
         <Route
-          path="/:lang?/:state?/:community?"
+          path="/:lang?/:state?/:community?/:tab?"
           render={({ match, history }) => {
             let { lang, state, community } = match.params;
             if (lang) {

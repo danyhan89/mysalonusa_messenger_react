@@ -21,9 +21,9 @@ export const fetchJobs = query => {
     return response.json().then(jobs => {
       return {
         jobs,
-        totalCount: response.headers.get('X-Total-Count') * 1
-      }
-    })
+        totalCount: response.headers.get("X-Total-Count") * 1
+      };
+    });
   });
 };
 export const fetchChats = query => {
@@ -46,6 +46,17 @@ export const createJob = job => {
     method: "POST",
 
     body: JSON.stringify(job)
+  }).then(response => {
+    return response.json();
+  });
+};
+
+
+export const incrementJobView = ({ id }) => {
+  return fetch(`/incrementJobView`, {
+    method: "PATCH",
+
+    body: JSON.stringify({ id })
   }).then(response => {
     return response.json();
   });

@@ -42,7 +42,7 @@ if (!STORED_NICKNAME) {
   global.localStorage.setItem("nickname", NICKNAME);
 }
 
-const emptyFn = () => {};
+const emptyFn = () => { };
 
 const SPACER = <div className={styles.flex1} />;
 
@@ -560,7 +560,8 @@ class ChatroomContent extends Component {
     return (
       <div
         key={job.id || index}
-        className={join(`  mt2`, itsMe && styles.flexEnd)}
+        style={{ maxHeight: '30vh', overflow: 'auto' }}
+        className={join(`mt2`, itsMe && styles.flexEnd)}
       >
         {job.nickname || <Label>unknown</Label>} ({renderDate(job.created_at)}):
         <div
@@ -640,21 +641,21 @@ class ChatroomContent extends Component {
 
     const icons = me
       ? [
-          DELETE_ICON({
-            size: 30,
-            onClick: this.deleteMessage.bind(this, msg),
-            className: `${styles.deleteIcon} ${
-              !canDelete ? "o-50" : ""
+        DELETE_ICON({
+          size: 30,
+          onClick: this.deleteMessage.bind(this, msg),
+          className: `${styles.deleteIcon} ${
+            !canDelete ? "o-50" : ""
             } absolute top-0 left-0`
-          }),
-          EDIT_ICON({
-            size: 30,
-            onClick: this.editMessage.bind(this, msg),
-            className: `${styles.editIcon} ${
-              !canEdit ? "o-50" : ""
+        }),
+        EDIT_ICON({
+          size: 30,
+          onClick: this.editMessage.bind(this, msg),
+          className: `${styles.editIcon} ${
+            !canEdit ? "o-50" : ""
             } absolute top-0 left-0`
-          })
-        ]
+        })
+      ]
       : null;
 
     if (isJob) {

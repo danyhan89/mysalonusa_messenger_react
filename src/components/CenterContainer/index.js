@@ -3,13 +3,20 @@ import join from "@app/join";
 import Label from "@app/Label";
 import TabPanel from "@app/TabPanel";
 
+import { withRouter } from "react-router-dom";
+
 import PostAJob from "../PostAJob";
 import JobList from "../JobList";
 //
-import Content from "../Content";
+import Dashboard from "../Dashboard";
 import ChatroomContent from "../ChatroomContent";
 
 import styles from "./index.scss";
+
+const TABS = {
+  jobs: 0,
+  chat: 1
+}
 
 class CenterContainer extends React.Component {
   constructor(props) {
@@ -29,15 +36,9 @@ class CenterContainer extends React.Component {
   }
   render() {
     const { props } = this;
-    const { className, lang, state, community } = props;
+    const { className } = props;
 
-    const key = `${community}-${state}-${lang}`;
-
-    const children = community ? (
-      <ChatroomContent {...props} key={key} />
-    ) : (
-      <Content {...props} />
-    );
+    const children = this.renderChildren()
     return (
       <div
         className={join(
@@ -47,43 +48,65 @@ class CenterContainer extends React.Component {
           "flex flex-column w-75-ns w-100 relative bg-white"
         )}
       >
-        <TabPanel className="">
-          <JobList
-            state={state}
-            community={community}
-            tabTitle={<Label>jobs</Label>}
-          />
-          <div tabTitle="children">{children}</div>
-          <div
-            tabTitle={
-              <div
-                style={{
-                  color: "red"
-                }}
-              >
-                xxx
-              </div>
-            }
-            style={{ color: "red" }}
-          >
-            tab one
-          </div>
-          <div tabTitle="2" style={{ color: "blue" }}>
-            tab two
-          </div>
-          <div tabTitle="3">tab three</div>
-          {community ? (
-            <PostAJob
-              tabTitle={<Label>postAJob</Label>}
-              toggleMenu={this.toggleMenu}
-              lang={lang}
-              state={state}
-              community={community}
-            />
-          ) : null}
-        </TabPanel>
+
+        {children}
       </div>
     );
   }
+
+  renderChildren() {
+    const { props } = this
+    const { lang, state, community, match, location, history } = props;
+    const key = `${community}-${state}-${lang}`;
+
+    console.log({ community })
+    if (!community) {
+      return <Dashboard {...props} />
+    }
+    const children = (
+      <ChatroomContent {...props} key={key} />
+    )
+    const activeIndex = TABS[match.params.tab] || 0
+
+    return <TabPanel className="" activeIndex={activeIndex} onActivate={(index) => {
+      let tab
+      Object.keys(TABS).map(key => {
+        if (TABS[key] == index) {
+          tab = key
+        }
+      })
+
+      if (tab) {
+        history.push(`/${lang}/${state}/${community}/${tab}`)
+      }
+    }}>
+      <JobList
+        state={state}
+        community={community}
+        tabTitle={<Label>jobs</Label>}
+      />
+      <div tabTitle={<Label>chatroom</Label>}>{children}</div>
+      <div
+        tabTitle={
+          <Label>businessOnSale</Label>
+        }
+      >
+        tab one
+      </div>
+      <div tabTitle="2" style={{ color: "blue" }}>
+        tab two
+      </div>
+      <div tabTitle="3">tab three</div>
+      {community ? (
+        <PostAJob
+          tabTitle={<Label>postAJob</Label>}
+          toggleMenu={this.toggleMenu}
+          lang={lang}
+          state={state}
+          community={community}
+        />
+      ) : null}
+    </TabPanel>
+  }
 }
-export default CenterContainer;
+export default withRouter(CenterContainer);

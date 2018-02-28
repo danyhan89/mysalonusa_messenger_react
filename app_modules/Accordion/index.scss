@@ -1,0 +1,19 @@
+@import "~@app/colors.scss";
+.hint {
+  font-weight: 200;
+  font-style: italic;
+}
+
+.accordionTab {
+  position: relative;
+  border: 1px solid $accent-color;
+  align-items: center;
+  cursor: pointer;
+  &:not(.last).collapsed {
+    border-bottom: 0px;
+  }
+}
+
+.tabTitle {
+  flex: 1;
+}
