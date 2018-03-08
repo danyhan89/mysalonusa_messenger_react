@@ -1,13 +1,15 @@
 @import "~@app/colors.scss";
-.selectedCommunity {
-  color: $accent-color;
-  background: $primary-color-dark;
-}
-
 .communityItem {
   cursor: pointer;
+  color: rgba(white, 0.7);
   &:hover {
-    background: white;
-    color: $primary-color-dark;
+    color: white;
   }
+  &.selectedCommunity {
+    color: white;
+  }
+}
+
+.welcome {
+  color: rgba(white, 0.7);
 }

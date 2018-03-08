@@ -47,12 +47,15 @@ class Accordion extends React.Component {
       }
       const collapsed = this.state.collapsedTabs[index]
       const last = index === tabs.length - 1
+      if (collapsed) {
+        tabProps.style = { ...tabProps.style, display: 'none' }
+      }
 
       return [
         <div onClick={onClick} key={index + 'tabtitle'} className={`${styles.accordionTab} ${last ? styles.last : ''} ${collapsed ? styles.collapsed : styles.expanded} flex flex-row pa2`}>
           <div className={styles.tabTitle}>{tabTitle}</div> <div className={styles.hint}>click to {collapsed ? 'expand' : 'collapse'}</div>
         </div>,
-        collapsed ? null : <TabType key={index} {...tabProps} />
+        <TabType key={index} {...tabProps} />
       ]
     })
 

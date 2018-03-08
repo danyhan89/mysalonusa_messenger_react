@@ -46,6 +46,7 @@ const App = () => {
             if (community) {
               community = community.toLowerCase();
             }
+
             const props = { history, lang, state, community };
 
             const msg = messages[lang];

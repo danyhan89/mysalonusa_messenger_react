@@ -136,21 +136,22 @@ class JobList extends React.Component {
       <div
         key={job.id || index}
         className={join(
-          "flex flex-column bg-white mr1 mr3-ns mb4 ba br3 w-90 w-40-m w-30-l",
+          "flex flex-column bg-white mr1 mr3-ns mb4 br3 w-90 w-40-m w-30-l",
           styles.job
         )}
       >
-        <div className={join("pa3 bb", styles.jobTitle)}>
-          {job.title}{" "}
+        <div className={join("pa3", styles.jobTitle)}>
+          {job.title}{" xxx"}
           <div>
             ({job.views || 0} <Label>views</Label>)
           </div>
         </div>
-        <div className={join("pa3 bb", styles.jobDescription)}>
+        <div className={join("pa3", styles.jobDescription)}>
           {job.description}
         </div>
-        <div className={join("pa3", styles.jobApplySection)}>
+        <div className={join("pa3 flex flex-row items-center", styles.jobApplySection)}>
           <ApplyButton
+            className="b"
             onClick={() => {
               this.setState({
                 applyForJob: job,
@@ -159,7 +160,8 @@ class JobList extends React.Component {
             }}
           />
 
-          <Button
+          <div
+            className={`${styles.viewDetails} dib i fw3 ml2 `}
             onClick={() => {
               this.setState({
                 applyForJob: job,
@@ -168,7 +170,7 @@ class JobList extends React.Component {
             }}
           >
             <Label>viewDetails</Label>
-          </Button>
+          </div>
         </div>
       </div>
     );

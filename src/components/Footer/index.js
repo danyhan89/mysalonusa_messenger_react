@@ -13,7 +13,7 @@ const Link = ({ children, onClick }) => {
   return (
     <a
       href=""
-      className={`${styles.link} db mb3`}
+      className={`${styles.link} db mb2`}
       onClick={e => {
         preventDefault(e);
         onClick();
@@ -34,7 +34,7 @@ class Footer extends React.Component {
   }
   render() {
     return (
-      <div className={`${styles.footer} f6 pa2 tl`}>
+      <div className={`${styles.footer} ph2 tl`}>
         <div>
           <Link
             onClick={() => {
@@ -74,10 +74,11 @@ class Footer extends React.Component {
           onChange={lang => {
             let url = `/${lang}`;
             if (this.props.state) {
-              url += `/${this.props.state.toUpperCase()}`;
-              if (this.props.community) {
-                url += `/${this.props.community}`;
-              }
+              url += `/${this.props.state.toUpperCase()}/${lang}`;
+
+              //if (this.props.community) {
+              //url += `/${this.props.community}`;
+              //}
             }
             this.props.history.push(url);
             this.setState({

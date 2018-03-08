@@ -42,7 +42,7 @@ if (!STORED_NICKNAME) {
   global.localStorage.setItem("nickname", NICKNAME);
 }
 
-const emptyFn = () => {};
+const emptyFn = () => { };
 
 const SPACER = <div className={styles.flex1} />;
 
@@ -148,7 +148,7 @@ class ChatroomContent extends Component {
 
     this.setState({ loading: true });
     fetchChats({
-      limit: LIMIT,
+      limit: this.props.limit || LIMIT,
       beforeId,
       state: props.state,
       community: props.community
@@ -201,7 +201,7 @@ class ChatroomContent extends Component {
     const { props } = this;
 
     fetchChats({
-      limit: LIMIT,
+      limit: this.props.limit || LIMIT,
       state: props.state,
       community: props.community
     }).then(chats => {
@@ -463,6 +463,9 @@ class ChatroomContent extends Component {
   }
 
   renderLoader() {
+    if (!this.props.showLoading) {
+      return null
+    }
     const visibleCls = this.state.loading ? styles.loaderVisible : "";
 
     return (
@@ -499,7 +502,7 @@ class ChatroomContent extends Component {
         {this.renderDeletePopup()}
         {this.renderApplyOverlay()}
         {this.renderJobEditOverlay()}
-        <form onSubmit={this.onSubmit} className={`${styles.form} pb2 ph2`}>
+        {this.props.showForm ? <form onSubmit={this.onSubmit} className={`${styles.form} pb2 ph2`}>
           <Input
             ref={this.inputRef}
             onChange={this.onTextChange}
@@ -509,7 +512,7 @@ class ChatroomContent extends Component {
           <Button disabled={!this.state.text} className={`br3 ph3 mt2`}>
             <Label>Send</Label>
           </Button>
-        </form>
+        </form> : null}
       </div>
     );
   }
@@ -639,23 +642,23 @@ class ChatroomContent extends Component {
     const canEdit = this.canEditMessage(msg);
     const canDelete = this.canDeleteMessage(msg);
 
-    const icons = me
+    const icons = me && this.props.showEditIcons
       ? [
-          DELETE_ICON({
-            size: 30,
-            onClick: this.deleteMessage.bind(this, msg),
-            className: `${styles.deleteIcon} ${
-              !canDelete ? "o-50" : ""
+        DELETE_ICON({
+          size: 30,
+          onClick: this.deleteMessage.bind(this, msg),
+          className: `${styles.deleteIcon} ${
+            !canDelete ? "o-50" : ""
             } absolute top-0 left-0`
-          }),
-          EDIT_ICON({
-            size: 30,
-            onClick: this.editMessage.bind(this, msg),
-            className: `${styles.editIcon} ${
-              !canEdit ? "o-50" : ""
+        }),
+        EDIT_ICON({
+          size: 30,
+          onClick: this.editMessage.bind(this, msg),
+          className: `${styles.editIcon} ${
+            !canEdit ? "o-50" : ""
             } absolute top-0 left-0`
-          })
-        ]
+        })
+      ]
       : null;
 
     if (isJob) {
@@ -691,7 +694,16 @@ class ChatroomContent extends Component {
   }
 }
 
+ChatroomContent.defaultProps = {
+  showForm: true,
+  showEditIcons: true,
+  showLoading: true
+}
 ChatroomContent.propTypes = {
+  limit: PropTypes.number,
+  showLoading: PropTypes.bool,
+  showForm: PropTypes.bool,
+  showEditIcons: PropTypes.bool,
   state: PropTypes.string.isRequired,
   community: PropTypes.string.isRequired,
   lang: PropTypes.string.isRequired

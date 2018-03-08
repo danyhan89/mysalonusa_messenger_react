@@ -4,10 +4,12 @@ import join from "@app/join";
 import Label from "@app/Label";
 import Text from "@app/Text";
 
+import { pngFlags } from 'src/components/LanguagePopup'
+
 import communities from "src/communities";
 import styles from "./index.scss";
 
-const emptyFn = () => {};
+const emptyFn = () => { };
 
 const ChatroomSelect = ({
   onChange = emptyFn,
@@ -18,21 +20,21 @@ const ChatroomSelect = ({
 }) => {
   return (
     <div {...props}>
-      <div className="mb3">
-        <Label values={{ state }}>welcome</Label>
+      <div className={`${styles.welcome} fw3 pa2 f4 pv4`}>
+        <Label values={{ state: state.toUpperCase() }}>welcome</Label>
       </div>
-      <div className="mb2">
+      <div className="mb2 fw4 ttu ph2 ">
         <Label defaultMessage="Please select chatroom">selectChatroom</Label>
       </div>
-      <div>
+      <div className="ph2">
         {communities.map(community => {
           const isSelected = currentCommunity === community.value;
-
+          const flag = pngFlags[community.value]
           return (
             <div
               key={community.value}
               className={join(
-                "mb2 pa2 pl3",
+                "mb1 pv1 fw3",
                 styles.communityItem,
                 isSelected && styles.selectedCommunity
               )}
@@ -41,16 +43,10 @@ const ChatroomSelect = ({
               }}
               value={community.value}
             >
-              {community.label} chatroom
+              <img src={flag} width={30} /> {community.label} chatroom
             </div>
           );
         })}
-        {currentCommunity && (
-          <div onClick={() => onChange()} className="mt3">
-            {" "}
-            Goto main page
-          </div>
-        )}
       </div>
     </div>
   );

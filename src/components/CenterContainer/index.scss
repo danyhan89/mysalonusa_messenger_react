@@ -1,3 +1,4 @@
+@import '~@app/colors.scss';
 .centerContainer {
   will-change: transform;
   backface-visibility: hidden;
@@ -8,4 +9,12 @@
 
 .toggled {
   transform: translate3d(75%, 0px, 0px);
+}
+
+.menuButton {
+  fill: white;
+  &:active {
+    fill: $primary-color;
+    background: $primary-color-light;
+  }
 }

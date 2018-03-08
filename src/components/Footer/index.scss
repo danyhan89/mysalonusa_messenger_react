@@ -1,11 +1,8 @@
 @import "~@app/colors.scss";
-.footer {
-  background: $primary-color-dark;
-  color: $primary-color-text;
-}
+.footer {}
 
 .link {
-  color: white;
+  color: rgba(white, 0.7);
   cursor: pointer;
   &:hover {
     text-decoration: underline;

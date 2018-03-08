@@ -28,6 +28,7 @@ class TabPanel extends React.Component {
     const ActiveTabType = activeTab.type
     const activeTabProps = { ...activeTab.props }
     delete activeTabProps.tabTitle
+    delete activeTabProps.tabTitleClassName
 
     activeTab = <ActiveTabType {...activeTabProps} />
 
@@ -38,11 +39,17 @@ class TabPanel extends React.Component {
           const onClick = () => {
             this.setActiveIndex(index)
           }
+          let titleClassName
+          if (typeof props.tabTitleClassName == 'function') {
+            titleClassName = props.tabTitleClassName(index)
+          } else {
+            titleClassName = props.tabTitleClassName
+          }
           return <div
             key={index}
             onClick={onClick}
             style={props.tabTitleStyle}
-            className={join(active && styles.activeTab, 'dib', props.tabTitleClassName)}
+            className={join(active && styles.activeTab, 'dib', props.defaultTabTitleClassName, titleClassName)}
           >
             {title}
           </div>
@@ -81,7 +88,7 @@ TabPanel.defaultProps = {
   tabTitleStyle: {
     cursor: 'pointer'
   },
-  tabTitleClassName: join('pa2 ph3', styles.tab),
+  defaultTabTitleClassName: join('pa2 ph3', styles.tab),
   tabStripClassName: join(styles.tabStrip),
   tabBodyClassName: ''
 }
@@ -96,7 +103,8 @@ TabPanel.propTypes = {
   tabBodyStyle: PropTypes.shape({}),
   tabStripStyle: PropTypes.shape({}),
 
-  tabTitleClassName: PropTypes.string,
+  tabTitleClassName: PropTypes.oneOfType([PropTypes.string, PropTypes.string]),
+  defaultTabTitleClassName: PropTypes.string,
   tabStripClassName: PropTypes.string,
   tabBodyClassName: PropTypes.string
 }

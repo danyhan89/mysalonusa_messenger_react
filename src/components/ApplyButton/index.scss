@@ -1,9 +1,15 @@
 @import "~@app/colors.scss";
 .apply {
-  background: $accent-color;
-  color: white;
-  fill: white;
+  background: rgba(white, 0.7); //$accent-color;
+  color: $accent-color; //rgba(white, 0.7);
+  border: 1px solid currentColor;
+  fill: $accent-color; //rgba(white, 0.7);
   cursor: pointer;
+  &:hover {
+    background: $accent-color;
+    color: white;
+    fill: white;
+  }
   &:active {
     position: relative;
     top: 1px;

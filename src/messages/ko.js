@@ -1,4 +1,7 @@
 export default {
-  welcome: "Korean - Welcome to My Salon USA, {state}.",
-  jobPost: "Job Post"
+  welcome: "MySalon USA, {state}",
+  jobPost: "Job Post",
+  chooseState: 'Choose state',
+  viewDetails: 'View Details',
+  chooseLanguage: 'Choose language'
 };

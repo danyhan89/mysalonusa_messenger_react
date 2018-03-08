@@ -1,17 +1,14 @@
+@import '~@app/colors.scss';
 .jobList {
   flex: none;
 }
 
-.job,
 .jobTitle,
-.jobDescription {
-  border-color: #cbcbcb;
-}
+.jobDescription {}
 
 .jobTitle,
-.jobDescription {
-  border-bottom-width: 1px;
-  border-bottom-style: dashed;
+.jobApplySection {
+  background: $pale-gray;
 }
 
 .jobDescription {
@@ -21,7 +18,18 @@
 
 .job {
   //width: 30vw;
+  overflow: hidden;
+  box-shadow: 0 0px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
   height: 30vw;
   min-height: 300px;
   min-width: 200px;
+}
+
+.viewDetails {
+  color: $gray;
+  cursor: pointer;
+  &:hover {
+    color: $accent-color;
+    ;
+  }
 }
