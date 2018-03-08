@@ -115,7 +115,7 @@ class Sidebar extends Component {
 
     const className = `top-0 bottom-0 overflow-auto w-75 w-25-ns flex flex-column fixed static-ns ${
       styles.sidebar
-    } ${this.props.className || ""}`;
+      } ${this.props.className || ""}`;
 
     return (
       <div className={className}>

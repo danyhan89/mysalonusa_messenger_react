@@ -19,7 +19,7 @@ const TABS = {
   dashboard: 1,
   jobs: 2,
   chat: 3,
-  postJob: 4
+  postJob: 5
 };
 
 class CenterContainer extends React.Component {
@@ -115,19 +115,27 @@ class CenterContainer extends React.Component {
           tabTitle={
             <div
               tabIndex={-1}
-              onBlur={this.toggleMenu}
-              className={`flex items-center ${styles.menuButton}`}
+              onBlur={() => {
+                if (this.state.opened) {
+                  this.toggleMenu()
+                }
+              }}
+              className={`${styles.menuButton}`}
               style={{ lineHeight: 0 }}
               onMouseDown={this.toggleMenu}
             >
-              <svg
-                height="24"
-                viewBox="0 0 24 24"
-                width="24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
-              </svg>
+              <div className="">
+                <svg
+                  height="32"
+                  viewBox="0 0 24 24"
+                  width="32"
+                  className="mr2"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+                </svg>
+                <Label>menu</Label>
+              </div>
             </div>
           }
         />

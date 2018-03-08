@@ -88,7 +88,7 @@ TabPanel.defaultProps = {
   tabTitleStyle: {
     cursor: 'pointer'
   },
-  defaultTabTitleClassName: join('pa2 ph3', styles.tab),
+  defaultTabTitleClassName: join('f5 ttu pa2 ph3', styles.tab),
   tabStripClassName: join(styles.tabStrip),
   tabBodyClassName: ''
 }

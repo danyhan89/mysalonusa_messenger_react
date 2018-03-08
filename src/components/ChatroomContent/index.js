@@ -42,7 +42,7 @@ if (!STORED_NICKNAME) {
   global.localStorage.setItem("nickname", NICKNAME);
 }
 
-const emptyFn = () => {};
+const emptyFn = () => { };
 
 const SPACER = <div className={styles.flex1} />;
 
@@ -65,6 +65,13 @@ const renderDate = dateString => {
   const date = DateTime.fromISO(dateString).plus({ minutes: -timezoneOffset });
 
   return date.toLocaleString(DateTime.DATETIME_SHORT);
+};
+
+
+const renderHour = dateString => {
+  const date = DateTime.fromISO(dateString).plus({ minutes: -timezoneOffset });
+
+  return date.toLocaleString(DateTime.TIME_SIMPLE);
 };
 
 const getDayFormat = dateString => {
@@ -506,11 +513,12 @@ class ChatroomContent extends Component {
           <form onSubmit={this.onSubmit} className={`${styles.form} pb2 ph2`}>
             <Input
               ref={this.inputRef}
+              placeholder="Your message"
               onChange={this.onTextChange}
               value={this.state.text}
               className={`${styles.input} mt2 mr2`}
             />
-            <Button disabled={!this.state.text} className={`br3 ph3 mt2`}>
+            <Button disabled={!this.state.text} className={`br2 ph2 mt2`}>
               <Label>Send</Label>
             </Button>
           </form>
@@ -571,7 +579,7 @@ class ChatroomContent extends Component {
         {job.nickname || <Label>unknown</Label>} ({renderDate(job.created_at)}):
         <div
           className={join(
-            "br3 pa2 relative",
+            "br2 pa2 relative",
 
             styles.jobMessage,
             styles.message,
@@ -643,55 +651,67 @@ class ChatroomContent extends Component {
     const me = this.itsMe(msg);
     const canEdit = this.canEditMessage(msg);
     const canDelete = this.canDeleteMessage(msg);
+    const differentAuthor = this.lastAuthor != msg.nickname
 
     const icons =
       me && this.props.showEditIcons
         ? [
-            DELETE_ICON({
-              size: 30,
-              onClick: this.deleteMessage.bind(this, msg),
-              className: `${styles.deleteIcon} ${
-                !canDelete ? "o-50" : ""
+          DELETE_ICON({
+            size: 24,
+            onClick: this.deleteMessage.bind(this, msg),
+            className: `${styles.deleteIcon} ${
+              !canDelete ? "o-50" : ""
               } absolute top-0 left-0`
-            }),
-            EDIT_ICON({
-              size: 30,
-              onClick: this.editMessage.bind(this, msg),
-              className: `${styles.editIcon} ${
-                !canEdit ? "o-50" : ""
+          }),
+          EDIT_ICON({
+            size: 24,
+            onClick: this.editMessage.bind(this, msg),
+            className: `${styles.editIcon} ${
+              !canEdit ? "o-50" : ""
               } absolute top-0 left-0`
-            })
-          ]
+          })
+        ]
         : null;
 
     if (isJob) {
       renderResult = this.renderJobMessage(JSON.parse(msg.message), msg, icons);
     } else {
+      const timestamp = <div className={join(styles.timestamp, 'ttu f6 dib')}>
+        {renderHour(msg.created_at)}
+      </div>
+
       const { message, nickname, alias } = msg;
-      renderResult = (
-        <div>
-          <div className="f7">
-            {alias || <Label>unknown</Label>} ({renderDate(msg.created_at)}):
-          </div>
+      renderResult = [
+        differentAuthor ? <div>
+          <div key="author" className="b dib">{alias || <Label>unknown</Label>}</div> {timestamp}
+        </div> : null,
+        <div key="msg" className={join(styles.message,
+          me && styles.myMessage, 'br2')}>
+
+
           <div
             className={join(
-              "pa1 br3 relative ml5",
-              styles.message,
-              me && styles.myMessage
+              "pv1 ph2 br2 relative dib",
+              styles.messageText
             )}
           >
+
             {icons}
+            {me ? timestamp : null}
             {message}
           </div>
+          {!me ? timestamp : null}
         </div>
-      );
+      ];
     }
 
     renderResult = (
-      <div key={key} className={`relative mt2 ${join(me && styles.flexEnd)}`}>
+      <div key={key} className={`relative w-100 ${differentAuthor ? 'mt2' : ''} ${join(me && styles.flexEnd)}`}>
         {renderResult}
       </div>
     );
+
+    this.lastAuthor = msg.nickname;
 
     return dateSeparator ? [dateSeparator, renderResult] : renderResult;
   }

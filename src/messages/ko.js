@@ -3,5 +3,6 @@ export default {
   jobPost: "Job Post",
   chooseState: "Choose state",
   viewDetails: "View Details",
+  xrecentjobs: 'KO recent jobs',
   chooseLanguage: "Choose language"
 };

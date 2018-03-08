@@ -22,7 +22,7 @@ class Input extends React.Component {
         }
       }}
       value={value}
-      className={join(`${styles.input} br3 pa3 `, className)}
+      className={join(`${styles.input} br2 pa2 `, className)}
       autoFocus={autoFocus}
     />
   }

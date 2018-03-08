@@ -1,6 +1,6 @@
 @import "~@app/colors.scss";
 .tabStrip {
-  background: white;
+  background: $pale-gray;
   color: $accent-text-color;
   z-index: 1;
   box-shadow: 0 0px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
@@ -21,11 +21,15 @@
 }
 
 .tab {
-  color: $primary-text-color; //$accent-text-color;
-  &:hover {}
+  //color: $primary-text-color; //$accent-text-color;
+  color: $gray;
+  &:hover {
+    background: rgba(white, 0.65);
+  }
 }
 
 .activeTab {
   background: white;
+  font-weight: bold;
   color: $accent-text-color;
 }

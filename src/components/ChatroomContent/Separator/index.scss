@@ -1,11 +1,10 @@
 @import "~@app/colors.scss";
-.separator {
-}
+.separator {}
 
 .separatorLine {
   height: 1px;
-  background: $accent-color;
-  z-index: -1;
+  background: $pale-gray;
+  ;
   top: 50%;
 }
 
@@ -14,6 +13,7 @@
 }
 
 .separatorContent {
-  background: $accent-color;
-  color: white;
+  background: $pale-gray;
+  color: $gray;
+  z-index: 1;
 }

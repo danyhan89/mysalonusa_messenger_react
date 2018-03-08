@@ -15,13 +15,15 @@
 
 .editIcon,
 .deleteIcon {
-  fill: $primary-color;
+  fill: $gray;
+  opacity: 0;
+  top: 3px;
   cursor: pointer;
   &:hover {
-    fill: lighten($primary-color, 10%);
+    fill: lighten($accent-color, 10%);
   }
   &:active {
-    top: 1px;
+    top: 4px;
   }
 }
 
@@ -94,9 +96,31 @@ $MARGIN_TOP: 5px;
   text-align: end;
 }
 
+.timestamp {
+  color: $gray;
+}
+
 .message {
-  background: $accent-color;
-  color: $primary-color-text;
+  .messageText {
+    background: $accent-color;
+    color: $primary-color-text;
+  }
+  .timestamp {
+    opacity: 0;
+  }
+  &:hover {
+    background: rgba($pale-gray, 0.5);
+    .timestamp,
+    .editIcon,
+    .deleteIcon {
+      transition: opacity 0.3s;
+      opacity: 1;
+    }
+  }
+}
+
+.message:not(.myMessage) .timestamp {
+  margin-left: 1rem;
 }
 
 .jobMessage {
@@ -106,7 +130,13 @@ $MARGIN_TOP: 5px;
 }
 
 .myMessage {
-  background: $primary-color-dark;
+  .messageText {
+    background: transparent; //$pale-gray;
+    color: $text-gray;
+  }
+  .timestamp {
+    margin-right: 1rem;
+  }
 }
 
 .input {

@@ -12,7 +12,13 @@
 }
 
 .menuButton {
-  fill: white;
+  color: $accent-color;
+  fill: $accent-color;
+  svg {
+    vertical-align: middle;
+    position: relative;
+    top: -2px;
+  }
   &:active {
     fill: $primary-color;
     background: $primary-color-light;
