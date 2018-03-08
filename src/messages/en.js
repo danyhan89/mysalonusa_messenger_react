@@ -1,6 +1,6 @@
 export default {
   welcome: "MySalon USA, {state}",
-  viewDetails: 'View Details',
+  viewDetails: "View Details",
   selectChatroom: "Please select chatroom",
   pleaseProvideNickname: "Please enter a nickname",
   whichCommunityPostJob: "Which community do you want to post the job to?",

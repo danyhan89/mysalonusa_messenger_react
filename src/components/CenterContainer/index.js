@@ -32,7 +32,6 @@ class CenterContainer extends React.Component {
   }
 
   toggleMenu(event) {
-
     requestAnimationFrame(() => {
       this.setState({
         opened: !this.state.opened
@@ -53,21 +52,23 @@ class CenterContainer extends React.Component {
           "flex flex-column w-75-ns w-100 relative bg-white"
         )}
       >
-        {this.state.showPostJob ? <Overlay
-          closeable
-          onClose={() => {
-            this.setState({ showPostJob: false });
-          }}
-        >
-          <PostJobForm
-            onSuccess={() => {
+        {this.state.showPostJob ? (
+          <Overlay
+            closeable
+            onClose={() => {
               this.setState({ showPostJob: false });
             }}
-            lang={lang}
-            state={state}
-            community={community}
-          />
-        </Overlay> : null}
+          >
+            <PostJobForm
+              onSuccess={() => {
+                this.setState({ showPostJob: false });
+              }}
+              lang={lang}
+              state={state}
+              community={community}
+            />
+          </Overlay>
+        ) : null}
         {children}
       </div>
     );
@@ -87,7 +88,7 @@ class CenterContainer extends React.Component {
         activeIndex={activeIndex}
         tabTitleClassName={index => {
           if (index == 0) {
-            return 'dn-ns'
+            return "dn-ns";
           }
         }}
         onActivate={index => {
@@ -98,11 +99,11 @@ class CenterContainer extends React.Component {
             }
           });
 
-          if (tab == 'postJob') {
+          if (tab == "postJob") {
             this.setState({
               showPostJob: true
-            })
-            return
+            });
+            return;
           }
 
           if (tab) {
@@ -110,23 +111,26 @@ class CenterContainer extends React.Component {
           }
         }}
       >
-        <div tabTitle={<div
-          tabIndex={-1}
-          onBlur={this.toggleMenu}
-          className={`flex items-center ${styles.menuButton}`}
-          style={{ lineHeight: 0 }}
-          onMouseDown={this.toggleMenu}
-        >
-          <svg
-            height="24"
-            viewBox="0 0 24 24"
-            width="24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
-          </svg>
-        </div>}>
-        </div>
+        <div
+          tabTitle={
+            <div
+              tabIndex={-1}
+              onBlur={this.toggleMenu}
+              className={`flex items-center ${styles.menuButton}`}
+              style={{ lineHeight: 0 }}
+              onMouseDown={this.toggleMenu}
+            >
+              <svg
+                height="24"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+              </svg>
+            </div>
+          }
+        />
         <Dashboard {...props} tabTitle={<Label>dashboard</Label>} />
         <JobList
           state={state}
@@ -135,11 +139,9 @@ class CenterContainer extends React.Component {
         />
         <div tabTitle={<Label>chatroom</Label>}>{children}</div>
         <div tabTitle={<Label>businessOnSale</Label>}>tab one</div>
-        <div tabTitle={<Label>postAJob</Label>}>
-        </div>
-
+        <div tabTitle={<Label>postAJob</Label>} />
       </TabPanel>
-    )
+    );
   }
 }
 export default withRouter(CenterContainer);

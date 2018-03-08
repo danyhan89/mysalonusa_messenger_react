@@ -141,7 +141,8 @@ class JobList extends React.Component {
         )}
       >
         <div className={join("pa3", styles.jobTitle)}>
-          {job.title}{" xxx"}
+          {job.title}
+          {" xxx"}
           <div>
             ({job.views || 0} <Label>views</Label>)
           </div>
@@ -149,7 +150,12 @@ class JobList extends React.Component {
         <div className={join("pa3", styles.jobDescription)}>
           {job.description}
         </div>
-        <div className={join("pa3 flex flex-row items-center", styles.jobApplySection)}>
+        <div
+          className={join(
+            "pa3 flex flex-row items-center",
+            styles.jobApplySection
+          )}
+        >
           <ApplyButton
             className="b"
             onClick={() => {

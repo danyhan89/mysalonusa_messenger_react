@@ -42,7 +42,7 @@ if (!STORED_NICKNAME) {
   global.localStorage.setItem("nickname", NICKNAME);
 }
 
-const emptyFn = () => { };
+const emptyFn = () => {};
 
 const SPACER = <div className={styles.flex1} />;
 
@@ -464,7 +464,7 @@ class ChatroomContent extends Component {
 
   renderLoader() {
     if (!this.props.showLoading) {
-      return null
+      return null;
     }
     const visibleCls = this.state.loading ? styles.loaderVisible : "";
 
@@ -502,17 +502,19 @@ class ChatroomContent extends Component {
         {this.renderDeletePopup()}
         {this.renderApplyOverlay()}
         {this.renderJobEditOverlay()}
-        {this.props.showForm ? <form onSubmit={this.onSubmit} className={`${styles.form} pb2 ph2`}>
-          <Input
-            ref={this.inputRef}
-            onChange={this.onTextChange}
-            value={this.state.text}
-            className={`${styles.input} mt2 mr2`}
-          />
-          <Button disabled={!this.state.text} className={`br3 ph3 mt2`}>
-            <Label>Send</Label>
-          </Button>
-        </form> : null}
+        {this.props.showForm ? (
+          <form onSubmit={this.onSubmit} className={`${styles.form} pb2 ph2`}>
+            <Input
+              ref={this.inputRef}
+              onChange={this.onTextChange}
+              value={this.state.text}
+              className={`${styles.input} mt2 mr2`}
+            />
+            <Button disabled={!this.state.text} className={`br3 ph3 mt2`}>
+              <Label>Send</Label>
+            </Button>
+          </form>
+        ) : null}
       </div>
     );
   }
@@ -642,24 +644,25 @@ class ChatroomContent extends Component {
     const canEdit = this.canEditMessage(msg);
     const canDelete = this.canDeleteMessage(msg);
 
-    const icons = me && this.props.showEditIcons
-      ? [
-        DELETE_ICON({
-          size: 30,
-          onClick: this.deleteMessage.bind(this, msg),
-          className: `${styles.deleteIcon} ${
-            !canDelete ? "o-50" : ""
-            } absolute top-0 left-0`
-        }),
-        EDIT_ICON({
-          size: 30,
-          onClick: this.editMessage.bind(this, msg),
-          className: `${styles.editIcon} ${
-            !canEdit ? "o-50" : ""
-            } absolute top-0 left-0`
-        })
-      ]
-      : null;
+    const icons =
+      me && this.props.showEditIcons
+        ? [
+            DELETE_ICON({
+              size: 30,
+              onClick: this.deleteMessage.bind(this, msg),
+              className: `${styles.deleteIcon} ${
+                !canDelete ? "o-50" : ""
+              } absolute top-0 left-0`
+            }),
+            EDIT_ICON({
+              size: 30,
+              onClick: this.editMessage.bind(this, msg),
+              className: `${styles.editIcon} ${
+                !canEdit ? "o-50" : ""
+              } absolute top-0 left-0`
+            })
+          ]
+        : null;
 
     if (isJob) {
       renderResult = this.renderJobMessage(JSON.parse(msg.message), msg, icons);
@@ -698,7 +701,7 @@ ChatroomContent.defaultProps = {
   showForm: true,
   showEditIcons: true,
   showLoading: true
-}
+};
 ChatroomContent.propTypes = {
   limit: PropTypes.number,
   showLoading: PropTypes.bool,

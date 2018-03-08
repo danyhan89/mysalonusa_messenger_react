@@ -7,8 +7,9 @@ import styles from "./index.scss";
 export default ({ onClick, className, size = 24 }) => (
   <div
     onClick={onClick}
-    className={`${className ||
-      ""} br3 pa1 fw300 inline-flex items-center ${styles.apply}`}
+    className={`${className || ""} br3 pa1 fw300 inline-flex items-center ${
+      styles.apply
+    }`}
   >
     {APPLY_ICON({ size })} <Label>APPLY</Label>
   </div>

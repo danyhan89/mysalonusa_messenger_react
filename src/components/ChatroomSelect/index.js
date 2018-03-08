@@ -4,12 +4,12 @@ import join from "@app/join";
 import Label from "@app/Label";
 import Text from "@app/Text";
 
-import { pngFlags } from 'src/components/LanguagePopup'
+import { pngFlags } from "src/components/LanguagePopup";
 
 import communities from "src/communities";
 import styles from "./index.scss";
 
-const emptyFn = () => { };
+const emptyFn = () => {};
 
 const ChatroomSelect = ({
   onChange = emptyFn,
@@ -29,7 +29,7 @@ const ChatroomSelect = ({
       <div className="ph2">
         {communities.map(community => {
           const isSelected = currentCommunity === community.value;
-          const flag = pngFlags[community.value]
+          const flag = pngFlags[community.value];
           return (
             <div
               key={community.value}

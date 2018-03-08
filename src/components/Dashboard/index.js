@@ -11,7 +11,7 @@ import ellipsis from "@app/ellipsis";
 import JobList from "../JobList";
 import ChatroomContent from "../ChatroomContent";
 
-const emptyFn = () => { };
+const emptyFn = () => {};
 
 class Dashboard extends Component {
   render() {
@@ -67,7 +67,15 @@ class Dashboard extends Component {
           </div>
 
           <div tabTitle={<Label>recentChat</Label>}>
-            <ChatroomContent limit={10} showLoading={false} showForm={false} showEditIcons={false} state={state} lang={lang} community={community || lang} />
+            <ChatroomContent
+              limit={10}
+              showLoading={false}
+              showForm={false}
+              showEditIcons={false}
+              state={state}
+              lang={lang}
+              community={community || lang}
+            />
           </div>
 
           <div
