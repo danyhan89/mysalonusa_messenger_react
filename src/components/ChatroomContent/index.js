@@ -18,13 +18,14 @@ import ActionButton from "@app/ActionButton";
 import Overlay from "@app/Overlay";
 import Popup from "@app/Popup";
 
-import { fetchChats } from "src/api";
+import { incrementJobView, fetchChats } from "src/api";
 
 import ApplyButton from "src/components/ApplyButton";
 
 import { isValid as isValidState } from "src/states";
 
 import Separator from "./Separator";
+import Job from "./Job";
 import JOB_ICON from "./jobIcon";
 import DELETE_ICON from "./deleteIcon";
 import EDIT_ICON from "./editIcon";
@@ -46,6 +47,13 @@ const emptyFn = () => { };
 
 const SPACER = <div className={styles.flex1} />;
 
+
+const incrementViews = (job) => incrementJobView(job).then(response => {
+  const { views } = response;
+
+  return views
+});
+
 const connect = state => {
   if (!state || !isValidState(state)) {
     throw "No valid state";
@@ -66,7 +74,6 @@ const renderDate = dateString => {
 
   return date.toLocaleString(DateTime.DATETIME_SHORT);
 };
-
 
 const renderHour = dateString => {
   const date = DateTime.fromISO(dateString).plus({ minutes: -timezoneOffset });
@@ -162,6 +169,8 @@ class ChatroomContent extends Component {
     }).then(chats => {
       chats = chats.reverse();
       const messages = chats.concat(this.state.messages);
+
+      //const viewViews = messages.filter
       this.setState(
         {
           loading: false,
@@ -355,6 +364,20 @@ class ChatroomContent extends Component {
     return message.nickname === NICKNAME;
   }
 
+  updateJobViews(job, message) {
+    incrementViews(job).then(views => {
+      this.setState({
+        messages: this.state.messages.map(m => {
+          if (m.id == message.id) {
+            job.views = views;
+            m.message = JSON.stringify(job)
+          }
+          return m
+        })
+      })
+    })
+  }
+
   renderApplyOverlay() {
     const job = this.state.applyForJob;
     if (!job) {
@@ -509,6 +532,7 @@ class ChatroomContent extends Component {
         {this.renderDeletePopup()}
         {this.renderApplyOverlay()}
         {this.renderJobEditOverlay()}
+        {this.renderJobViewOverlay()}
         {this.props.showForm ? (
           <form onSubmit={this.onSubmit} className={`${styles.form} pb2 ph2`}>
             <Input
@@ -527,8 +551,9 @@ class ChatroomContent extends Component {
     );
   }
 
-  onApply(job, message) {
-    this.setState({ applyForJob: job });
+  onApply(job, msg) {
+    this.setState({ applyForJob: job, applyForJobMessage: msg });
+    this.updateJobViews(job, msg)
   }
 
   onEditJob(job, message) {
@@ -543,8 +568,6 @@ class ChatroomContent extends Component {
     if (!job) {
       return null;
     }
-
-    console.log(job);
 
     return (
       <Overlay
@@ -568,15 +591,64 @@ class ChatroomContent extends Component {
     );
   }
 
+  renderJobViewOverlay() {
+    const job = this.state.jobToView;
+
+    if (!job) {
+      return null;
+    }
+
+    return (
+      <Overlay
+        closeable
+        onClose={() => {
+          this.setState({ jobToView: null });
+        }}
+      >
+        <PostJobForm
+          step="apply"
+          defaultValues={job}
+
+          onApplyClick={() => {
+            this.setState({
+              jobToView: null
+            });
+            this.onApply(job, this.state.jobToViewMessage)
+          }}
+          lang={this.props.lang}
+          state={this.props.state}
+          community={this.props.community}
+        />
+      </Overlay>
+    );
+  }
+
+  onViewJob(job, msg) {
+    this.updateJobViews(job, msg);
+    this.setState({
+      jobToView: job,
+      jobToViewMessage: msg
+    })
+  }
+
   renderJobMessage(job, msg, children) {
     const itsMe = this.itsMe(msg);
+    const timestamp = this.renderTimestamp(msg)
+
+    return <Job
+      key={job.id || index}
+      job={job}
+      onViewClick={this.onViewJob.bind(this, job, msg)}
+      onApplyClick={this.onApply.bind(this, job, msg)}
+    />
     return (
       <div
         key={job.id || index}
         style={{ maxHeight: "30vh", overflow: "auto" }}
         className={join(`mt2`, itsMe && styles.flexEnd)}
       >
-        {job.nickname || <Label>unknown</Label>} ({renderDate(job.created_at)}):
+        {job.nickname || <Label>unknown</Label>}
+        {timestamp}
         <div
           className={join(
             "br2 pa2 relative",
@@ -634,6 +706,16 @@ class ChatroomContent extends Component {
     return this.canDeleteMessage(message);
   }
 
+  renderTimestamp(msg) {
+    const timestamp = (
+      <div className={join(styles.timestamp, "ttu f6 dib")}>
+        {renderHour(msg.created_at)}
+      </div>
+    );
+
+    return timestamp
+  }
+
   renderMessage(msg, index) {
     const isJob = this.isJob(msg);
 
@@ -651,7 +733,7 @@ class ChatroomContent extends Component {
     const me = this.itsMe(msg);
     const canEdit = this.canEditMessage(msg);
     const canDelete = this.canDeleteMessage(msg);
-    const differentAuthor = this.lastAuthor != msg.nickname
+    const differentAuthor = this.lastAuthor != msg.nickname;
 
     const icons =
       me && this.props.showEditIcons
@@ -676,26 +758,27 @@ class ChatroomContent extends Component {
     if (isJob) {
       renderResult = this.renderJobMessage(JSON.parse(msg.message), msg, icons);
     } else {
-      const timestamp = <div className={join(styles.timestamp, 'ttu f6 dib')}>
-        {renderHour(msg.created_at)}
-      </div>
+      const timestamp = (
+        <div className={join(styles.timestamp, "ttu f6 dib")}>
+          {renderHour(msg.created_at)}
+        </div>
+      );
 
       const { message, nickname, alias } = msg;
       renderResult = [
-        differentAuthor ? <div>
-          <div key="author" className="b dib">{alias || <Label>unknown</Label>}</div> {timestamp}
-        </div> : null,
-        <div key="msg" className={join(styles.message,
-          me && styles.myMessage, 'br2')}>
-
-
-          <div
-            className={join(
-              "pv1 ph2 br2 relative dib",
-              styles.messageText
-            )}
-          >
-
+        differentAuthor ? (
+          <div>
+            <div key="author" className="b dib">
+              {alias || <Label>unknown</Label>}
+            </div>{" "}
+            {timestamp}
+          </div>
+        ) : null,
+        <div
+          key="msg"
+          className={join(styles.message, me && styles.myMessage, "br2")}
+        >
+          <div className={join("pv1 ph2 br2 relative dib", styles.messageText)}>
             {icons}
             {me ? timestamp : null}
             {message}
@@ -706,7 +789,12 @@ class ChatroomContent extends Component {
     }
 
     renderResult = (
-      <div key={key} className={`relative w-100 ${differentAuthor ? 'mt2' : ''} ${join(me && styles.flexEnd)}`}>
+      <div
+        key={key}
+        className={`relative w-100 ${differentAuthor ? "mt2" : ""} ${join(
+          me && styles.flexEnd
+        )}`}
+      >
         {renderResult}
       </div>
     );

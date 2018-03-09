@@ -28,16 +28,6 @@ class ApplyOverlay extends Component {
     };
   }
 
-  componentDidMount() {
-    incrementJobView(this.props.job).then(response => {
-      const { views } = response;
-
-      if (this.props.updateJobViews) {
-        this.props.updateJobViews(this.props.job, views);
-      }
-    });
-  }
-
   isSendDisabled() {
     return this.state.message.length < 20 || !isEmail(this.state.email);
   }
@@ -82,8 +72,8 @@ class ApplyOverlay extends Component {
     const actionIcon = this.state.sending ? (
       <LoadingIcon size={32} />
     ) : (
-      APPLY_ICON({ size: 32 })
-    );
+        APPLY_ICON({ size: 32 })
+      );
 
     let otherChildren;
     if (!readOnly) {

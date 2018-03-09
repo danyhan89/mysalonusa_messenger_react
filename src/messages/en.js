@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 export default {
   welcome: "MySalon USA, {state}",
@@ -21,6 +21,6 @@ export default {
   yes: "Yes",
   confirmDeleteMessage: "Are you sure you want to delete the message?",
   chooseLanguage: "Choose your language",
-  xrecentjobs: '{count} recent jobs',
-  inperiod: 'in the last {period} weeks'
+  xrecentjobs: "{count} recent jobs",
+  inperiod: "in the last {period} weeks"
 };

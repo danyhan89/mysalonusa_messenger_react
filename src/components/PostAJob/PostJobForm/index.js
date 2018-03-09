@@ -202,6 +202,12 @@ const STEPS = [
       </span>
     ),
     render: renderPreview
+  },
+  {
+    key: 'apply',
+    render: renderPreview,
+    onClick: ({ onApplyClick }) => onApplyClick(),
+    buttonLabel: ({ defaultValues }) => <Label>apply</Label>
   }
 ];
 
@@ -209,11 +215,21 @@ class PostJobForm extends Component {
   constructor(props) {
     super(props);
 
-    const { defaultValues } = props;
+    const { defaultValues, step } = props;
+
+    let currentStep = defaultValues ? 2 : 0
+
+    if (step) {
+      STEPS.forEach((s, index) => {
+        if (s.key == step) {
+          currentStep = index
+        }
+      })
+    }
 
     this.state = {
       uniqueNickname: global.localStorage.getItem("nickname"),
-      currentStep: defaultValues ? 2 : 0,
+      currentStep,
       minStep: defaultValues ? 2 : 0,
       community: getCommunity(props.community).value,
       state: props.state,
@@ -240,9 +256,14 @@ class PostJobForm extends Component {
     let { currentStep } = this.state;
     const step = STEPS[currentStep];
 
+
+    if (step.onClick) {
+      step.onClick(this.props)
+    }
     if (step && step.locked) {
       return;
     }
+
     currentStep++;
     if (step.submit) {
       this.postJob();

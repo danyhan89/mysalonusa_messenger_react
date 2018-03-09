@@ -125,8 +125,10 @@ $MARGIN_TOP: 5px;
 
 .jobMessage {
   align-self: stretch;
+  max-width: 50%;
   fill: white;
-  background: $accent-color-2;
+  color: white;
+  background: $accent-color;
 }
 
 .myMessage {

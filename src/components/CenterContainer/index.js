@@ -117,7 +117,7 @@ class CenterContainer extends React.Component {
               tabIndex={-1}
               onBlur={() => {
                 if (this.state.opened) {
-                  this.toggleMenu()
+                  this.toggleMenu();
                 }
               }}
               className={`${styles.menuButton}`}

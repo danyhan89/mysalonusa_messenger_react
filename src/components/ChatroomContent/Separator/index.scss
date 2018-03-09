@@ -1,10 +1,10 @@
 @import "~@app/colors.scss";
-.separator {}
+.separator {
+}
 
 .separatorLine {
   height: 1px;
   background: $pale-gray;
-  ;
   top: 50%;
 }
 

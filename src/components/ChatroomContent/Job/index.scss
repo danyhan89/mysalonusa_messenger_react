@@ -1,0 +1,34 @@
+@import "~@app/colors.scss";
+.jobList {
+  flex: none;
+}
+
+.jobTitle,
+.jobDescription {}
+
+.jobTitle,
+.jobApplySection {
+  flex: none;
+  background: $pale-gray;
+}
+
+.jobDescription {
+  flex: 1 1 100%;
+  overflow: auto;
+}
+
+.job {
+  overflow: hidden;
+  box-shadow: 0 0px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  max-height: 300px;
+  min-height: 200px;
+  min-width: 200px;
+}
+
+.viewDetails {
+  color: $gray;
+  cursor: pointer;
+  &:hover {
+    color: $accent-color;
+  }
+}
