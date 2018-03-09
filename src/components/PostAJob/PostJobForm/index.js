@@ -204,7 +204,7 @@ const STEPS = [
     render: renderPreview
   },
   {
-    key: 'apply',
+    key: "apply",
     render: renderPreview,
     onClick: ({ onApplyClick }) => onApplyClick(),
     buttonLabel: ({ defaultValues }) => <Label>apply</Label>
@@ -217,14 +217,14 @@ class PostJobForm extends Component {
 
     const { defaultValues, step } = props;
 
-    let currentStep = defaultValues ? 2 : 0
+    let currentStep = defaultValues ? 2 : 0;
 
     if (step) {
       STEPS.forEach((s, index) => {
         if (s.key == step) {
-          currentStep = index
+          currentStep = index;
         }
-      })
+      });
     }
 
     this.state = {
@@ -256,9 +256,8 @@ class PostJobForm extends Component {
     let { currentStep } = this.state;
     const step = STEPS[currentStep];
 
-
     if (step.onClick) {
-      step.onClick(this.props)
+      step.onClick(this.props);
     }
     if (step && step.locked) {
       return;

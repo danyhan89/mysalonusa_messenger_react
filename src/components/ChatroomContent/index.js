@@ -43,16 +43,16 @@ if (!STORED_NICKNAME) {
   global.localStorage.setItem("nickname", NICKNAME);
 }
 
-const emptyFn = () => { };
+const emptyFn = () => {};
 
 const SPACER = <div className={styles.flex1} />;
 
+const incrementViews = job =>
+  incrementJobView(job).then(response => {
+    const { views } = response;
 
-const incrementViews = (job) => incrementJobView(job).then(response => {
-  const { views } = response;
-
-  return views
-});
+    return views;
+  });
 
 const connect = state => {
   if (!state || !isValidState(state)) {
@@ -370,12 +370,12 @@ class ChatroomContent extends Component {
         messages: this.state.messages.map(m => {
           if (m.id == message.id) {
             job.views = views;
-            m.message = JSON.stringify(job)
+            m.message = JSON.stringify(job);
           }
-          return m
+          return m;
         })
-      })
-    })
+      });
+    });
   }
 
   renderApplyOverlay() {
@@ -553,7 +553,7 @@ class ChatroomContent extends Component {
 
   onApply(job, msg) {
     this.setState({ applyForJob: job, applyForJobMessage: msg });
-    this.updateJobViews(job, msg)
+    this.updateJobViews(job, msg);
   }
 
   onEditJob(job, message) {
@@ -608,12 +608,11 @@ class ChatroomContent extends Component {
         <PostJobForm
           step="apply"
           defaultValues={job}
-
           onApplyClick={() => {
             this.setState({
               jobToView: null
             });
-            this.onApply(job, this.state.jobToViewMessage)
+            this.onApply(job, this.state.jobToViewMessage);
           }}
           lang={this.props.lang}
           state={this.props.state}
@@ -628,19 +627,21 @@ class ChatroomContent extends Component {
     this.setState({
       jobToView: job,
       jobToViewMessage: msg
-    })
+    });
   }
 
   renderJobMessage(job, msg, children) {
     const itsMe = this.itsMe(msg);
-    const timestamp = this.renderTimestamp(msg)
+    const timestamp = this.renderTimestamp(msg);
 
-    return <Job
-      key={job.id || index}
-      job={job}
-      onViewClick={this.onViewJob.bind(this, job, msg)}
-      onApplyClick={this.onApply.bind(this, job, msg)}
-    />
+    return (
+      <Job
+        key={job.id || index}
+        job={job}
+        onViewClick={this.onViewJob.bind(this, job, msg)}
+        onApplyClick={this.onApply.bind(this, job, msg)}
+      />
+    );
     return (
       <div
         key={job.id || index}
@@ -713,7 +714,7 @@ class ChatroomContent extends Component {
       </div>
     );
 
-    return timestamp
+    return timestamp;
   }
 
   renderMessage(msg, index) {
@@ -738,21 +739,21 @@ class ChatroomContent extends Component {
     const icons =
       me && this.props.showEditIcons
         ? [
-          DELETE_ICON({
-            size: 24,
-            onClick: this.deleteMessage.bind(this, msg),
-            className: `${styles.deleteIcon} ${
-              !canDelete ? "o-50" : ""
+            DELETE_ICON({
+              size: 24,
+              onClick: this.deleteMessage.bind(this, msg),
+              className: `${styles.deleteIcon} ${
+                !canDelete ? "o-50" : ""
               } absolute top-0 left-0`
-          }),
-          EDIT_ICON({
-            size: 24,
-            onClick: this.editMessage.bind(this, msg),
-            className: `${styles.editIcon} ${
-              !canEdit ? "o-50" : ""
+            }),
+            EDIT_ICON({
+              size: 24,
+              onClick: this.editMessage.bind(this, msg),
+              className: `${styles.editIcon} ${
+                !canEdit ? "o-50" : ""
               } absolute top-0 left-0`
-          })
-        ]
+            })
+          ]
         : null;
 
     if (isJob) {

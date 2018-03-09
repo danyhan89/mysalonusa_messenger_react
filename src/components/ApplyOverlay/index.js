@@ -72,8 +72,8 @@ class ApplyOverlay extends Component {
     const actionIcon = this.state.sending ? (
       <LoadingIcon size={32} />
     ) : (
-        APPLY_ICON({ size: 32 })
-      );
+      APPLY_ICON({ size: 32 })
+    );
 
     let otherChildren;
     if (!readOnly) {
