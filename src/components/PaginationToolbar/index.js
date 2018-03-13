@@ -176,7 +176,7 @@ class PaginationToolbar extends React.Component {
         key={page}
         className={join(
           styles.pageBlock,
-          children == '...' && styles.disabled,
+          children == "..." && styles.disabled,
           page != null && styles.page,
           "pa2",
           isCurrent && styles.currentPage
@@ -194,8 +194,8 @@ class PaginationToolbar extends React.Component {
 }
 
 PaginationToolbar.defaultProps = {
-  onPageChange: () => { },
-  onSkipChange: () => { },
+  onPageChange: () => {},
+  onSkipChange: () => {},
   pagesToShow: 3
 };
 

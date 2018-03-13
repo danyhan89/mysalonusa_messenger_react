@@ -9,13 +9,12 @@ import { fetchJobs, incrementJobView } from "src/api";
 
 import Button from "@app/Button";
 import Label from "@app/Label";
-import PostJobForm from 'src/components/PostAJob/PostJobForm'
+import PostJobForm from "src/components/PostAJob/PostJobForm";
 
 import ApplyButton from "src/components/ApplyButton";
 import ApplyOverlay from "src/components/ApplyOverlay";
 
 import PaginationToolbar from "src/components/PaginationToolbar";
-
 
 import styles from "./index.scss";
 import ViewAndApply from "../ViewAndApply";
@@ -138,7 +137,11 @@ class JobList extends React.Component {
       return this.props.renderJob(job, index);
     }
 
-    const title = <div className={`${styles.title} fw5`}>{job.title || ellipsis(job.description, 50)}</div>;
+    const title = (
+      <div className={`${styles.title} fw5`}>
+        {job.title || ellipsis(job.description, 50)}
+      </div>
+    );
 
     return (
       <div
@@ -154,7 +157,13 @@ class JobList extends React.Component {
           styles.job
         )}
       >
-        <svg className={styles.viewIcon} height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          className={styles.viewIcon}
+          height="24"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <path d="M0 0h24v24H0z" fill="none" />
           <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
         </svg>
@@ -188,25 +197,27 @@ class JobList extends React.Component {
     if (!applyForJob) {
       return null;
     }
-    const job = applyForJob
+    const job = applyForJob;
 
-    return <ViewAndApply
-      job={job}
-      lang={this.props.lang}
-      community={this.props.community}
-      state={this.props.state}
-      onDismiss={(applied) => {
-        this.setState({ applyForJob: null });
-        this.updateJobViews(job)
-      }}
-    />
+    return (
+      <ViewAndApply
+        job={job}
+        lang={this.props.lang}
+        community={this.props.community}
+        state={this.props.state}
+        onDismiss={applied => {
+          this.setState({ applyForJob: null });
+          this.updateJobViews(job);
+        }}
+      />
+    );
 
     return (
       <Overlay
         closeable
         onClose={() => {
           this.setState({ applyForJob: null });
-          this.updateJobViews(job)
+          this.updateJobViews(job);
         }}
       >
         <PostJobForm

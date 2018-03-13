@@ -42,7 +42,7 @@ if (!STORED_NICKNAME) {
   global.localStorage.setItem("nickname", NICKNAME);
 }
 
-const emptyFn = () => { };
+const emptyFn = () => {};
 
 const SPACER = <div className={styles.flex1} />;
 
@@ -606,7 +606,6 @@ class ChatroomContent extends Component {
           this.setState({ jobToView: null });
         }}
         job={job}
-
         lang={this.props.lang}
         state={this.props.state}
         community={this.props.community}
@@ -630,7 +629,7 @@ class ChatroomContent extends Component {
       <Job
         key={job.id || index}
         job={job}
-        className={itsMe ? 'fr mt1' : 'mt1'}
+        className={itsMe ? "fr mt1" : "mt1"}
         onViewClick={this.onViewJob.bind(this, job, msg)}
         onApplyClick={this.onApply.bind(this, job, msg)}
       />
@@ -692,21 +691,21 @@ class ChatroomContent extends Component {
     const icons =
       me && this.props.showEditIcons
         ? [
-          DELETE_ICON({
-            size: 24,
-            onClick: this.deleteMessage.bind(this, msg),
-            className: `${styles.deleteIcon} ${
-              !canDelete ? "o-50" : ""
+            DELETE_ICON({
+              size: 24,
+              onClick: this.deleteMessage.bind(this, msg),
+              className: `${styles.deleteIcon} ${
+                !canDelete ? "o-50" : ""
               } absolute top-0 left-0`
-          }),
-          EDIT_ICON({
-            size: 24,
-            onClick: this.editMessage.bind(this, msg),
-            className: `${styles.editIcon} ${
-              !canEdit ? "o-50" : ""
+            }),
+            EDIT_ICON({
+              size: 24,
+              onClick: this.editMessage.bind(this, msg),
+              className: `${styles.editIcon} ${
+                !canEdit ? "o-50" : ""
               } absolute top-0 left-0`
-          })
-        ]
+            })
+          ]
         : null;
 
     if (isJob) {

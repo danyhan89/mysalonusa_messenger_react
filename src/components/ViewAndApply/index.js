@@ -1,10 +1,9 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React from "react";
+import PropTypes from "prop-types";
 
 import JOB_ICON from "src/components/ChatroomContent/jobIcon";
 import APPLY_ICON from "src/components/ApplyButton/applyIcon";
-import PostJobForm from 'src/components/PostAJob/PostJobForm'
-
+import PostJobForm from "src/components/PostAJob/PostJobForm";
 
 import isEmail from "is-email";
 
@@ -22,53 +21,59 @@ class ViewAndApply extends React.Component {
     super(props);
 
     this.state = {
-      step: props.defaultStep || 'view',
-      message: '',
-      email: ''
-    }
+      step: props.defaultStep || "view",
+      message: "",
+      email: ""
+    };
   }
 
   render() {
-    const { job, lang, state, community } = this.props
+    const { job, lang, state, community } = this.props;
 
-    return <Overlay
-      closeable
-      onClose={() => {
-        this.props.onDismiss(false)
-      }}
-    >
-      {this.state.step == 'view' ? this.renderViewStep() : this.renderApplyStep()}
-    </Overlay>
+    return (
+      <Overlay
+        closeable
+        onClose={() => {
+          this.props.onDismiss(false);
+        }}
+      >
+        {this.state.step == "view"
+          ? this.renderViewStep()
+          : this.renderApplyStep()}
+      </Overlay>
+    );
   }
 
   renderViewStep() {
-    const { job, lang, state, community } = this.props
-    return <PostJobForm
-      step="apply"
-      defaultValues={job}
-      onApplyClick={() => {
-        this.setState({
-          step: 'apply'
-        });
-      }}
-      lang={lang}
-      state={state}
-      community={community}
-    />
+    const { job, lang, state, community } = this.props;
+    return (
+      <PostJobForm
+        step="apply"
+        defaultValues={job}
+        onApplyClick={() => {
+          this.setState({
+            step: "apply"
+          });
+        }}
+        lang={lang}
+        state={state}
+        community={community}
+      />
+    );
   }
 
   renderApplyStep() {
-    const { job, lang, state, community } = this.props
+    const { job, lang, state, community } = this.props;
     const actionIcon = this.state.sending ? (
       <LoadingIcon size={32} />
     ) : (
-        APPLY_ICON({ size: 32 })
-      );
+      APPLY_ICON({ size: 32 })
+    );
 
     const otherChildren = [
       <div key="label">
         <Label>yourEmail</Label>:
-        </div>,
+      </div>,
 
       <Input
         key="emailField"
@@ -82,7 +87,7 @@ class ViewAndApply extends React.Component {
       />,
       <div className="mt3" key="message">
         <Label>yourMessage</Label>:
-        </div>,
+      </div>,
 
       <Input
         key="messageField"
@@ -109,27 +114,29 @@ class ViewAndApply extends React.Component {
       </ActionButton>
     ];
 
-    return <div
-      style={{ minWidth: "50vw", maxHeight: "90vh" }}
-      className={`mw7 br3`}
-    >
-      <div className="f3 flex items-center mt3">
-        {JOB_ICON({ size: 32 })} <Label>jobPost</Label>
-      </div>
-      <div>
-        <Label>jobEmail</Label>: {job.email}
-      </div>
-      <div>
-        <Label>jobNickname</Label>: {job.nickname}
-      </div>
-      <div className="mt3">
-        <Label>jobDescription</Label>:
-          </div>
+    return (
+      <div
+        style={{ minWidth: "50vw", maxHeight: "90vh" }}
+        className={`mw7 br3`}
+      >
+        <div className="f3 flex items-center mt3">
+          {JOB_ICON({ size: 32 })} <Label>jobPost</Label>
+        </div>
+        <div>
+          <Label>jobEmail</Label>: {job.email}
+        </div>
+        <div>
+          <Label>jobNickname</Label>: {job.nickname}
+        </div>
+        <div className="mt3">
+          <Label>jobDescription</Label>:
+        </div>
 
-      <div className="mb3">{job.description}</div>
+        <div className="mb3">{job.description}</div>
 
-      {otherChildren}
-    </div>
+        {otherChildren}
+      </div>
+    );
   }
 
   isSendDisabled() {
@@ -173,10 +180,12 @@ class ViewAndApply extends React.Component {
 
 ViewAndApply.propTypes = {
   onDismiss: PropTypes.func.isRequired,
-  job: PropTypes.shape({ id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]) }).isRequired,
+  job: PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+  }).isRequired,
   lang: PropTypes.string.isRequired,
   state: PropTypes.string.isRequired,
   community: PropTypes.string.isRequired
-}
+};
 
-export default ViewAndApply
+export default ViewAndApply;
