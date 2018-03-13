@@ -239,7 +239,7 @@ class JobList extends React.Component {
 }
 
 JobList.defaultProps = {
-  limit: 5,
+  limit: 25,
   pagination: true
 };
 
