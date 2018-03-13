@@ -140,7 +140,7 @@ class PaginationToolbar extends React.Component {
     return (
       <div
         className={join(
-          "inline-flex flex-row br3",
+          "inline-flex flex-row br2",
           this.props.className,
           styles.pagination
         )}
@@ -176,6 +176,7 @@ class PaginationToolbar extends React.Component {
         key={page}
         className={join(
           styles.pageBlock,
+          children == '...' && styles.disabled,
           page != null && styles.page,
           "pa2",
           isCurrent && styles.currentPage
@@ -193,8 +194,8 @@ class PaginationToolbar extends React.Component {
 }
 
 PaginationToolbar.defaultProps = {
-  onPageChange: () => {},
-  onSkipChange: () => {},
+  onPageChange: () => { },
+  onSkipChange: () => { },
   pagesToShow: 3
 };
 

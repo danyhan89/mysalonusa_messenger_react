@@ -6,18 +6,18 @@ import ApplyButton from "src/components/ApplyButton";
 
 import styles from "./index.scss";
 
-const Job = ({ job, onApplyClick, onViewClick }) => {
+const Job = ({ job, onApplyClick, className, onViewClick }) => {
   return (
     <div
       key={job.id || index}
       className={join(
         "flex flex-column bg-white mr1 mr3-ns mb4 br2 w-90 w-40-m w-30-l",
+        className,
         styles.job
       )}
     >
       <div className={join("pa2", styles.jobTitle)}>
         {job.title}
-        {" xxx"}
         <div>
           ({job.views || 0} <Label>views</Label>)
         </div>

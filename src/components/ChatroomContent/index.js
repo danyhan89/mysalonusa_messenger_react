@@ -20,8 +20,6 @@ import Popup from "@app/Popup";
 
 import { incrementJobView, fetchChats } from "src/api";
 
-import ApplyButton from "src/components/ApplyButton";
-
 import { isValid as isValidState } from "src/states";
 
 import Separator from "./Separator";
@@ -34,6 +32,7 @@ import ApplyOverlay from "../ApplyOverlay";
 import PostJobForm from "../PostAJob/PostJobForm";
 
 import styles from "./index.scss";
+import ViewAndApply from "../ViewAndApply";
 
 const STORED_NICKNAME = global.localStorage.getItem("nickname");
 let STORED_ALIAS = global.localStorage.getItem("alias");
@@ -43,7 +42,7 @@ if (!STORED_NICKNAME) {
   global.localStorage.setItem("nickname", NICKNAME);
 }
 
-const emptyFn = () => {};
+const emptyFn = () => { };
 
 const SPACER = <div className={styles.flex1} />;
 
@@ -380,18 +379,21 @@ class ChatroomContent extends Component {
 
   renderApplyOverlay() {
     const job = this.state.applyForJob;
+
     if (!job) {
       return null;
     }
 
     return (
-      <ApplyOverlay
-        job={job}
+      <ViewAndApply
+        defaultStep="apply"
         onDismiss={() => {
-          this.setState({
-            applyForJob: null
-          });
+          this.setState({ applyForJob: null });
         }}
+        job={job}
+        lang={this.props.lang}
+        state={this.props.state}
+        community={this.props.community}
       />
     );
   }
@@ -599,26 +601,16 @@ class ChatroomContent extends Component {
     }
 
     return (
-      <Overlay
-        closeable
-        onClose={() => {
+      <ViewAndApply
+        onDismiss={() => {
           this.setState({ jobToView: null });
         }}
-      >
-        <PostJobForm
-          step="apply"
-          defaultValues={job}
-          onApplyClick={() => {
-            this.setState({
-              jobToView: null
-            });
-            this.onApply(job, this.state.jobToViewMessage);
-          }}
-          lang={this.props.lang}
-          state={this.props.state}
-          community={this.props.community}
-        />
-      </Overlay>
+        job={job}
+
+        lang={this.props.lang}
+        state={this.props.state}
+        community={this.props.community}
+      />
     );
   }
 
@@ -638,49 +630,10 @@ class ChatroomContent extends Component {
       <Job
         key={job.id || index}
         job={job}
+        className={itsMe ? 'fr mt1' : 'mt1'}
         onViewClick={this.onViewJob.bind(this, job, msg)}
         onApplyClick={this.onApply.bind(this, job, msg)}
       />
-    );
-    return (
-      <div
-        key={job.id || index}
-        style={{ maxHeight: "30vh", overflow: "auto" }}
-        className={join(`mt2`, itsMe && styles.flexEnd)}
-      >
-        {job.nickname || <Label>unknown</Label>}
-        {timestamp}
-        <div
-          className={join(
-            "br2 pa2 relative",
-
-            styles.jobMessage,
-            styles.message,
-            itsMe && styles.myMessage,
-            itsMe ? "ml5" : null
-          )}
-        >
-          <div className="f4 f3-ns flex items-center">
-            {JOB_ICON({ size: 32 })} <Label>jobPost</Label>
-          </div>
-          <div>
-            <Label>jobEmail</Label>: {job.email}
-          </div>
-          <div>
-            <Label>jobNickname</Label>: {job.nickname}
-          </div>
-          <div className="mt3">
-            <Label>jobDescription</Label>:
-          </div>
-          <div>{job.description}</div>
-
-          {!itsMe ? (
-            <ApplyButton onClick={this.onApply.bind(this, job, msg)} />
-          ) : null}
-
-          {children}
-        </div>
-      </div>
     );
   }
 
@@ -739,21 +692,21 @@ class ChatroomContent extends Component {
     const icons =
       me && this.props.showEditIcons
         ? [
-            DELETE_ICON({
-              size: 24,
-              onClick: this.deleteMessage.bind(this, msg),
-              className: `${styles.deleteIcon} ${
-                !canDelete ? "o-50" : ""
+          DELETE_ICON({
+            size: 24,
+            onClick: this.deleteMessage.bind(this, msg),
+            className: `${styles.deleteIcon} ${
+              !canDelete ? "o-50" : ""
               } absolute top-0 left-0`
-            }),
-            EDIT_ICON({
-              size: 24,
-              onClick: this.editMessage.bind(this, msg),
-              className: `${styles.editIcon} ${
-                !canEdit ? "o-50" : ""
+          }),
+          EDIT_ICON({
+            size: 24,
+            onClick: this.editMessage.bind(this, msg),
+            className: `${styles.editIcon} ${
+              !canEdit ? "o-50" : ""
               } absolute top-0 left-0`
-            })
-          ]
+          })
+        ]
         : null;
 
     if (isJob) {

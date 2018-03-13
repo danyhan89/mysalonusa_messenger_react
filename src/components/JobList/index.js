@@ -2,18 +2,23 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import join from "@app/join";
+import ellipsis from "@app/ellipsis";
+import Overlay from "@app/Overlay";
 
-import { fetchJobs } from "src/api";
+import { fetchJobs, incrementJobView } from "src/api";
 
 import Button from "@app/Button";
 import Label from "@app/Label";
+import PostJobForm from 'src/components/PostAJob/PostJobForm'
 
 import ApplyButton from "src/components/ApplyButton";
 import ApplyOverlay from "src/components/ApplyOverlay";
 
 import PaginationToolbar from "src/components/PaginationToolbar";
 
+
 import styles from "./index.scss";
+import ViewAndApply from "../ViewAndApply";
 
 class JobList extends React.Component {
   constructor(props) {
@@ -122,7 +127,7 @@ class JobList extends React.Component {
       return this.props.renderJobs(jobs, this.state.totalCount);
     }
     return (
-      <div className="w-100 center inline-flex flex-wrap ">
+      <div className="w-100 center mb3 inline-flex flex-wrap ">
         {jobs.map(this.renderJob, this)}
       </div>
     );
@@ -132,67 +137,48 @@ class JobList extends React.Component {
     if (this.props.renderJob) {
       return this.props.renderJob(job, index);
     }
+
+    const title = <div className={`${styles.title} fw5`}>{job.title || ellipsis(job.description, 50)}</div>;
+
     return (
       <div
+        onClick={() => {
+          this.setState({
+            applyForJob: job,
+            viewOnly: true
+          });
+        }}
         key={job.id || index}
         className={join(
-          "flex flex-column bg-white mr1 mr3-ns mb4 br3 w-90 w-40-m w-30-l",
+          "flex flex-column mh3 mv1 br2 bg-white w-100 ",
           styles.job
         )}
       >
+        <svg className={styles.viewIcon} height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+        </svg>
         <div className={join("pa3", styles.jobTitle)}>
-          {job.title}
-          {" xxx"}
-          <div>
-            ({job.views || 0} <Label>views</Label>)
-          </div>
-        </div>
-        <div className={join("pa3", styles.jobDescription)}>
-          {job.description}
-        </div>
-        <div
-          className={join(
-            "pa3 flex flex-row items-center",
-            styles.jobApplySection
-          )}
-        >
-          <ApplyButton
-            className="b"
-            onClick={() => {
-              this.setState({
-                applyForJob: job,
-                viewOnly: false
-              });
-            }}
-          />
-
-          <div
-            className={`${styles.viewDetails} dib i fw3 ml2 `}
-            onClick={() => {
-              this.setState({
-                applyForJob: job,
-                viewOnly: true
-              });
-            }}
-          >
-            <Label>viewDetails</Label>
+          {title}
+          <div className={`${styles.views} fw2`}>
+            {job.views || 0} <Label>views</Label>
           </div>
         </div>
       </div>
     );
   }
 
-  updateJobViews(job, views) {
-    const { jobs } = this.state;
+  updateJobViews(job) {
+    incrementJobView(job).then(({ views }) => {
+      this.setState({
+        jobs: this.state.jobs.map(j => {
+          if (j.id == job.id) {
+            j = { ...j, views };
+          }
 
-    this.setState({
-      jobs: jobs.map(j => {
-        if (j.id == job.id) {
-          j = { ...j, views };
-        }
-
-        return j;
-      })
+          return j;
+        })
+      });
     });
   }
 
@@ -202,18 +188,41 @@ class JobList extends React.Component {
     if (!applyForJob) {
       return null;
     }
+    const job = applyForJob
+
+    return <ViewAndApply
+      job={job}
+      lang={this.props.lang}
+      community={this.props.community}
+      state={this.props.state}
+      onDismiss={(applied) => {
+        this.setState({ applyForJob: null });
+        this.updateJobViews(job)
+      }}
+    />
+
     return (
-      <ApplyOverlay
-        readOnly={this.state.viewOnly}
-        job={applyForJob}
-        updateJobViews={this.updateJobViews}
-        onDismiss={() => {
-          this.setState({
-            viewOnly: null,
-            applyForJob: null
-          });
+      <Overlay
+        closeable
+        onClose={() => {
+          this.setState({ applyForJob: null });
+          this.updateJobViews(job)
         }}
-      />
+      >
+        <PostJobForm
+          step="apply"
+          defaultValues={job}
+          onApplyClick={() => {
+            this.setState({
+              applyForJob: null
+            });
+            //this.onApply(job, this.state.jobToViewMessage);
+          }}
+          lang={this.props.lang}
+          state={this.props.state}
+          community={this.props.community}
+        />
+      </Overlay>
     );
   }
 }
