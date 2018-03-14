@@ -19,14 +19,22 @@ import PaginationToolbar from "src/components/PaginationToolbar";
 import styles from "./index.scss";
 import ViewAndApply from "../ViewAndApply";
 
-const DEFAULT_IMAGE = 'https://s3.us-east-2.amazonaws.com/mysalonusa/uploads/cities/image.png'
+const DEFAULT_IMAGE =
+  "https://s3.us-east-2.amazonaws.com/mysalonusa/uploads/cities/image.png";
 
-const locationIcon = <svg className={styles.locationIcon} height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+const locationIcon = (
+  <svg
+    className={styles.locationIcon}
+    height="24"
+    viewBox="0 0 24 24"
+    width="24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+  </svg>
+);
 
-</svg>
-
-const EMPTY_PRICE = '0.00'
+const EMPTY_PRICE = "0.00";
 
 class BusinessOnSales extends React.Component {
   constructor(props) {
@@ -89,7 +97,6 @@ class BusinessOnSales extends React.Component {
     });
   }
   render() {
-
     const { totalCount, skip } = this.state;
     const { limit, pagination, className } = this.props;
 
@@ -128,18 +135,36 @@ class BusinessOnSales extends React.Component {
 
   renderBusiness(business, index) {
     const topBar = (
-      <div className={`${styles.title} ${styles.textLayer} pa2 w-100 absolute top-0 left-0 flex flex-row items-center`}>
-        <div title={business.title} className="flex-auto nowrap overflow-hidden truncate fw5 f4">{business.title || ellipsis(business.description, 50)} </div>
-        <div className={join(styles.location, 'fw2 flex-none flex flex-row items-center')}>
+      <div
+        className={`${styles.title} ${
+          styles.textLayer
+        } pa2 w-100 absolute top-0 left-0 flex flex-row items-center`}
+      >
+        <div
+          title={business.title}
+          className="flex-auto nowrap overflow-hidden truncate fw5 f4"
+        >
+          {business.title || ellipsis(business.description, 50)}{" "}
+        </div>
+        <div
+          className={join(
+            styles.location,
+            "fw2 flex-none flex flex-row items-center"
+          )}
+        >
           {locationIcon} New York
         </div>
       </div>
     );
 
+    let price =
+      business.price_string && business.price_string != EMPTY_PRICE ? (
+        `$ ${business.price_string}`
+      ) : (
+        <Label>private</Label>
+      );
 
-    let price = business.price_string && business.price_string != EMPTY_PRICE ? `$ ${business.price_string}` : <Label>private</Label>
-
-    price = <div className={join(styles.price, 'b flex-auto')}> {price}</ div>
+    price = <div className={join(styles.price, "b flex-auto")}> {price}</div>;
 
     return (
       <div
@@ -160,11 +185,14 @@ class BusinessOnSales extends React.Component {
           <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
         </svg>
 
-
         {topBar}
         <img src={business.image_urls[0] || DEFAULT_IMAGE} />
-        <div className={join(styles.textLayer, 'pa2 absolute bottom-0 left-0 w-100')}>
-
+        <div
+          className={join(
+            styles.textLayer,
+            "pa2 absolute bottom-0 left-0 w-100"
+          )}
+        >
           <div className="flex flex-row items-center">
             {price}
             <div className={`${styles.views} fw2 flex-none`}>
@@ -172,7 +200,7 @@ class BusinessOnSales extends React.Component {
             </div>
           </div>
         </div>
-      </div >
+      </div>
     );
   }
 
@@ -190,7 +218,6 @@ class BusinessOnSales extends React.Component {
       });
     });*/
   }
-
 }
 
 BusinessOnSales.defaultProps = {
