@@ -8,6 +8,7 @@ import { withRouter } from "react-router-dom";
 
 import PostJobForm from "../PostAJob/PostJobForm";
 import JobList from "../JobList";
+import BusinessOnSales from "../BusinessOnSales";
 //
 import Dashboard from "../Dashboard";
 
@@ -19,6 +20,7 @@ const TABS = {
   dashboard: 1,
   jobs: 2,
   chat: 3,
+  businessOnSales: 4,
   postJob: 5
 };
 
@@ -145,8 +147,13 @@ class CenterContainer extends React.Component {
           community={community}
           tabTitle={<Label>jobs</Label>}
         />
+
         <div tabTitle={<Label>chatroom</Label>}>{children}</div>
-        <div tabTitle={<Label>businessOnSale</Label>}>tab one</div>
+        <BusinessOnSales
+          state={state}
+          community={community}
+          tabTitle={<Label>businessOnSales</Label>}
+        />
         <div tabTitle={<Label>postAJob</Label>} />
       </TabPanel>
     );

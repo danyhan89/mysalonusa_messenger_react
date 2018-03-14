@@ -1,10 +1,22 @@
 @import "~@app/colors.scss";
-.jobList {
-  flex: none;
-}
-
 .title {
   transition: 0.3s;
+  color: white;
+}
+
+.business {
+  overflow: hidden;
+  min-height: 200px;
+}
+
+.textLayer {
+  color: rgba(white, 0.9);
+  background-color: rgba(204, 71, 0, 0.73); //rgba(255, 255, 255, 0.69);
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 90%;
 }
 
 .viewIcon {
@@ -16,14 +28,27 @@
   fill: $accent-color;
 }
 
-.job {
+.location {}
+
+.locationIcon {
+  fill: white;
+}
+
+.price {}
+
+.item {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.business {
   position: relative;
   background: rgba($pale-gray, 0.5);
   transition: 0.4s;
   transform: scale3d(1, 1, 1);
   &:hover {
     .viewIcon {
-      opacity: 1;
+      opacity: 0;
     }
     z-index: 1;
     cursor: pointer;
@@ -35,6 +60,4 @@
   }
 }
 
-.views {
-  color: $gray;
-}
+.views {}

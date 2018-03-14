@@ -153,7 +153,7 @@ class JobList extends React.Component {
         }}
         key={job.id || index}
         className={join(
-          "flex flex-column mh3 mv1 br2 bg-white w-100 ",
+          "flex flex-column mh3  mv1 br2 bg-white w-100 ",
           styles.job
         )}
       >

@@ -26,6 +26,26 @@ export const fetchJobs = query => {
     });
   });
 };
+
+export const fetchBusinessOnSales = query => {
+  query.limit = query.limit || 50;
+
+  const queryString = Object.keys(query)
+    .map(key => {
+      const value = query[key];
+      return `${key}=${value}`;
+    })
+    .join("&");
+
+  return fetch(`/fetchBusinessOnSales?${queryString}`).then(response => {
+    return response.json().then(data => {
+      return {
+        data,
+        totalCount: response.headers.get("X-Total-Count") * 1
+      };
+    });
+  });
+};
 export const fetchChats = query => {
   query.limit = query.limit || 50;
 
