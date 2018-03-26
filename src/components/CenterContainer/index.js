@@ -86,13 +86,12 @@ class CenterContainer extends React.Component {
                 this.setState({ showPostBusiness: false });
               }}
               xdefaultValues={{
-                city: {id: 4, name: 'a city'},
-                state: 'ca',
-                title: 'business title',
-                description: 'business description',
-                email: 'bla@business.com',
+                city: { id: 4, name: "a city" },
+                state: "ca",
+                title: "business title",
+                description: "business description",
+                email: "bla@business.com",
                 price: 123
-                
               }}
               xstep="image"
               lang={lang}

@@ -27,11 +27,9 @@ export const fetchJobs = query => {
   });
 };
 
-
-
 export const fetchCities = stateId => {
   return fetch(`/fetchCities?state=${stateId}`).then(response => {
-    return response.json()
+    return response.json();
   });
 };
 
@@ -81,8 +79,7 @@ export const createJob = job => {
 
 export const createBusiness = business => {
   return fetch(`/createBusiness`, {
-    headers: {
-    },
+    headers: {},
     method: "POST",
     body: business
   }).then(response => {
