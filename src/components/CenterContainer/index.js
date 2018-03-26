@@ -7,6 +7,7 @@ import Overlay from "@app/Overlay";
 import { withRouter } from "react-router-dom";
 
 import PostJobForm from "../PostAJob/PostJobForm";
+import PostBusinessForm from "../PostBusinessForm";
 import JobList from "../JobList";
 import BusinessOnSales from "../BusinessOnSales";
 //
@@ -21,7 +22,8 @@ const TABS = {
   jobs: 2,
   chat: 3,
   businessOnSales: 4,
-  postJob: 5
+  postJob: 5,
+  postBusiness: 6
 };
 
 class CenterContainer extends React.Component {
@@ -71,6 +73,34 @@ class CenterContainer extends React.Component {
             />
           </Overlay>
         ) : null}
+
+        {this.state.showPostBusiness ? (
+          <Overlay
+            closeable
+            onClose={() => {
+              this.setState({ showPostBusiness: false });
+            }}
+          >
+            <PostBusinessForm
+              onSuccess={() => {
+                this.setState({ showPostBusiness: false });
+              }}
+              xdefaultValues={{
+                city: {id: 4, name: 'a city'},
+                state: 'ca',
+                title: 'business title',
+                description: 'business description',
+                email: 'bla@business.com',
+                price: 123
+                
+              }}
+              xstep="image"
+              lang={lang}
+              state={state}
+              community={community}
+            />
+          </Overlay>
+        ) : null}
         {children}
       </div>
     );
@@ -104,6 +134,13 @@ class CenterContainer extends React.Component {
           if (tab == "postJob") {
             this.setState({
               showPostJob: true
+            });
+            return;
+          }
+
+          if (tab == "postBusiness") {
+            this.setState({
+              showPostBusiness: true
             });
             return;
           }
@@ -155,6 +192,7 @@ class CenterContainer extends React.Component {
           tabTitle={<Label>businessOnSales</Label>}
         />
         <div tabTitle={<Label>postAJob</Label>} />
+        <div tabTitle={<Label>postABusiness</Label>} />
       </TabPanel>
     );
   }

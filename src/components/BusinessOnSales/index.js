@@ -1,5 +1,8 @@
 import React from "react";
+import { findDOMNode} from 'react-dom'
 import PropTypes from "prop-types";
+
+import selectParent from 'select-parent'
 
 import join from "@app/join";
 import ellipsis from "@app/ellipsis";
@@ -47,6 +50,7 @@ class BusinessOnSales extends React.Component {
     };
 
     this.onSkipChange = this.onSkipChange.bind(this);
+    this.onTransitionEnd = this.onTransitionEnd.bind(this)
     this.renderBusinesses = this.renderBusinesses.bind(this);
     this.updateViews = this.updateViews.bind(this);
   }
@@ -76,6 +80,11 @@ class BusinessOnSales extends React.Component {
     this.setState({
       skip
     });
+
+  }
+
+  scrollToTop() {
+    findDOMNode(this).parentNode.scrollTop = 0
   }
 
   fetchBusinessOnSales(skip = 0, props = this.props) {
@@ -94,6 +103,7 @@ class BusinessOnSales extends React.Component {
         initialLoading: false,
         totalCount
       });
+      this.scrollToTop();
     });
   }
   render() {
@@ -133,16 +143,49 @@ class BusinessOnSales extends React.Component {
     );
   }
 
+  viewBusiness(business, event) {
+    const target = selectParent(`.${styles.business}`, event.target)
+    const rect = target.getBoundingClientRect()
+    const viewStyle = {
+      width: target.offsetWidth,
+      height: target.offsetHeigh,
+      top: rect.top,
+      left: rect.left
+    }
+    
+    this.setState({
+      viewBusiness: business,
+      transitionStep: 'one',
+      viewStyle
+    }, () => {
+      this.setState({
+        transitionStep: 'two',
+        viewStyle: {
+          width: document.body.offsetWidth,
+          height: document.body.offsetHeight,
+          left: 0,
+          top: 0
+        }
+      })
+    })
+  }
+
+  onTransitionEnd() {
+    this.setState({
+      transitionStep: null
+    })
+  }
+
   renderBusiness(business, index) {
     const topBar = (
       <div
-        className={`${styles.title} ${
+        className={`${styles.titleLine} ${
           styles.textLayer
         } pa2 w-100 absolute top-0 left-0 flex flex-row items-center`}
       >
         <div
           title={business.title}
-          className="flex-auto nowrap overflow-hidden truncate fw5 f4"
+          className={`flex-auto nowrap overflow-hidden truncate fw5 f4 ${styles.title}`}
         >
           {business.title || ellipsis(business.description, 50)}{" "}
         </div>
@@ -166,13 +209,41 @@ class BusinessOnSales extends React.Component {
 
     price = <div className={join(styles.price, "b flex-auto")}> {price}</div>;
 
-    return (
+    let transitionStyle
+    let transitionClassName
+    let events
+
+    const viewing = this.state.viewBusiness && this.state.viewBusiness.id === business.id
+
+    if (viewing) {
+      if (this.state.transitionStep) {
+        transitionStyle = this.state.viewStyle
+      } 
+
+      if (this.state.transitionStep == 'two') {
+        events = {onTransitionEnd: this.onTransitionEnd }
+      }
+
+      transitionClassName = join(
+        this.state.transitionStep 
+          ? styles['step-' +this.state.transitionStep]
+          : styles.finalState,
+        this.state.transitionStep && styles.transitioning
+      )
+    }
+
+    const result = (
       <div
         key={business.id || index}
+        style={transitionStyle}
         className={join(
-          "flex flex-column mh3 mv1 br2 bg-white w-100 ",
-          styles.business
+          "flex flex-column mh3 mv1  bg-white w-100 ",
+          styles.business,
+          transitionClassName,        
+          viewing && styles.viewing
         )}
+        {...events}
+        onClick={this.viewBusiness.bind(this, business)}
       >
         <svg
           className={styles.viewIcon}
@@ -186,7 +257,7 @@ class BusinessOnSales extends React.Component {
         </svg>
 
         {topBar}
-        <img src={business.image_urls[0] || DEFAULT_IMAGE} />
+        <img className={styles.img} src={business.image_urls[0] || DEFAULT_IMAGE} />
         <div
           className={join(
             styles.textLayer,
@@ -202,6 +273,15 @@ class BusinessOnSales extends React.Component {
         </div>
       </div>
     );
+
+    if (viewing) {
+      return [
+        result, 
+        <div key={business.id + '-placeholder'} style={{transitionStyle}} />
+      ]
+    }
+
+    return result
   }
 
   updateViews(job) {

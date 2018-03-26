@@ -27,6 +27,14 @@ export const fetchJobs = query => {
   });
 };
 
+
+
+export const fetchCities = stateId => {
+  return fetch(`/fetchCities?state=${stateId}`).then(response => {
+    return response.json()
+  });
+};
+
 export const fetchBusinessOnSales = query => {
   query.limit = query.limit || 50;
 
@@ -71,6 +79,17 @@ export const createJob = job => {
   });
 };
 
+export const createBusiness = business => {
+  return fetch(`/createBusiness`, {
+    headers: {
+    },
+    method: "POST",
+    body: business
+  }).then(response => {
+    return response.json();
+  });
+};
+
 export const incrementJobView = ({ id }) => {
   return fetch(`/incrementJobView`, {
     method: "PATCH",
@@ -86,6 +105,16 @@ export const editJob = job => {
     method: "POST",
 
     body: JSON.stringify(job)
+  }).then(response => {
+    return response.json();
+  });
+};
+
+export const editBusiness = business => {
+  return fetch(`/editBusiness`, {
+    method: "POST",
+
+    body: JSON.stringify(business)
   }).then(response => {
     return response.json();
   });

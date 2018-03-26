@@ -11,6 +11,7 @@ export default {
   emailForPosting: "What email do you want to post job?",
   jobDescription: "Job description",
   jobPost: "Job Post",
+  postABusiness: "Post my business",
   postAJob: "Post a Job",
   close: "Close",
   prev: "Previous",

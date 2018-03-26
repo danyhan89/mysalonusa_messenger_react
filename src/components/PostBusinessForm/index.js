@@ -1,16 +1,35 @@
+/*
+create_table "business_on_sales", force: :cascade do |t|
+    t.integer  "company_location_sale_id"
+    t.text     "title"
+    t.text     "description"
+    t.integer  "views",                    default: 0
+    t.text     "contact_email"
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+    t.integer  "price_cents",              default: 0,     null: false
+    t.string   "price_currency",           default: "USD", null: false
+    t.json     "images"
+    t.string   "price_string"
+    t.string   "image_urls",               default: [],                 array: true
+    t.integer  "city_id"
+  end
+  */
 import React, { Component } from "react";
 import isEmail from "is-email";
 import Label from "@app/Label";
 import join from "@app/join";
 import ActionButton from "@app/ActionButton";
 import LoadingIcon from "@app/LoadingIcon";
-import { createJob, editJob } from "src/api";
+import { createBusiness, editBusiness } from "src/api";
 
 import communities, { getCommunity } from "src/communities";
 import states from "src/states";
 import styles from "./index.scss";
 
-import OptionList from "../../OptionList";
+import OptionList from "../OptionList";
+
+import CitySelect from "./CitySelect";
 
 const preventDefault = e => e.preventDefault();
 
@@ -73,33 +92,32 @@ const renderPreview = ({ state }) => {
     <div key="state">
       <Label>state</Label>: {state.state}
     </div>,
+    <div key="city">
+      <Label>city</Label>: {state.city.name}
+    </div>,
     <div key="nickname">
       <Label>nickname</Label>: {state.nickname}
     </div>,
     <div key="email">
       <Label>email</Label>: {state.email}
     </div>,
-    <div key="jobDescription">
-      <Label>jobDescription</Label>: {state.description}
+    <div key="businessTitle">
+      <Label>businessTitle</Label>: {state.title}
+    </div>,
+
+    <div key="businessDescription">
+      <Label>businessDescription</Label>: {state.description}
+    </div>,
+    <div key="businessImage">
+      <Label>businessImage</Label>:{" "}
+      {state.images.map(({ file, data }) => {
+        return <img key={file.name} src={data} style={{ maxWidth: "80vw" }} />;
+      })}
     </div>
   ];
 };
 
 const STEPS = [
-  {
-    key: "community",
-    render: ({ onChange, value }) => {
-      return [
-        <Label key="label">whichCommunityPostJob</Label>,
-        <OptionList
-          key="optionList"
-          value={value}
-          options={communities}
-          onChange={onChange}
-        />
-      ];
-    }
-  },
   {
     key: "state",
     render: ({ onChange, value }) => {
@@ -114,6 +132,16 @@ const STEPS = [
           }))}
           onChange={onChange}
         />
+      ];
+    }
+  },
+  {
+    key: "city",
+    isValid: city => city && city.id != null,
+    render: ({ onChange, value, state }) => {
+      return [
+        <Label key="label">whichStatePostJob</Label>,
+        <CitySelect state={state.state} onChange={onChange} />
       ];
     }
   },
@@ -164,23 +192,114 @@ const STEPS = [
     }
   },
   {
+    key: "title",
+    isValid: value => !!value,
+    render: ({ onChange, value }) => {
+      return [
+        <div key="label" style={{ paddingBottom: 20 }}>
+          <Label>businessTitle</Label>
+        </div>,
+        <input
+          key="title"
+          autoFocus
+          placeholder="Your short business title"
+          value={value}
+          className={styles.input}
+          onChange={event => {
+            event.stopPropagation();
+            onChange(event.target.value);
+          }}
+        />
+      ];
+    }
+  },
+  {
     key: "description",
     isValid: value => !!value,
     render: ({ onChange, value }) => {
       return [
         <div key="label" style={{ paddingBottom: 20 }}>
-          <Label>jobDescription</Label>
+          <Label>businessDescription</Label>
         </div>,
         <textarea
           key="description"
           autoFocus
-          placeholder="Your job description"
+          placeholder="Your business description"
           value={value}
           rows={7}
           className={styles.textarea}
           onChange={event => {
             event.stopPropagation();
             onChange(event.target.value);
+          }}
+        />
+      ];
+    }
+  },
+  {
+    key: "price",
+    isValid: value => parseFloat(value) == value,
+    canSkip: true,
+    render: ({ onChange, value }) => {
+      return [
+        <div key="label" style={{ paddingBottom: 20 }}>
+          <Label>businessPrice</Label>
+        </div>,
+        <input
+          key="price"
+          autoFocus
+          type="number"
+          placeholder="Your business price"
+          value={value}
+          className={styles.input}
+          onChange={event => {
+            event.stopPropagation();
+            onChange(event.target.value);
+          }}
+        />
+      ];
+    }
+  },
+  {
+    key: "images",
+    render: ({ onChange }) => {
+      return [
+        <div key="label" style={{ paddingBottom: 20 }}>
+          <Label>businessImage</Label>
+        </div>,
+        <input
+          key="price"
+          autoFocus
+          type="file"
+          accept="image/*"
+          placeholder="Your business picture"
+          className={styles.input}
+          multiple
+          onChange={event => {
+            event.stopPropagation();
+            const files = [...event.target.files];
+
+            const promises = files.map(file => {
+              return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.addEventListener(
+                  "load",
+                  () => {
+                    resolve({
+                      file,
+                      data: reader.result
+                    });
+                  },
+                  false
+                );
+
+                if (file) {
+                  reader.readAsDataURL(file);
+                }
+              });
+            });
+
+            Promise.all(promises).then(files => onChange(files));
           }}
         />
       ];
@@ -211,7 +330,7 @@ const STEPS = [
   }
 ];
 
-class PostJobForm extends Component {
+class PostBusinessForm extends Component {
   constructor(props) {
     super(props);
 
@@ -230,11 +349,15 @@ class PostJobForm extends Component {
     this.state = {
       uniqueNickname: global.localStorage.getItem("nickname"),
       currentStep,
+      images: [],
       minStep: defaultValues ? 2 : 0,
       community: getCommunity(props.community).value,
       state: props.state,
+      city: defaultValues ? defaultValues.city : null,
+      title: defaultValues ? defaultValues.title : "",
       nickname: global.localStorage.getItem("alias") || "",
       email: defaultValues ? defaultValues.email : "",
+      price: defaultValues ? defaultValues.price : "",
       description: defaultValues ? defaultValues.description : ""
     };
     if (defaultValues) {
@@ -274,12 +397,31 @@ class PostJobForm extends Component {
     }
   }
   postJob() {
-    const { currentStep, ...job } = this.state;
+    const { currentStep, ...business } = this.state;
 
-    const apiMethod = this.props.defaultValues ? editJob : createJob;
-    apiMethod(job).then(result => {
+    const apiMethod = this.props.defaultValues ? editBusiness : createBusiness;
+
+    const formData = new FormData();
+
+    Object.keys(business).forEach(key => {
+      let value = business[key];
+      if (key == "city") {
+        value = value.id;
+      }
+      if (key == "images") {
+        value.forEach(({ file, data }, index) => {
+          formData.append(`images[${index}]`, data);
+          formData.append(`fileNames[${index}]`, file.name);
+          formData.append(`contentTypes[${index}]`, file.type);
+        });
+      } else {
+        formData.append(key, value);
+      }
+    });
+
+    apiMethod(formData).then(result => {
       if (result.success) {
-        this.props.onSuccess(job);
+        this.props.onSuccess(business);
       }
     });
   }
@@ -317,10 +459,15 @@ class PostJobForm extends Component {
           <Button disabled={!valid} onClick={() => this.next()}>
             {buttonLabel || <Label>next</Label>}
           </Button>
+          {step.canSkip ? (
+            <Button className="ml3" onClick={() => this.next()}>
+              <Label>skip</Label>
+            </Button>
+          ) : null}
         </div>
       </div>
     );
   }
 }
 
-export default PostJobForm;
+export default PostBusinessForm;
