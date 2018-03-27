@@ -86,32 +86,37 @@ const returnTrue = () => true;
 
 const renderPreview = ({ state }) => {
   return [
-    <div key="community">
+    <div className={styles.label} key="community">
       <Label>community</Label>: {state.community}
     </div>,
-    <div key="state">
+    <div className={styles.label} key="state">
       <Label>state</Label>: {state.state}
     </div>,
-    <div key="city">
-      <Label>city</Label>: {state.city.name}
+    <div className={styles.label} key="city">
+      <Label>city</Label>: {state.city ? state.city.name : null}
     </div>,
-    <div key="nickname">
+    <div className={styles.label} key="nickname">
       <Label>nickname</Label>: {state.nickname}
     </div>,
-    <div key="email">
+    <div className={styles.label} key="email">
       <Label>email</Label>: {state.email}
     </div>,
-    <div key="businessTitle">
+    <div className={styles.label} key="businessTitle">
       <Label>businessTitle</Label>: {state.title}
     </div>,
 
-    <div key="businessDescription">
+    <div className={styles.label} key="businessDescription">
       <Label>businessDescription</Label>: {state.description}
     </div>,
-    <div key="businessImage">
-      <Label>businessImage</Label>:{" "}
+    <div className={styles.label} key="businessImageLabel">
+      <Label>businessImage</Label>:
+    </div>,
+    <div
+      className={styles.imageContainer + " " + styles.label}
+      key="businessImage"
+    >
       {state.images.map(({ file, data }) => {
-        return <img key={file.name} src={data} style={{ maxWidth: "80vw" }} />;
+        return <img key={file.name} src={data} style={{ maxWidth: 300 }} />;
       })}
     </div>
   ];
@@ -122,9 +127,12 @@ const STEPS = [
     key: "state",
     render: ({ onChange, value }) => {
       return [
-        <Label key="label">whichStatePostJob</Label>,
+        <Label key="label" className={styles.label}>
+          whichStatePostJob
+        </Label>,
         <OptionList
           key="optionList"
+          className={styles.field}
           value={value}
           options={states.map(state => ({
             value: state.toLowerCase(),
@@ -140,17 +148,24 @@ const STEPS = [
     isValid: city => city && city.id != null,
     render: ({ onChange, value, state }) => {
       return [
-        <Label key="label">whichStatePostJob</Label>,
-        <CitySelect state={state.state} onChange={onChange} />
+        <Label key="label" className={styles.label}>
+          whichStatePostJob
+        </Label>,
+        <CitySelect
+          className={styles.field}
+          state={state.state}
+          onChange={onChange}
+        />
       ];
     }
   },
   {
     key: "nickname",
+    canSkip: true,
     isValid: nickname => !!nickname,
     render: ({ onChange, value }) => {
       return [
-        <div key="label" style={{ paddingBottom: 20 }}>
+        <div key="label" className={styles.label} style={{ paddingBottom: 20 }}>
           <Label>userNameForPosting</Label>
         </div>,
         <input
@@ -159,7 +174,7 @@ const STEPS = [
           value={value}
           autoFocus
           placeholder="Your nickname"
-          className={styles.input}
+          className={styles.input + " " + styles.field}
           onChange={event => {
             event.stopPropagation();
             onChange(event.target.value);
@@ -173,7 +188,7 @@ const STEPS = [
     isValid: isEmail,
     render: ({ onChange, value }) => {
       return [
-        <div key="label" style={{ paddingBottom: 20 }}>
+        <div key="label" className={styles.label} style={{ paddingBottom: 20 }}>
           <Label>emailForPosting</Label>
         </div>,
         <input
@@ -182,7 +197,7 @@ const STEPS = [
           autoFocus
           placeholder="Your email address"
           value={value}
-          className={styles.input}
+          className={styles.input + " " + styles.field}
           onChange={event => {
             event.stopPropagation();
             onChange(event.target.value);
@@ -196,7 +211,7 @@ const STEPS = [
     isValid: value => !!value,
     render: ({ onChange, value }) => {
       return [
-        <div key="label" style={{ paddingBottom: 20 }}>
+        <div key="label" className={styles.label} style={{ paddingBottom: 20 }}>
           <Label>businessTitle</Label>
         </div>,
         <input
@@ -204,7 +219,7 @@ const STEPS = [
           autoFocus
           placeholder="Your short business title"
           value={value}
-          className={styles.input}
+          className={styles.input + " " + styles.field}
           onChange={event => {
             event.stopPropagation();
             onChange(event.target.value);
@@ -218,7 +233,7 @@ const STEPS = [
     isValid: value => !!value,
     render: ({ onChange, value }) => {
       return [
-        <div key="label" style={{ paddingBottom: 20 }}>
+        <div key="label" className={styles.label} style={{ paddingBottom: 20 }}>
           <Label>businessDescription</Label>
         </div>,
         <textarea
@@ -227,7 +242,7 @@ const STEPS = [
           placeholder="Your business description"
           value={value}
           rows={7}
-          className={styles.textarea}
+          className={styles.textarea + " " + styles.field}
           onChange={event => {
             event.stopPropagation();
             onChange(event.target.value);
@@ -242,7 +257,7 @@ const STEPS = [
     canSkip: true,
     render: ({ onChange, value }) => {
       return [
-        <div key="label" style={{ paddingBottom: 20 }}>
+        <div key="label" className={styles.label} style={{ paddingBottom: 20 }}>
           <Label>businessPrice</Label>
         </div>,
         <input
@@ -251,7 +266,7 @@ const STEPS = [
           type="number"
           placeholder="Your business price"
           value={value}
-          className={styles.input}
+          className={styles.input + " " + styles.field}
           onChange={event => {
             event.stopPropagation();
             onChange(event.target.value);
@@ -262,9 +277,10 @@ const STEPS = [
   },
   {
     key: "images",
+    isValid: images => images && images.length > 0,
     render: ({ onChange }) => {
       return [
-        <div key="label" style={{ paddingBottom: 20 }}>
+        <div key="label" className={styles.label} style={{ paddingBottom: 20 }}>
           <Label>businessImage</Label>
         </div>,
         <input
@@ -273,7 +289,7 @@ const STEPS = [
           type="file"
           accept="image/*"
           placeholder="Your business picture"
-          className={styles.input}
+          className={styles.input + " " + styles.field}
           multiple
           onChange={event => {
             event.stopPropagation();
@@ -388,7 +404,7 @@ class PostBusinessForm extends Component {
 
     currentStep++;
     if (step.submit) {
-      this.postJob();
+      this.postBusiness();
     }
     if (STEPS[currentStep]) {
       this.setState({
@@ -396,7 +412,7 @@ class PostBusinessForm extends Component {
       });
     }
   }
-  postJob() {
+  postBusiness() {
     const { currentStep, ...business } = this.state;
 
     const apiMethod = this.props.defaultValues ? editBusiness : createBusiness;

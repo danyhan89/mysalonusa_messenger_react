@@ -97,6 +97,16 @@ export const incrementJobView = ({ id }) => {
   });
 };
 
+export const incrementBusinessView = ({ id }) => {
+  return fetch(`/incrementBusinessView`, {
+    method: "PATCH",
+
+    body: JSON.stringify({ id })
+  }).then(response => {
+    return response.json();
+  });
+};
+
 export const editJob = job => {
   return fetch(`/editJob`, {
     method: "POST",

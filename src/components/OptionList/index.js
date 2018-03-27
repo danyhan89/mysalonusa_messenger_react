@@ -103,7 +103,7 @@ class OptionList extends Component {
     return (
       <ul
         style={style}
-        className={styles.list}
+        className={join(styles.list, this.props.className)}
         tabIndex={0}
         onKeyDown={this.onKeyDown}
       >

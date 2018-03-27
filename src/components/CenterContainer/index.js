@@ -93,7 +93,7 @@ class CenterContainer extends React.Component {
                 email: "bla@business.com",
                 price: 123
               }}
-              xstep="image"
+              xstep="price"
               lang={lang}
               state={state}
               community={community}
