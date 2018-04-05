@@ -3,6 +3,7 @@
 .titleLine {
   transition: 0.3s;
   color: white;
+  flex: none;
 }
 
 .business {
@@ -88,4 +89,15 @@
 .closeIcon {
   fill: white;
   cursor: pointer;
+}
+
+.content {
+}
+.field {
+  label {
+    color: $text-gray;
+  }
+}
+.contentImage {
+  max-width: 100%;
 }

@@ -9,10 +9,26 @@ import Accordion from "@app/Accordion";
 import ellipsis from "@app/ellipsis";
 import join from "@app/join";
 
+import { fetchDashboardInfo } from "src/api";
+
 import JobList from "../JobList";
 import ChatroomContent from "../ChatroomContent";
 
 const emptyFn = () => {};
+
+const LoadingBox = ({ visible, children }) => {
+  return (
+    <div
+      style={{
+        visibility: visible ? "visible" : "hidden",
+        transition: "opacity 0.5s",
+        opacity: visible ? 1 : 0
+      }}
+    >
+      {children}
+    </div>
+  );
+};
 
 const Box = ({ to, title, children, style, className }) => {
   return (
@@ -36,7 +52,42 @@ const Box = ({ to, title, children, style, className }) => {
 };
 
 class Dashboard extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      info: {
+        businessOnSalesCount: 0,
+        chatsCount: 0,
+        jobsCount: 0
+      },
+      loading: true
+    };
+  }
+  componentDidMount() {
+    this.fetchInfo(this.props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.state != this.props.state) {
+      this.fetchInfo(nextProps);
+    }
+  }
+  fetchInfo(props = this.props) {
+    this.setState({
+      loading: true
+    });
+
+    fetchDashboardInfo({ state: props.state }).then(info => {
+      this.setState({
+        info,
+        loading: false
+      });
+    });
+  }
+
   render() {
+    const { info, loading } = this.state;
     const { state, community, lang } = this.props;
     const jobListProps = {
       pagination: false,
@@ -125,24 +176,40 @@ class Dashboard extends Component {
                 'url("https://s3.us-east-2.amazonaws.com/mysalonusa/uploads/banner_cards/post_jobs.jpg") center/cover'
             }}
           >
-            <Label values={{ count: <b>54</b> }}>xrecentjobs</Label>
-            <br />
-            <Label values={{ period: <b>2</b> }}>inperiod</Label>
+            <LoadingBox visible={!loading}>
+              <Label values={{ count: <b>{info.jobsCount}</b> }}>
+                xrecentjobs
+              </Label>
+              <br />
+              <Label>inlastmonth</Label>
+            </LoadingBox>
           </Box>
           <Box
-            to={`${url}/jobs`}
+            to={`${url}/businessOnSales`}
             title="Business on sale"
             style={{
               background:
                 'url("https://s3.us-east-2.amazonaws.com/mysalonusa/uploads/banner_cards/Business_On_Sale_2.jpg") center/cover'
             }}
           >
-            <Label values={{ count: <b>4</b> }}>xrecentjobs</Label>
-            <br />
-            <Label values={{ period: <b>3</b> }}>inperiod</Label>
+            <LoadingBox visible={!loading}>
+              <Label values={{ count: <b>{info.businessOnSalesCount}</b> }}>
+                xrecentbusinessonsales
+              </Label>
+
+              <br />
+              <Label>inlastmonth</Label>
+            </LoadingBox>
           </Box>
-          <Box to={`${url}/jobs`} title="Chatroom">
-            There are 54 recent jobs posted int he last 2 weeks
+          <Box to={`${url}/chat`} title="Chatroom">
+            <LoadingBox visible={!loading}>
+              <Label values={{ count: <b>{info.chatsCount}</b> }}>
+                xrecentchats
+              </Label>
+
+              <br />
+              <Label>inlastmonth</Label>
+            </LoadingBox>
           </Box>
           <Box
             to={`${url}/jobs`}
@@ -153,7 +220,13 @@ class Dashboard extends Component {
               backgroundPositionX: "40%"
             }}
           >
-            There are 54 recent jobs posted int he last 2 weeks
+            <LoadingBox visible={!loading}>
+              <Label values={{ count: <b>{info.jobsCount}</b> }}>
+                xrecentjobs
+              </Label>
+              <br />
+              <Label>inlastmonth</Label>
+            </LoadingBox>
           </Box>
         </div>
       </div>

@@ -6,6 +6,8 @@ import join from "@app/join";
 import ellipsis from "@app/ellipsis";
 import Label from "@app/Label";
 
+import { renderDate } from "@app/dateUtils";
+
 import { incrementBusinessView } from "src/api";
 
 import styles from "./index.scss";
@@ -35,6 +37,22 @@ class BusinessDetails extends React.Component {
 
     this.onTransitionEnd = this.onTransitionEnd.bind(this);
     this.viewBusiness = this.viewBusiness.bind(this);
+  }
+
+  componentWillUnmount() {
+    this.unmounted = true;
+  }
+
+  componentDidMount() {
+    this.props.data.image_urls.forEach((url, index) => {
+      setTimeout(() => {
+        if (this.unmounted) {
+          return;
+        }
+        const image = new Image();
+        image.src = url;
+      }, (index + 1) * 200);
+    });
   }
 
   onTransitionEnd() {
@@ -112,7 +130,9 @@ class BusinessDetails extends React.Component {
       <div
         className={`${styles.titleLine} ${
           styles.textLayer
-        } pa2 w-100 absolute top-0 left-0 flex flex-row items-center`}
+        } pa2 w-100 top-0 left-0 flex flex-row items-center ${
+          !viewing ? "absolute" : ""
+        }`}
       >
         <div
           title={business.title}
@@ -128,7 +148,8 @@ class BusinessDetails extends React.Component {
             "fw2 flex-none flex flex-row items-center"
           )}
         >
-          {locationIcon} New York {this.renderCloseIcon()}
+          {locationIcon} {business.city ? business.city.name : "Unknown"}{" "}
+          {this.renderCloseIcon()}
         </div>
       </div>
     );
@@ -158,14 +179,20 @@ class BusinessDetails extends React.Component {
         )}
       >
         {topBar}
-        <img
-          className={styles.img}
-          src={business.image_urls[0] || DEFAULT_IMAGE}
-        />
+        {viewing ? (
+          this.renderContent()
+        ) : (
+          <img
+            className={styles.img}
+            src={business.image_urls[0] || DEFAULT_IMAGE}
+          />
+        )}
+
         <div
           className={join(
             styles.textLayer,
-            "pa2 absolute bottom-0 left-0 w-100"
+            !viewing && "absolute",
+            "pa2  bottom-0 left-0 w-100"
           )}
         >
           <div className="flex flex-row items-center">
@@ -187,6 +214,55 @@ class BusinessDetails extends React.Component {
 
     return result;
   }
+  renderContent() {
+    const business = this.props.data;
+
+    const fieldClassName = join(styles.field, "mb4 fw4 f4");
+    const labelClassName = "db mb1 fw2 ";
+
+    return (
+      <div className={join(styles.content, "flex-auto overflow-auto")}>
+        <div className="pa3 pb0">
+          <div className={fieldClassName}>
+            <label className={labelClassName}>
+              <Label>contact</Label>
+            </label>
+            {business.contact_email}
+          </div>
+          <div className={fieldClassName}>
+            <label className={labelClassName}>
+              <Label>description</Label>
+            </label>
+            {business.description}
+          </div>
+
+          <div className={fieldClassName}>
+            <label className={labelClassName}>
+              <Label>postedAt</Label>
+            </label>
+            {renderDate(business.created_at)}
+          </div>
+
+          <div className={fieldClassName}>
+            <label className={labelClassName}>
+              <Label>images</Label>
+            </label>
+          </div>
+        </div>
+        <div className="flex flex-column">
+          {business.image_urls.map((url, index) => {
+            return (
+              <img
+                className={join(styles.contentImage, "mb4")}
+                key={url}
+                src={url || DEFAULT_IMAGE}
+              />
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
   renderCloseIcon() {
     if (!this.state.viewing) {
       return null;
@@ -200,7 +276,7 @@ class BusinessDetails extends React.Component {
           event.stopPropagation();
           this.closePreview();
         }}
-        className={styles.closeIcon}
+        className={join("ml4", styles.closeIcon)}
         viewBox="0 0 24 24"
         xmlns="http://www.w3.org/2000/svg"
       >

@@ -9,6 +9,8 @@ import uuidv4 from "uuid/v4";
 
 import communities from "src/communities";
 
+import { renderDate, renderHour } from "@app/dateUtils";
+
 import LoadingIcon from "@app/LoadingIcon";
 import Label from "@app/Label";
 import join from "@app/join";
@@ -67,18 +69,6 @@ const LIMIT = 50;
 const isValidAlias = alias => alias.length >= 1;
 
 const timezoneOffset = new Date().getTimezoneOffset();
-
-const renderDate = dateString => {
-  const date = DateTime.fromISO(dateString).plus({ minutes: -timezoneOffset });
-
-  return date.toLocaleString(DateTime.DATETIME_SHORT);
-};
-
-const renderHour = dateString => {
-  const date = DateTime.fromISO(dateString).plus({ minutes: -timezoneOffset });
-
-  return date.toLocaleString(DateTime.TIME_SIMPLE);
-};
 
 const getDayFormat = dateString => {
   const date = DateTime.fromISO(dateString).plus({ minutes: -timezoneOffset });

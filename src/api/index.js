@@ -97,6 +97,12 @@ export const incrementJobView = ({ id }) => {
   });
 };
 
+export const fetchDashboardInfo = ({ state }) => {
+  return fetch("/dashboardInfo" + (state ? `?state=${state}` : "")).then(
+    response => response.json()
+  );
+};
+
 export const incrementBusinessView = ({ id }) => {
   return fetch(`/incrementBusinessView`, {
     method: "PATCH",
