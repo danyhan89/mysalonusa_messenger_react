@@ -1,4 +1,6 @@
 @import "~@app/colors.scss";
+@import "~@app/breakpoints.scss";
+
 .main {
   flex: 1 0 auto;
 }
@@ -10,9 +12,17 @@
 
 .container {
   display: grid;
-  grid-template-columns: 30% 30% 30%;
+  grid-template-columns: 1fr 1fr 1fr;
   grid-column-gap: 1em;
   grid-row-gap: 1em;
+
+  @media (max-width: $small-desktop) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (max-width: $mobile) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .item {

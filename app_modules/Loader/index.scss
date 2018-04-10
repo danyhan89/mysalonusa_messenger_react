@@ -1,0 +1,7 @@
+@import "~@app/colors.scss";
+
+:global {
+  .react-dots-loader .react-dots-loader__circle {
+    background-color: $accent-color;
+  }
+}

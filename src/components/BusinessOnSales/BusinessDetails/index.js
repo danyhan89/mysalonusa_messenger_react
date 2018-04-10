@@ -173,7 +173,7 @@ class BusinessDetails extends React.Component {
         className={join(
           transitionClassName,
           viewing && styles.viewing,
-          "flex flex-column mh3 mv1  bg-white w-100 ",
+          "flex flex-column mv1  bg-white w-100 ",
           styles.business,
           className
         )}

@@ -5,6 +5,8 @@ import join from "@app/join";
 import ellipsis from "@app/ellipsis";
 import Overlay from "@app/Overlay";
 
+import Loader from "@app/Loader";
+
 import { fetchJobs, incrementJobView } from "src/api";
 
 import Button from "@app/Button";
@@ -107,7 +109,7 @@ class JobList extends React.Component {
           />
         ) : null}
         {this.renderJobs()}
-        {!this.state.initialLoading && pagination ? (
+        {!this.state.initialLoading && pagination && jobs.length > limit ? (
           <PaginationToolbar
             skip={skip}
             totalCount={totalCount}
@@ -121,13 +123,27 @@ class JobList extends React.Component {
   }
 
   renderJobs() {
-    const { jobs } = this.state;
+    const { jobs, loading } = this.state;
     if (this.props.renderJobs) {
       return this.props.renderJobs(jobs, this.state.totalCount);
     }
     return (
       <div className="w-100 center mb3 inline-flex flex-wrap ">
+        {this.renderLoading()}
         {jobs.map(this.renderJob, this)}
+
+        {!jobs.length && !loading ? <Label>noJobs</Label> : null}
+      </div>
+    );
+  }
+
+  renderLoading() {
+    if (!this.state.loading) {
+      return null;
+    }
+    return (
+      <div className="tc w-100">
+        <Loader size={20} />
       </div>
     );
   }
