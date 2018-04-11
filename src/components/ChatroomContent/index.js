@@ -612,6 +612,10 @@ class ChatroomContent extends Component {
   }
 
   renderJobMessage(job, msg, children) {
+    if (!job || typeof job != "object") {
+      return null;
+    }
+
     const itsMe = this.itsMe(msg);
     const timestamp = this.renderTimestamp(msg);
 
