@@ -98,6 +98,8 @@
 }
 
 .content {
+  overflow-scrolling: touch;
+  -webkit-overflow-scrolling: touch;
 }
 .field {
   label {

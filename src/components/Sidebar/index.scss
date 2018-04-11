@@ -3,10 +3,14 @@
   color: inherit;
   background: $dark-red; //$primary-color-dark;
   color: $primary-color-text;
+  transition: opacity 0.4s;
 }
 
 .closed {
   opacity: 0;
+  @media screen and (min-width: 30em) {
+    opacity: 1;
+  }
 }
 .opened {
   opacity: 1;
