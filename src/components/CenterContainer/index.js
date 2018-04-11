@@ -37,9 +37,14 @@ class CenterContainer extends React.Component {
 
   toggleMenu(event) {
     requestAnimationFrame(() => {
-      this.setState({
-        opened: !this.state.opened
-      });
+      this.setState(
+        {
+          opened: !this.state.opened
+        },
+        () => {
+          this.props.onToggle(this.state.opened);
+        }
+      );
     });
   }
   render() {

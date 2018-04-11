@@ -18,16 +18,30 @@ import styles from "./index.scss";
 
 import messages from "./messages";
 
-const Layout = props => {
-  return (
-    <div className="flex flex-column" style={{ height: "100%" }}>
-      <div className="flex-auto flex-ns flex-flow">
-        <Sidebar {...props} />
-        <CenterContainer {...props} />
+class Layout extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.sidebarRef = c => {
+      this.sidebar = c;
+    };
+  }
+  render() {
+    return (
+      <div className="flex flex-column" style={{ height: "100%" }}>
+        <div className="flex-auto flex-ns flex-flow">
+          <Sidebar {...this.props} ref={this.sidebarRef} />
+          <CenterContainer
+            {...this.props}
+            onToggle={opened => {
+              this.sidebar.setOpened(opened);
+            }}
+          />
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+}
 
 const App = () => {
   return (

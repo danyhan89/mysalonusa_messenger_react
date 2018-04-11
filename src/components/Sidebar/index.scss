@@ -5,6 +5,13 @@
   color: $primary-color-text;
 }
 
+.closed {
+  opacity: 0;
+}
+.opened {
+  opacity: 1;
+}
+
 .chatroomSelect {
   flex: 1 0 auto;
 }

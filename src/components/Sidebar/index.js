@@ -6,6 +6,8 @@ import { isValid as isValidLang } from "src/languages";
 import { isValid as isValidState } from "src/states";
 import { isValid as isValidCommunity } from "src/communities";
 
+import join from "@app/join";
+
 import ChatroomSelect from "../ChatroomSelect";
 import Footer from "../Footer";
 
@@ -56,6 +58,13 @@ const storeCommunity = community => {
   }
 };
 class Sidebar extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      opened: false
+    };
+  }
   componentDidMount() {
     this.maybeStoreLanguage(this.props);
     this.maybeStoreState(this.props);
@@ -113,9 +122,12 @@ class Sidebar extends Component {
       }
     }
 
-    const className = `top-0 bottom-0 overflow-auto w-75 w-25-ns flex flex-column fixed static-ns ${
-      styles.sidebar
-    } ${this.props.className || ""}`;
+    const className = join(
+      `top-0 bottom-0 overflow-auto w-75 w-25-ns flex flex-column fixed static-ns`,
+      styles.sidebar,
+      this.props.className,
+      this.state.opened ? styles.opened : styles.closed
+    );
 
     return (
       <div className={className}>
@@ -123,6 +135,12 @@ class Sidebar extends Component {
         <Footer {...this.props} />
       </div>
     );
+  }
+
+  setOpened(opened) {
+    this.setState({
+      opened
+    });
   }
   renderChatroomSelect() {
     const { history, lang, state, community } = this.props;
