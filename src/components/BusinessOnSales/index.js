@@ -12,7 +12,8 @@ import { fetchBusinessOnSales, incrementJobView } from "src/api";
 
 import Button from "@app/Button";
 import Label from "@app/Label";
-import PostJobForm from "src/components/PostAJob/PostJobForm";
+
+import PostBusinessForm from "src/components/PostBusinessForm";
 
 import ApplyButton from "src/components/ApplyButton";
 import ApplyOverlay from "src/components/ApplyOverlay";
@@ -94,15 +95,29 @@ class BusinessOnSales extends React.Component {
 
     return (
       <div className={join("pa3 flex flex-column", styles.main, className)}>
-        {pagination ? (
-          <PaginationToolbar
-            skip={skip}
-            className="mb3"
-            totalCount={totalCount}
-            limit={limit}
-            onSkipChange={this.onSkipChange}
-          />
-        ) : null}
+        <div className="flex flex-row flex-wrap">
+          {pagination ? (
+            <PaginationToolbar
+              skip={skip}
+              className="mb3 mr3"
+              totalCount={totalCount}
+              limit={limit}
+              onSkipChange={this.onSkipChange}
+            />
+          ) : null}
+          <div style={{ flex: 1 }} />
+          <Button
+            className="mb3  pv2 bg-white"
+            onClick={() =>
+              this.setState({
+                showPostBusiness: true
+              })
+            }
+          >
+            <Label>postABusiness</Label>
+          </Button>
+        </div>
+        {this.renderPostBusinessOverlay()}
         {this.renderBusinesses()}
         {!this.state.initialLoading && pagination ? (
           <PaginationToolbar
@@ -113,6 +128,39 @@ class BusinessOnSales extends React.Component {
           />
         ) : null}
       </div>
+    );
+  }
+
+  renderPostBusinessOverlay() {
+    if (!this.state.showPostBusiness) {
+      return null;
+    }
+    return (
+      <Overlay
+        closeable
+        onClose={() => {
+          this.setState({ showPostBusiness: false });
+        }}
+      >
+        <PostBusinessForm
+          onSuccess={() => {
+            this.setState({ showPostBusiness: false });
+            this.onSkipChange(0);
+          }}
+          xdefaultValues={{
+            city: { id: 4, name: "a city" },
+            state: "ca",
+            title: "business title",
+            description: "business description",
+            email: "bla@business.com",
+            price: 123
+          }}
+          xstep="price"
+          lang={this.props.lang}
+          state={this.props.state}
+          community={this.props.community}
+        />
+      </Overlay>
     );
   }
 

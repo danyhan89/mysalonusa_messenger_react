@@ -99,16 +99,30 @@ class JobList extends React.Component {
 
     return (
       <div className={join("pa3 flex flex-column", styles.jobList, className)}>
-        {pagination ? (
-          <PaginationToolbar
-            skip={skip}
-            className="mb3"
-            totalCount={totalCount}
-            limit={limit}
-            onSkipChange={this.onSkipChange}
-          />
-        ) : null}
+        <div className="flex flex-row flex-wrap">
+          {pagination ? (
+            <PaginationToolbar
+              skip={skip}
+              className="mb3 mr3"
+              totalCount={totalCount}
+              limit={limit}
+              onSkipChange={this.onSkipChange}
+            />
+          ) : null}
+          <div style={{ flex: 1 }} />
+          <Button
+            className="mb3  pv2 bg-white"
+            onClick={() =>
+              this.setState({
+                showPostJob: true
+              })
+            }
+          >
+            <Label>postAJob</Label>
+          </Button>
+        </div>
         {this.renderJobs()}
+        {this.renderPostJobOverlay()}
         {!this.state.initialLoading && pagination && jobs.length > limit ? (
           <PaginationToolbar
             skip={skip}
@@ -119,6 +133,30 @@ class JobList extends React.Component {
         ) : null}
         {this.renderApplyOverlay()}
       </div>
+    );
+  }
+
+  renderPostJobOverlay() {
+    if (!this.state.showPostJob) {
+      return null;
+    }
+    return (
+      <Overlay
+        closeable
+        onClose={() => {
+          this.setState({ showPostJob: false });
+        }}
+      >
+        <PostJobForm
+          onSuccess={() => {
+            this.setState({ showPostJob: false });
+            this.onSkipChange(0);
+          }}
+          lang={this.props.lang}
+          state={this.props.state}
+          community={this.props.community}
+        />
+      </Overlay>
     );
   }
 

@@ -6,7 +6,6 @@ import Overlay from "@app/Overlay";
 
 import { withRouter } from "react-router-dom";
 
-import PostJobForm from "../PostAJob/PostJobForm";
 import PostBusinessForm from "../PostBusinessForm";
 import JobList from "../JobList";
 import BusinessOnSales from "../BusinessOnSales";
@@ -61,50 +60,6 @@ class CenterContainer extends React.Component {
           "flex flex-column w-75-ns w-100 relative bg-white"
         )}
       >
-        {this.state.showPostJob ? (
-          <Overlay
-            closeable
-            onClose={() => {
-              this.setState({ showPostJob: false });
-            }}
-          >
-            <PostJobForm
-              onSuccess={() => {
-                this.setState({ showPostJob: false });
-              }}
-              lang={lang}
-              state={state}
-              community={community}
-            />
-          </Overlay>
-        ) : null}
-
-        {this.state.showPostBusiness ? (
-          <Overlay
-            closeable
-            onClose={() => {
-              this.setState({ showPostBusiness: false });
-            }}
-          >
-            <PostBusinessForm
-              onSuccess={() => {
-                this.setState({ showPostBusiness: false });
-              }}
-              xdefaultValues={{
-                city: { id: 4, name: "a city" },
-                state: "ca",
-                title: "business title",
-                description: "business description",
-                email: "bla@business.com",
-                price: 123
-              }}
-              xstep="price"
-              lang={lang}
-              state={state}
-              community={community}
-            />
-          </Overlay>
-        ) : null}
         {children}
       </div>
     );
@@ -134,20 +89,6 @@ class CenterContainer extends React.Component {
               tab = key;
             }
           });
-
-          if (tab == "postJob") {
-            this.setState({
-              showPostJob: true
-            });
-            return;
-          }
-
-          if (tab == "postBusiness") {
-            this.setState({
-              showPostBusiness: true
-            });
-            return;
-          }
 
           if (tab) {
             history.push(`/${lang}/${state}/${community}/${tab}`);
@@ -195,8 +136,6 @@ class CenterContainer extends React.Component {
           community={community}
           tabTitle={<Label>businessOnSales</Label>}
         />
-        <div tabTitle={<Label>postAJob</Label>} />
-        <div tabTitle={<Label>postABusiness</Label>} />
       </TabPanel>
     );
   }

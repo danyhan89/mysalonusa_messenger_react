@@ -16,6 +16,9 @@
   width: 100%;
 }
 
+.stateImageWrapper {
+  transition: all 0.25s ease-in;
+}
 .stateImageWrapper:hover {
   cursor: pointer;
 
