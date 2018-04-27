@@ -528,6 +528,7 @@ class ChatroomContent extends Component {
         {this.props.showForm ? (
           <form onSubmit={this.onSubmit} className={`${styles.form} pb2 ph2`}>
             <Input
+              autoFocus={false}
               ref={this.inputRef}
               placeholder="Your message"
               onChange={this.onTextChange}
