@@ -77,6 +77,7 @@ class ViewAndApply extends React.Component {
 
       <Input
         key="emailField"
+        type="email"
         onChange={email => {
           this.setState({
             email
