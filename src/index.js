@@ -29,7 +29,7 @@ class Layout extends React.Component {
   render() {
     return (
       <div className="flex flex-column" style={{ height: "100%" }}>
-        <div className="flex-auto flex-ns flex-flow">
+        <div className="flex-auto flex-ns flex-flow" style={{ height: "100%" }}>
           <Sidebar {...this.props} ref={this.sidebarRef} />
           <CenterContainer
             {...this.props}

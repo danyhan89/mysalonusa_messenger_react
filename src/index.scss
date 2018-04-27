@@ -5,3 +5,13 @@
   width: 100%;
   overflow: hidden;
 }
+:global {
+  body,
+  #root {
+    height: 100%;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    top: 0px;
+  }
+}
