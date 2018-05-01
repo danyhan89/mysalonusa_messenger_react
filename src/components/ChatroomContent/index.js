@@ -743,9 +743,9 @@ class ChatroomContent extends Component {
     renderResult = (
       <div
         key={key}
-        className={`relative w-100 ${differentAuthor ? "mt2" : ""} ${join(
-          me && styles.flexEnd
-        )}`}
+        className={`flex-none relative w-100 ${
+          differentAuthor ? "mt2" : ""
+        } ${join(me && styles.flexEnd)}`}
       >
         {renderedAuthor}
         {renderResult}
