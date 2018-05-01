@@ -41,6 +41,8 @@
   flex-flow: column;
   align-items: flex-start;
   overflow: auto;
+  overflow-scrolling: touch;
+  -webkit-overflow-scrolling: touch;
 }
 
 .form {

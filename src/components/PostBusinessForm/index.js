@@ -464,22 +464,24 @@ class PostBusinessForm extends Component {
 
     return (
       <div className={join(styles.form)}>
-        {this.props.children}
-        {step.render({ value: stepValue, onChange, state: this.state })}
-        <div className="mt3">
-          {currentStep > 0 && hasPrev ? (
-            <Button className={styles.prevButton} onClick={() => this.prev()}>
-              <Label>prev</Label>
+        <div className={join(styles.formInner, "pa4 ph4 br3")}>
+          {this.props.children}
+          {step.render({ value: stepValue, onChange, state: this.state })}
+          <div className="mt3">
+            {currentStep > 0 && hasPrev ? (
+              <Button className={styles.prevButton} onClick={() => this.prev()}>
+                <Label>prev</Label>
+              </Button>
+            ) : null}
+            <Button disabled={!valid} onClick={() => this.next()}>
+              {buttonLabel || <Label>next</Label>}
             </Button>
-          ) : null}
-          <Button disabled={!valid} onClick={() => this.next()}>
-            {buttonLabel || <Label>next</Label>}
-          </Button>
-          {step.canSkip ? (
-            <Button className="ml3" onClick={() => this.next()}>
-              <Label>skip</Label>
-            </Button>
-          ) : null}
+            {step.canSkip ? (
+              <Button className="ml3" onClick={() => this.next()}>
+                <Label>skip</Label>
+              </Button>
+            ) : null}
+          </div>
         </div>
       </div>
     );

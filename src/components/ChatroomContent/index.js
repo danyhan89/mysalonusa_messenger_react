@@ -681,7 +681,8 @@ class ChatroomContent extends Component {
     const me = this.itsMe(msg);
     const canEdit = this.canEditMessage(msg);
     const canDelete = this.canDeleteMessage(msg);
-    const differentAuthor = this.lastAuthor != msg.nickname;
+    const jobMessage = isJob ? JSON.parse(msg.message) : null;
+    const differentAuthor = this.lastAuthor != (jobMessage || msg).nickname;
 
     const icons =
       me && this.props.showEditIcons
@@ -703,25 +704,28 @@ class ChatroomContent extends Component {
           ]
         : null;
 
-    if (isJob) {
-      renderResult = this.renderJobMessage(JSON.parse(msg.message), msg, icons);
-    } else {
-      const timestamp = (
-        <div className={join(styles.timestamp, "ttu f6 dib")}>
-          {renderHour(msg.created_at)}
-        </div>
-      );
+    const timestamp = (
+      <div className={join(styles.timestamp, "ttu f6 dib")}>
+        {renderHour(msg.created_at)}
+      </div>
+    );
 
-      const { message, nickname, alias } = msg;
+    const { message, nickname } = msg;
+    const alias = jobMessage ? jobMessage.nickname : msg.alias;
+
+    const renderedAuthor = differentAuthor ? (
+      <div>
+        <div key="author" className="b dib">
+          {alias || <Label>unknown</Label>}
+        </div>{" "}
+        {timestamp}
+      </div>
+    ) : null;
+
+    if (isJob) {
+      renderResult = this.renderJobMessage(jobMessage, msg, icons);
+    } else {
       renderResult = [
-        differentAuthor ? (
-          <div>
-            <div key="author" className="b dib">
-              {alias || <Label>unknown</Label>}
-            </div>{" "}
-            {timestamp}
-          </div>
-        ) : null,
         <div
           key="msg"
           className={join(styles.message, me && styles.myMessage, "br2")}
@@ -743,11 +747,16 @@ class ChatroomContent extends Component {
           me && styles.flexEnd
         )}`}
       >
+        {renderedAuthor}
         {renderResult}
       </div>
     );
 
-    this.lastAuthor = msg.nickname;
+    if (dateSeparator) {
+      delete this.lastAuthor;
+    } else {
+      this.lastAuthor = msg.nickname;
+    }
 
     return dateSeparator ? [dateSeparator, renderResult] : renderResult;
   }
