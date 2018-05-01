@@ -14,11 +14,4 @@
     width: 100%;
     top: 0px;
   }
-
-  // prevent safari body overscroll
-  html,
-  body {
-    position: fixed;
-    overflow: hidden;
-  }
 }
