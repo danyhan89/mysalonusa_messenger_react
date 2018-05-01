@@ -20,6 +20,7 @@ export default {
   chooseState: "Choose your state",
   no: "No",
   yes: "Yes",
+  page: "Page",
   confirmDeleteMessage: "Are you sure you want to delete the message?",
   chooseLanguage: "Choose your language",
   xrecentjobs: "{count} recent jobs",

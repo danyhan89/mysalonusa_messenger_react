@@ -180,7 +180,7 @@ class JobList extends React.Component {
       return null;
     }
     return (
-      <div className="tc w-100">
+      <div className={"tc w-100 absolute z-1"}>
         <Loader size={20} />
       </div>
     );

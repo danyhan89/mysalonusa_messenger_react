@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import join from "@app/join";
+import Label from "@app/Label";
 
 import styles from "./index.scss";
 
@@ -43,7 +44,7 @@ class PaginationToolbar extends React.Component {
 
     const pages = Math.ceil(totalCount / limit);
 
-    return pages;
+    return pages || 1;
   }
 
   getCurrentPage() {
@@ -108,6 +109,12 @@ class PaginationToolbar extends React.Component {
       middlePages.push(this.renderPage("..."));
     }
 
+    const currentPageDisplay = (
+      <div className={join("db dn-ns pa2", styles.page, styles.pageBlock)}>
+        <Label>page</Label> {this.getCurrentPage()} / {this.getMaxPage()}
+      </div>
+    );
+
     const items = [
       this.renderNavButton({
         key: "first",
@@ -122,7 +129,7 @@ class PaginationToolbar extends React.Component {
         children: <PrevIcon />
       }),
       ...middlePages,
-
+      currentPageDisplay,
       this.renderNavButton({
         key: "next",
         disabled: !hasNextPage,
@@ -156,6 +163,7 @@ class PaginationToolbar extends React.Component {
         className={join(
           styles.navButton,
           styles.pageBlock,
+          "flex",
           disabled && styles.disabled
         )}
         disabled={disabled}
@@ -176,6 +184,7 @@ class PaginationToolbar extends React.Component {
         key={page}
         className={join(
           styles.pageBlock,
+          "dn flex-ns",
           children == "..." && styles.disabled,
           page != null && styles.page,
           "pa2",
