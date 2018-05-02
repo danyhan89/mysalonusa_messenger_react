@@ -16,9 +16,13 @@ const Job = ({ job, onApplyClick, className, onViewClick }) => {
         styles.job
       )}
     >
-      <div className={join("pa2", styles.jobTitle)}>
+      <div className={join("pa2 flex flex-row items-center", styles.jobTitle)}>
         {job.title}
-        <div>
+        <div className={join("dib pa br2 pa1", styles.newJob)}>
+          <Label>newJob</Label>
+        </div>
+        <div className="flex-auto" />
+        <div className="dib">
           ({job.views || 0} <Label>views</Label>)
         </div>
       </div>
@@ -32,7 +36,7 @@ const Job = ({ job, onApplyClick, className, onViewClick }) => {
         )}
       >
         <ApplyButton onClick={onApplyClick} />
-
+        <div className="flex-auto" />
         <div
           className={`${styles.viewDetails} dib i fw3 ml2 `}
           onClick={onViewClick}

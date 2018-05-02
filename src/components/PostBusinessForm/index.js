@@ -30,6 +30,7 @@ import styles from "./index.scss";
 import OptionList from "../OptionList";
 
 import CitySelect from "./CitySelect";
+import ShadowBox from "../ShadowBox";
 
 const preventDefault = e => e.preventDefault();
 
@@ -116,7 +117,7 @@ const renderPreview = ({ state }) => {
       key="businessImage"
     >
       {state.images.map(({ file, data }) => {
-        return <img key={file.name} src={data} style={{ maxWidth: 300 }} />;
+        return <img key={file.name} src={data} />;
       })}
     </div>
   ];
@@ -464,10 +465,10 @@ class PostBusinessForm extends Component {
 
     return (
       <div className={join(styles.form)}>
-        <div className={join(styles.formInner, "pa4 ph4 br3")}>
+        <ShadowBox>
           {this.props.children}
           {step.render({ value: stepValue, onChange, state: this.state })}
-          <div className="mt3">
+          <div className="mt3 mb3">
             {currentStep > 0 && hasPrev ? (
               <Button className={styles.prevButton} onClick={() => this.prev()}>
                 <Label>prev</Label>
@@ -482,7 +483,7 @@ class PostBusinessForm extends Component {
               </Button>
             ) : null}
           </div>
-        </div>
+        </ShadowBox>
       </div>
     );
   }

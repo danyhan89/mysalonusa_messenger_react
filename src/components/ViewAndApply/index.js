@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import JOB_ICON from "src/components/ChatroomContent/jobIcon";
 import APPLY_ICON from "src/components/ApplyButton/applyIcon";
 import PostJobForm from "src/components/PostAJob/PostJobForm";
+import ShadowBox from "src/components/ShadowBox";
 
 import isEmail from "is-email";
 
@@ -37,9 +38,11 @@ class ViewAndApply extends React.Component {
           this.props.onDismiss(false);
         }}
       >
-        {this.state.step == "view"
-          ? this.renderViewStep()
-          : this.renderApplyStep()}
+        <ShadowBox>
+          {this.state.step == "view"
+            ? this.renderViewStep()
+            : this.renderApplyStep()}
+        </ShadowBox>
       </Overlay>
     );
   }
