@@ -2,6 +2,7 @@ import React from "react";
 import Label from "@app/Label";
 
 import APPLY_ICON from "./applyIcon";
+
 import styles from "./index.scss";
 
 export default ({ onClick, className, size = 24 }) => (

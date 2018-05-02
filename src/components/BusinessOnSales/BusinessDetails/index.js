@@ -1,8 +1,11 @@
 import React from "react";
+import { findDOMNode } from "react-dom";
+import PropTypes from "prop-types";
 
 import selectParent from "select-parent";
 
 import join from "@app/join";
+import cleanProps from "@app/cleanupProps";
 import ellipsis from "@app/ellipsis";
 import Label from "@app/Label";
 
@@ -79,6 +82,11 @@ class BusinessDetails extends React.Component {
       top: rect.top,
       left: rect.left
     };
+
+    // fix a mobile bug that causes the business details
+    // to show under the tabPanel tab strip
+    selectParent(".TabPanel__tabBody", findDOMNode(this)).style.overflow =
+      "initial";
 
     this.setState(
       {
@@ -166,7 +174,7 @@ class BusinessDetails extends React.Component {
     const result = (
       <div
         key="business"
-        {...this.props}
+        {...cleanProps(this.props, BusinessDetails.propTypes)}
         {...events}
         onClick={this.viewBusiness}
         style={{ ...style, ...transitionStyle }}
@@ -286,11 +294,18 @@ class BusinessDetails extends React.Component {
   }
 
   closePreview() {
+    // put back the TabPanel tab body overflow
+    selectParent(".TabPanel__tabBody", findDOMNode(this)).style.overflow = "";
+
     this.setState({
       viewing: null,
       viewStyle: null
     });
   }
 }
+
+BusinessDetails.propTypes = {
+  updateViews: PropTypes.func
+};
 
 export default BusinessDetails;

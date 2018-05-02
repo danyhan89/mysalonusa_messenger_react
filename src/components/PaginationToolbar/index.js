@@ -110,7 +110,10 @@ class PaginationToolbar extends React.Component {
     }
 
     const currentPageDisplay = (
-      <div className={join("db dn-ns pa2", styles.page, styles.pageBlock)}>
+      <div
+        key="currentPage"
+        className={join("db dn-ns pa2", styles.page, styles.pageBlock)}
+      >
         <Label>page</Label> {this.getCurrentPage()} / {this.getMaxPage()}
       </div>
     );
