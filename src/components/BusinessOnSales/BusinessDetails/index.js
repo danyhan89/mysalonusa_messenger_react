@@ -200,7 +200,7 @@ class BusinessDetails extends React.Component {
           className={join(
             styles.textLayer,
             !viewing && "absolute",
-            "pa2  bottom-0 left-0 w-100"
+            "pa2  bottom-0 left-0 w-100 flex-none"
           )}
         >
           <div className="flex flex-row items-center">
