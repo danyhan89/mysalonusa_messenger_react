@@ -42,7 +42,7 @@
   &.finalState {
     top: 0px;
     left: 0px;
-    height: 100vh;
+    height: 100%;
     width: 100vw;
   }
 }
@@ -107,6 +107,7 @@
   label {
     color: $text-gray;
   }
+  word-wrap: break-word;
 }
 .contentImage {
   max-width: 100%;
