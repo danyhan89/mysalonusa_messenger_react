@@ -1,5 +1,5 @@
 import React from "react";
-import { findDOMNode } from "react-dom";
+import { findDOMNode, createPortal } from "react-dom";
 import PropTypes from "prop-types";
 
 import selectParent from "select-parent";
@@ -82,11 +82,6 @@ class BusinessDetails extends React.Component {
       top: rect.top,
       left: rect.left
     };
-
-    // fix a mobile bug that causes the business details
-    // to show under the tabPanel tab strip
-    selectParent(".TabPanel__tabBody", findDOMNode(this)).style.overflow =
-      "initial";
 
     this.setState(
       {
@@ -214,10 +209,13 @@ class BusinessDetails extends React.Component {
     );
 
     if (viewing) {
-      return [
-        result,
-        <div key={business.id + "-placeholder"} style={{ transitionStyle }} />
-      ];
+      return createPortal(
+        [
+          result,
+          <div key={business.id + "-placeholder"} style={{ transitionStyle }} />
+        ],
+        document.getElementById("overlay")
+      );
     }
 
     return result;
@@ -294,9 +292,6 @@ class BusinessDetails extends React.Component {
   }
 
   closePreview() {
-    // put back the TabPanel tab body overflow
-    selectParent(".TabPanel__tabBody", findDOMNode(this)).style.overflow = "";
-
     this.setState({
       viewing: null,
       viewStyle: null
