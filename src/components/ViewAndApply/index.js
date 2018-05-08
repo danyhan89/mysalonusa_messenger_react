@@ -73,6 +73,8 @@ class ViewAndApply extends React.Component {
       APPLY_ICON({ size: 32 })
     );
 
+    const validEmail = isEmail(this.state.email);
+
     const otherChildren = [
       <div key="label">
         <Label>yourEmail</Label>:
@@ -108,6 +110,21 @@ class ViewAndApply extends React.Component {
         className={`f4 w-100`}
       />,
 
+      <div className={styles.errorMessage}>
+        {!validEmail ? <Label>provideValidEmail</Label> : null}
+      </div>,
+      <div
+        className={styles.errorMessage}
+        style={{
+          display: !validEmail ? "none" : "block",
+          visibility:
+            this.state.message.length < 20 && validEmail ? "visible" : "hidden"
+        }}
+      >
+        <Label values={{ remaining: 20 - this.state.message.length }}>
+          xmoreCharacters
+        </Label>
+      </div>,
       <ActionButton
         key="actionButton"
         disabled={this.isSendDisabled()}

@@ -24,7 +24,9 @@ export default {
   confirmDeleteMessage: "Are you sure you want to delete the message?",
   chooseLanguage: "Choose your language",
   xrecentjobs: "{count} recent jobs",
+  xmoreCharacters: "You need to write {remaining} more characters",
   xrecentbusinessonsales: "{count} recent business on sales",
   xrecentchats: "{count} recent chat messages",
-  inlastmonth: "in the last month"
+  inlastmonth: "in the last month",
+  provideValidEmail: "Please provide a valid email address"
 };

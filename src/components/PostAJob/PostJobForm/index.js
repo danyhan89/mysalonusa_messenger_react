@@ -310,7 +310,7 @@ class PostJobForm extends Component {
         <div className={join(styles.form)}>
           {this.props.children}
           {step.render({ value: stepValue, onChange, state: this.state })}
-          <div className="mt3">
+          <div className="mt3 mb3">
             {currentStep > 0 && hasPrev ? (
               <Button className={styles.prevButton} onClick={() => this.prev()}>
                 <Label>prev</Label>
