@@ -4,6 +4,7 @@ import Label from "@app/Label";
 import join from "@app/join";
 import ActionButton from "@app/ActionButton";
 import LoadingIcon from "@app/LoadingIcon";
+import ShadowBox from "src/components/ShadowBox";
 import { createJob, editJob } from "src/api";
 
 import communities, { getCommunity } from "src/communities";
@@ -305,20 +306,22 @@ class PostJobForm extends Component {
         : step.buttonLabel;
 
     return (
-      <div className={join(styles.form)}>
-        {this.props.children}
-        {step.render({ value: stepValue, onChange, state: this.state })}
-        <div className="mt3">
-          {currentStep > 0 && hasPrev ? (
-            <Button className={styles.prevButton} onClick={() => this.prev()}>
-              <Label>prev</Label>
+      <ShadowBox>
+        <div className={join(styles.form)}>
+          {this.props.children}
+          {step.render({ value: stepValue, onChange, state: this.state })}
+          <div className="mt3">
+            {currentStep > 0 && hasPrev ? (
+              <Button className={styles.prevButton} onClick={() => this.prev()}>
+                <Label>prev</Label>
+              </Button>
+            ) : null}
+            <Button disabled={!valid} onClick={() => this.next()}>
+              {buttonLabel || <Label>next</Label>}
             </Button>
-          ) : null}
-          <Button disabled={!valid} onClick={() => this.next()}>
-            {buttonLabel || <Label>next</Label>}
-          </Button>
+          </div>
         </div>
-      </div>
+      </ShadowBox>
     );
   }
 }

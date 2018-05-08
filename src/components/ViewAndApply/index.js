@@ -17,6 +17,8 @@ import LoadingIcon from "@app/LoadingIcon";
 
 import { applyForJob, incrementJobView } from "src/api";
 
+import styles from "./index.scss";
+
 class ViewAndApply extends React.Component {
   constructor(props) {
     super(props);
@@ -38,11 +40,9 @@ class ViewAndApply extends React.Component {
           this.props.onDismiss(false);
         }}
       >
-        <ShadowBox>
-          {this.state.step == "view"
-            ? this.renderViewStep()
-            : this.renderApplyStep()}
-        </ShadowBox>
+        {this.state.step == "view"
+          ? this.renderViewStep()
+          : this.renderApplyStep()}
       </Overlay>
     );
   }
@@ -119,27 +119,29 @@ class ViewAndApply extends React.Component {
     ];
 
     return (
-      <div
-        style={{ minWidth: "50vw", maxHeight: "90vh" }}
-        className={`mw7 br3`}
-      >
-        <div className="f3 flex items-center mt3">
-          {JOB_ICON({ size: 32 })} <Label>jobPost</Label>
-        </div>
-        <div>
-          <Label>jobEmail</Label>: {job.email}
-        </div>
-        <div>
-          <Label>jobNickname</Label>: {job.nickname}
-        </div>
-        <div className="mt3">
-          <Label>jobDescription</Label>:
-        </div>
+      <ShadowBox>
+        <div
+          style={{ minWidth: "50vw", maxHeight: "90vh" }}
+          className={`${styles.viewAndApply} mw7 br3`}
+        >
+          <div className="f3 flex items-center mt3">
+            {JOB_ICON({ size: 32 })} <Label>jobPost</Label>
+          </div>
+          <div>
+            <Label>jobEmail</Label>: {job.email}
+          </div>
+          <div>
+            <Label>jobNickname</Label>: {job.nickname}
+          </div>
+          <div className="mt3">
+            <Label>jobDescription</Label>:
+          </div>
 
-        <div className="mb3">{job.description}</div>
+          <div className="mb3">{job.description}</div>
 
-        {otherChildren}
-      </div>
+          {otherChildren}
+        </div>
+      </ShadowBox>
     );
   }
 
