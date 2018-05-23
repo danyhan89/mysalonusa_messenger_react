@@ -3,12 +3,16 @@
   //will-change: transform;
   backface-visibility: hidden;
   transition: transform 0.35s ease;
-  height: 100%;
-  //transform: translate3d(0px, 0px, 0px);
+  height: 100%; //transform: translate3d(0px, 0px, 0px);
 }
 
 .toggled {
   transform: translate3d(75%, 0px, 0px);
+}
+
+.heart {
+  vertical-align: middle;
+  fill: $accent-color;
 }
 
 .menuButton {
@@ -23,4 +27,8 @@
     fill: $primary-color;
     background: $primary-color-light;
   }
+}
+
+.pointerEventsNone {
+  pointer-events: none;
 }

@@ -7,14 +7,19 @@ const fetch = (url, options) => {
   });
 };
 
+const notEmpty = x => !!x;
 export const fetchJobs = query => {
   query.limit = query.limit || 50;
 
   const queryString = Object.keys(query)
     .map(key => {
       const value = query[key];
+      if (value === undefined) {
+        return "";
+      }
       return `${key}=${value}`;
     })
+    .filter(notEmpty)
     .join("&");
 
   return fetch(`/fetchJobs?${queryString}`).then(response => {
