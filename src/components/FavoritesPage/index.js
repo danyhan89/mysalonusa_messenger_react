@@ -13,13 +13,23 @@ import BusinessOnSales, {
 } from "../BusinessOnSales";
 
 const getFavoriteJobIds = (favoriteJobs = getFavoriteJobs()) => {
-  return Object.keys(favoriteJobs).map(id => id);
+  const result = Object.keys(favoriteJobs).map(id => id);
+  if (!result.length) {
+    return [-1];
+  }
+
+  return result;
 };
 
 const getFavoriteBusinessIds = (
   favoriteBusinesses = getFavoriteBusinesses()
 ) => {
-  return Object.keys(favoriteBusinesses).map(id => id);
+  const result = Object.keys(favoriteBusinesses).map(id => id);
+  if (!result.length) {
+    return [-1];
+  }
+
+  return result;
 };
 
 class FavoritesPage extends Component {

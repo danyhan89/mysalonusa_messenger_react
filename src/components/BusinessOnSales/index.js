@@ -147,7 +147,7 @@ class BusinessOnSales extends React.Component {
       skip,
       limit,
       state,
-      filter: Array.isArray(filter) ? filter.join(",") : undefined
+      filter: Array.isArray(filter) ? filter : undefined
     }).then(({ data, totalCount }) => {
       this.setState({
         data,

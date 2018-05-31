@@ -143,7 +143,7 @@ class JobList extends React.Component {
       skip,
       limit,
       community,
-      filter: Array.isArray(filter) ? filter.join(",") : undefined,
+      filter: Array.isArray(filter) ? filter : undefined,
       state
     }).then(({ jobs, totalCount }) => {
       this.setState({
