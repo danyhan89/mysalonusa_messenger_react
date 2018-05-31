@@ -7,21 +7,22 @@ import Overlay from "@app/Overlay";
 import { withRouter } from "react-router-dom";
 
 import PostBusinessForm from "../PostBusinessForm";
-import JobList from "../JobList";
-import BusinessOnSales from "../BusinessOnSales";
+import JobList, {
+  registerFavoriteChange as registerFavoriteJobChange,
+  getFavoriteJobs
+} from "../JobList";
+import BusinessOnSales, {
+  registerFavoriteChange as registerFavoriteBusinessChange,
+  getFavoriteBusinesses
+} from "../BusinessOnSales";
 import FavoritesPage from "../FavoritesPage";
+
 //
 import Dashboard from "../Dashboard";
 
 import ChatroomContent from "../ChatroomContent";
-
+import heartIcon from "./heartIcon";
 import styles from "./index.scss";
-
-const heartIcon = (
-  <svg className={styles.heart} width="24" height="24" viewBox="0 0 24 24">
-    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-  </svg>
-);
 
 const TABS = {
   dashboard: 1,
@@ -36,9 +37,29 @@ class CenterContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      opened: false
+      opened: false,
+      favoriteJobCount: Object.keys(getFavoriteJobs()).length,
+      favoriteBusinessCount: Object.keys(getFavoriteBusinesses()).length
     };
     this.toggleMenu = this.toggleMenu.bind(this);
+  }
+  componentDidMount() {
+    this.unregisterFavoriteJob = registerFavoriteJobChange(favoriteIds => {
+      this.setState({
+        favoriteJobCount: Object.keys(favoriteIds).length
+      });
+    });
+    this.unregisterFavoriteBusiness = registerFavoriteBusinessChange(
+      favoriteIds => {
+        this.setState({
+          favoriteBusinessCount: Object.keys(favoriteIds).length
+        });
+      }
+    );
+  }
+  componentWillUnmount() {
+    this.unregisterFavoriteJob();
+    this.unregisterFavoriteBusiness();
   }
 
   toggleMenu(event) {
@@ -151,7 +172,12 @@ class CenterContainer extends React.Component {
         <FavoritesPage
           state={state}
           community={community}
-          tabTitle={heartIcon}
+          tabTitle={
+            <div>
+              {heartIcon} <Label>favorites</Label> ({this.state
+                .favoriteJobCount + this.state.favoriteBusinessCount})
+            </div>
+          }
         />
       </TabPanel>
     );

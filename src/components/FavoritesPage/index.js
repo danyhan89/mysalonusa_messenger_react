@@ -3,29 +3,52 @@ import styles from "./index.scss";
 
 import join from "@app/join";
 
-import JobList, { registerFavoriteChange, getFavoriteJobs } from "../JobList";
+import JobList, {
+  registerFavoriteChange as registerFavoriteJobChange,
+  getFavoriteJobs
+} from "../JobList";
+import BusinessOnSales, {
+  registerFavoriteChange as registerFavoriteBusinessOnSalesChange,
+  getFavoriteBusinesses
+} from "../BusinessOnSales";
 
-const getFavoriteIds = (favoriteJobs = getFavoriteJobs()) => {
+const getFavoriteJobIds = (favoriteJobs = getFavoriteJobs()) => {
   return Object.keys(favoriteJobs).map(id => id);
 };
+
+const getFavoriteBusinessIds = (
+  favoriteBusinesses = getFavoriteBusinesses()
+) => {
+  return Object.keys(favoriteBusinesses).map(id => id);
+};
+
 class FavoritesPage extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      favorites: getFavoriteIds()
+      favoriteJobs: getFavoriteJobIds(),
+      favoriteBusinesses: getFavoriteBusinessIds()
     };
   }
 
   componentDidMount() {
-    this.unregister = registerFavoriteChange(favoriteJobs => {
+    this.unregisterFavoriteJobs = registerFavoriteJobChange(favoriteJobs => {
       this.setState({
-        favorites: getFavoriteIds(favoriteJobs)
+        favoriteJobs: getFavoriteJobIds(favoriteJobs)
       });
     });
+    this.unregisterFavoriteBusinesses = registerFavoriteJobChange(
+      favoriteBusinesses => {
+        this.setState({
+          favoriteBusinesses: getFavoriteBusinessIds(favoriteBusinesses)
+        });
+      }
+    );
   }
   componentWillUnmount() {
-    this.unregister();
+    this.unregisterFavoriteJobs();
+    this.unregisterFavoriteBusinesses();
   }
   render() {
     const { props } = this;
@@ -41,7 +64,13 @@ class FavoritesPage extends Component {
         <JobList
           state={state}
           community={community}
-          filter={this.state.favorites}
+          filter={this.state.favoriteJobs}
+        />
+
+        <BusinessOnSales
+          state={state}
+          community={community}
+          filter={this.state.favoriteBusinesses}
         />
       </div>
     );

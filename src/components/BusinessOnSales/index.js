@@ -24,6 +24,74 @@ import styles from "./index.scss";
 import ViewAndApply from "../ViewAndApply";
 import BusinessDetails from "./BusinessDetails";
 
+export const getFavoriteBusinesses = () => {
+  let favoritedBusinesses = localStorage.getItem("favoriteBusinesses") || null;
+
+  if (favoritedBusinesses) {
+    try {
+      favoritedBusinesses = JSON.parse(favoritedBusinesses);
+    } catch (ex) {
+      favoritedBusinesses = {};
+    }
+  }
+
+  return favoritedBusinesses || {};
+};
+
+export const getFavoriteBusinessCount = () => {
+  return Object.keys(FAVORITE_BUSINESSES).length;
+};
+
+let FAVORITE_BUSINESSES = getFavoriteBusinesses();
+
+global.addEventListener("storage", function(e) {
+  FAVORITE_BUSINESSES = getFavoriteBusinesses();
+
+  notifyFavoriteListeners();
+});
+
+let favoriteListeners = [];
+
+const notifyFavoriteListeners = (favoriteJobs = FAVORITE_BUSINESSES) => {
+  favoriteListeners.forEach(listener => {
+    listener(favoriteJobs);
+  });
+};
+export const registerFavoriteChange = listener => {
+  favoriteListeners = [...favoriteListeners, listener];
+
+  return () => {
+    unregisterFavoriteChange(listener);
+  };
+};
+
+export const unregisterFavoriteChange = listener => {
+  favoriteListeners = favoriteListeners.filter(l => l !== listener);
+};
+
+export const isBusinessFavorite = jobId => {
+  return !!FAVORITE_BUSINESSES[jobId];
+};
+
+export const setBusinessFavorite = (businessId, favorite) => {
+  const favoritedBusinesses = getFavoriteBusinesses();
+
+  if (favorite) {
+    favoritedBusinesses[businessId] = 1;
+  } else {
+    delete favoritedBusinesses[businessId];
+  }
+
+  localStorage.setItem(
+    "favoriteBusinesses",
+    JSON.stringify(favoritedBusinesses)
+  );
+
+  FAVORITE_BUSINESSES = favoritedBusinesses;
+
+  notifyFavoriteListeners();
+};
+
 class BusinessOnSales extends React.Component {
   constructor(props) {
     super(props);
@@ -71,14 +139,15 @@ class BusinessOnSales extends React.Component {
   }
 
   fetchBusinessOnSales(skip = 0, props = this.props) {
-    const { state, limit } = props;
+    const { state, limit, filter } = props;
     this.setState({
       loading: true
     });
     fetchBusinessOnSales({
       skip,
       limit,
-      state
+      state,
+      filter: Array.isArray(filter) ? filter.join(",") : undefined
     }).then(({ data, totalCount }) => {
       this.setState({
         data,
@@ -174,8 +243,15 @@ class BusinessOnSales extends React.Component {
   }
 
   renderBusiness(business, index) {
+    const favorite = isBusinessFavorite(business.id);
     return (
       <BusinessDetails
+        favorite={favorite}
+        onFavoriteClick={event => {
+          event.stopPropagation();
+          setBusinessFavorite(business.id, !favorite);
+          this.forceUpdate();
+        }}
         updateViews={this.updateViews}
         key={business.id || index}
         data={business}

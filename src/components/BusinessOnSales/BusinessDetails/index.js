@@ -1,4 +1,4 @@
-import React from "react";
+import React, { cloneElement } from "react";
 import { findDOMNode, createPortal } from "react-dom";
 import PropTypes from "prop-types";
 
@@ -17,6 +17,11 @@ import styles from "./index.scss";
 
 const DEFAULT_IMAGE =
   "https://s3.us-east-2.amazonaws.com/mysalonusa/uploads/cities/image.png";
+
+import {
+  heartFull as HEART_FULL_ICON,
+  heartEmpty as HEART_EMPTY_ICON
+} from "src/components/icons";
 
 const locationIcon = (
   <svg
@@ -129,6 +134,8 @@ class BusinessDetails extends React.Component {
       );
     }
 
+    const heartFull = this.props.favorite;
+
     const topBar = (
       <div
         className={`${styles.titleLine} ${
@@ -151,6 +158,10 @@ class BusinessDetails extends React.Component {
             "fw2 flex-none flex flex-row items-center"
           )}
         >
+          {cloneElement(heartFull ? HEART_FULL_ICON : HEART_EMPTY_ICON, {
+            className: styles.heartIcon,
+            onClick: this.props.onFavoriteClick
+          })}
           {locationIcon} {business.city ? business.city.name : "Unknown"}{" "}
           {this.renderCloseIcon()}
         </div>

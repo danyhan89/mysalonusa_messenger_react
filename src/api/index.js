@@ -44,8 +44,12 @@ export const fetchBusinessOnSales = query => {
   const queryString = Object.keys(query)
     .map(key => {
       const value = query[key];
+      if (value === undefined) {
+        return "";
+      }
       return `${key}=${value}`;
     })
+    .filter(notEmpty)
     .join("&");
 
   return fetch(`/fetchBusinessOnSales?${queryString}`).then(response => {
