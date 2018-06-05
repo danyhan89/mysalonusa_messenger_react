@@ -165,7 +165,7 @@ class BusinessOnSales extends React.Component {
     return (
       <div className={join("pa3 flex flex-column", styles.main, className)}>
         <div className="flex flex-row flex-wrap">
-          {pagination ? (
+          {this.showPaginationAt("top") ? (
             <PaginationToolbar
               skip={skip}
               className="mb3 mr3"
@@ -175,20 +175,22 @@ class BusinessOnSales extends React.Component {
             />
           ) : null}
           <div style={{ flex: 1 }} />
-          <Button
-            className="mb3  pv2 bg-white"
-            onClick={() =>
-              this.setState({
-                showPostBusiness: true
-              })
-            }
-          >
-            <Label>postABusiness</Label>
-          </Button>
+          {this.props.showPostButton ? (
+            <Button
+              className="mb3  pv2 bg-white"
+              onClick={() =>
+                this.setState({
+                  showPostBusiness: true
+                })
+              }
+            >
+              <Label>postABusiness</Label>
+            </Button>
+          ) : null}
         </div>
         {this.renderPostBusinessOverlay()}
         {this.renderBusinesses()}
-        {!this.state.initialLoading && pagination ? (
+        {this.showPaginationAt("bottom") ? (
           <PaginationToolbar
             skip={skip}
             totalCount={totalCount}
@@ -198,6 +200,28 @@ class BusinessOnSales extends React.Component {
         ) : null}
       </div>
     );
+  }
+
+  showPaginationAt(position) {
+    const { pagination, paginationPosition, limit } = this.props;
+    const { initialLoading, data } = this.state;
+
+    if (!pagination) {
+      return false;
+    }
+    if (position === "top") {
+      if (paginationPosition === undefined || paginationPosition === "both") {
+        return true;
+      }
+      return paginationPosition === position;
+    }
+
+    if (position === "bottom") {
+      if (paginationPosition === undefined || paginationPosition === "both") {
+        return !initialLoading && pagination && data.length > limit;
+      }
+      return paginationPosition === position;
+    }
   }
 
   renderPostBusinessOverlay() {
@@ -286,7 +310,9 @@ class BusinessOnSales extends React.Component {
 
 BusinessOnSales.defaultProps = {
   limit: 25,
-  pagination: true
+  pagination: true,
+  showPostButton: true,
+  paginationPosition: "both"
 };
 
 BusinessOnSales.propTypes = {

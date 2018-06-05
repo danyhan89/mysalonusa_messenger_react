@@ -29,5 +29,7 @@ export default {
   xrecentchats: "{count} recent chat messages",
   inlastmonth: "in the last month",
   provideValidEmail: "Please provide a valid email address",
-  favorites: "Favorites"
+  favorites: "Favorites",
+  favoriteJobs: "Favorite jobs",
+  favoriteBusinesses: "Favorite businesses"
 };

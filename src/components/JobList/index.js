@@ -171,7 +171,7 @@ class JobList extends React.Component {
     return (
       <div className={join("pa3 flex flex-column", styles.jobList, className)}>
         <div className="flex flex-row flex-wrap">
-          {pagination ? (
+          {this.showPaginationAt("top") ? (
             <PaginationToolbar
               skip={skip}
               className="mb3 mr3"
@@ -181,20 +181,22 @@ class JobList extends React.Component {
             />
           ) : null}
           <div style={{ flex: 1 }} />
-          <Button
-            className="mb3  pv2 bg-white"
-            onClick={() =>
-              this.setState({
-                showPostJob: true
-              })
-            }
-          >
-            <Label>postAJob</Label>
-          </Button>
+          {this.props.showPostButton ? (
+            <Button
+              className="mb3  pv2 bg-white"
+              onClick={() =>
+                this.setState({
+                  showPostJob: true
+                })
+              }
+            >
+              <Label>postAJob</Label>
+            </Button>
+          ) : null}
         </div>
         {this.renderJobs()}
         {this.renderPostJobOverlay()}
-        {!this.state.initialLoading && pagination && jobs.length > limit ? (
+        {this.showPaginationAt("bottom") ? (
           <PaginationToolbar
             skip={skip}
             totalCount={totalCount}
@@ -205,6 +207,28 @@ class JobList extends React.Component {
         {this.renderApplyOverlay()}
       </div>
     );
+  }
+
+  showPaginationAt(position) {
+    const { pagination, paginationPosition, limit } = this.props;
+    const { initialLoading, jobs } = this.state;
+
+    if (!pagination) {
+      return false;
+    }
+    if (position === "top") {
+      if (paginationPosition === undefined || paginationPosition === "both") {
+        return true;
+      }
+      return paginationPosition === position;
+    }
+
+    if (position === "bottom") {
+      if (paginationPosition === undefined || paginationPosition === "both") {
+        return !initialLoading && pagination && jobs.length > limit;
+      }
+      return paginationPosition === position;
+    }
   }
 
   renderPostJobOverlay() {
@@ -294,7 +318,7 @@ class JobList extends React.Component {
         }}
         key={job.id || index}
         className={join(
-          "flex flex-column mh3  mv1 br2 bg-white w-100 ",
+          "flex flex-column  mv1 br2 bg-white w-100 ",
           styles.job
         )}
       >
@@ -390,7 +414,9 @@ class JobList extends React.Component {
 
 JobList.defaultProps = {
   limit: 25,
-  pagination: true
+  pagination: true,
+  showPostButton: true,
+  paginationPosition: "both"
 };
 
 JobList.propTypes = {

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import styles from "./index.scss";
 
 import join from "@app/join";
+import Label from "@app/Label";
 
 import JobList, {
   registerFavoriteChange as registerFavoriteJobChange,
@@ -48,13 +49,21 @@ class FavoritesPage extends Component {
         favoriteJobs: getFavoriteJobIds(favoriteJobs)
       });
     });
-    this.unregisterFavoriteBusinesses = registerFavoriteJobChange(
+    this.unregisterFavoriteBusinesses = registerFavoriteBusinessOnSalesChange(
       favoriteBusinesses => {
         this.setState({
           favoriteBusinesses: getFavoriteBusinessIds(favoriteBusinesses)
         });
       }
     );
+  }
+
+  getCount(array) {
+    if (array.length === 1 && array[0] === -1) {
+      return 0;
+    }
+
+    return array.length;
   }
   componentWillUnmount() {
     this.unregisterFavoriteJobs();
@@ -66,21 +75,33 @@ class FavoritesPage extends Component {
     return (
       <div
         className={join(
-          "pa3 flex flex-column",
+          "pv3 flex flex-column",
           styles.favoritesPage,
           className
         )}
       >
+        <div className={`f4 ph3 pv2 ${styles.header}`}>
+          <Label>favoriteJobs</Label> ({this.getCount(this.state.favoriteJobs)})
+        </div>
         <JobList
+          showPostButton={false}
           state={state}
           community={community}
           filter={this.state.favoriteJobs}
+          paginationPosition="bottom"
         />
 
+        <div className={`f4 ph3 pv2 ${styles.header}`}>
+          <Label>favoriteBusinesses</Label> ({this.getCount(
+            this.state.favoriteBusinesses
+          )})
+        </div>
         <BusinessOnSales
+          showPostButton={false}
           state={state}
           community={community}
           filter={this.state.favoriteBusinesses}
+          paginationPosition="bottom"
         />
       </div>
     );

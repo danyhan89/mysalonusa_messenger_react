@@ -311,7 +311,9 @@ class BusinessDetails extends React.Component {
 }
 
 BusinessDetails.propTypes = {
-  updateViews: PropTypes.func
+  updateViews: PropTypes.func,
+  favorite: PropTypes.bool,
+  onFavoriteClick: PropTypes.func
 };
 
 export default BusinessDetails;

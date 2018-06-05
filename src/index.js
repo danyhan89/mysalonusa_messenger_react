@@ -3,10 +3,11 @@ import React from "react";
 import "bootstrap/scss/bootstrap-grid.scss";
 import "tachyons/css/tachyons.css";
 
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import { IntlProvider } from "react-intl";
 
+import AdminPage from "./components/AdminPage";
 import Sidebar from "./components/Sidebar";
 import LanguagePopup from "./components/LanguagePopup";
 import StatesPopup from "./components/StatesPopup";
@@ -47,54 +48,59 @@ const App = () => {
   return (
     <Router>
       <div className={`${styles.app}`}>
-        <Route
-          path="/:lang?/:state?/:community?/:tab?"
-          render={({ match, history }) => {
-            let { lang, state, community } = match.params;
-            if (lang) {
-              lang = lang.toLowerCase();
-            }
-            if (state) {
-              state = state.toLowerCase();
-            }
-            if (community) {
-              community = community.toLowerCase();
-            }
+        <Switch>
+          <Route path="/admin/login" component={AdminPage} />
 
-            const props = { history, lang, state, community };
+          <Route path="/admin" component={AdminPage} />
+          <Route
+            path="/:lang?/:state?/:community?/:tab?"
+            render={({ match, history }) => {
+              let { lang, state, community } = match.params;
+              if (lang) {
+                lang = lang.toLowerCase();
+              }
+              if (state) {
+                state = state.toLowerCase();
+              }
+              if (community) {
+                community = community.toLowerCase();
+              }
 
-            const msg = messages[lang];
+              const props = { history, lang, state, community };
 
-            if (!lang) {
+              const msg = messages[lang];
+
+              if (!lang) {
+                return (
+                  <LanguagePopup
+                    onChange={lang => {
+                      history.push(`/${lang}`);
+                    }}
+                  />
+                );
+              }
+
+              let content;
+              if (!state) {
+                content = (
+                  <StatesPopup
+                    onChange={state => {
+                      history.push(`/${lang}/${state}`);
+                    }}
+                  />
+                );
+              } else {
+                content = <Layout {...props} />;
+              }
+
               return (
-                <LanguagePopup
-                  onChange={lang => {
-                    history.push(`/${lang}`);
-                  }}
-                />
+                <IntlProvider locale="en" messages={msg}>
+                  {content}
+                </IntlProvider>
               );
-            }
-
-            let content;
-            if (!state) {
-              content = (
-                <StatesPopup
-                  onChange={state => {
-                    history.push(`/${lang}/${state}`);
-                  }}
-                />
-              );
-            } else {
-              content = <Layout {...props} />;
-            }
-
-            return (
-              <IntlProvider locale="en" messages={msg}>
-                {content}
-              </IntlProvider>
-            );
-          }}
-        />
+            }}
+          />
+        </Switch>
       </div>
     </Router>
   );
