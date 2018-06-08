@@ -5,12 +5,12 @@ import qs from "query-string";
 import LoginForm from "./LoginForm";
 
 export const setUser = user => {
-  localStorage.setItem("user", JSON.stringify(user));
+  localStorage.setItem("loggedUser", JSON.stringify(user));
   return user;
 };
 
 export const getUser = () => {
-  const user = localStorage.getItem("user");
+  const user = localStorage.getItem("loggedUser");
 
   if (user) {
     return JSON.parse(user);

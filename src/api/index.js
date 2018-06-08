@@ -3,11 +3,17 @@ const fetch = (url, options) => {
     headers: {
       "Content-Type": "application/json"
     },
+    credentials: "include",
     ...options
   });
 };
 
 const notEmpty = x => !!x;
+
+export const deleteJob = id => {
+  return fetch(`/jobs/${id}`, { method: "DELETE" });
+};
+
 export const fetchJobs = query => {
   query.limit = query.limit || 50;
 

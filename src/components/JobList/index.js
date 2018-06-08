@@ -7,7 +7,7 @@ import Overlay from "@app/Overlay";
 
 import Loader from "@app/Loader";
 
-import { fetchJobs, incrementJobView } from "src/api";
+import { fetchJobs, incrementJobView, deleteJob } from "src/api";
 
 import Button from "@app/Button";
 import Label from "@app/Label";
@@ -25,6 +25,12 @@ import PaginationToolbar from "src/components/PaginationToolbar";
 
 import styles from "./index.scss";
 import ViewAndApply from "../ViewAndApply";
+
+const loggedUser = localStorage.getItem("loggedUser")
+  ? JSON.parse(localStorage.getItem("loggedUser"))
+  : null;
+
+const isAdmin = loggedUser && loggedUser.admin;
 
 export const getFavoriteJobs = () => {
   let favoritedJobs = localStorage.getItem("favoriteJobs") || null;
@@ -287,6 +293,10 @@ class JobList extends React.Component {
 
     this.forceUpdate();
   }
+
+  onDeleteClick(job) {
+    deleteJob(job.id);
+  }
   onHeartEnter(job) {
     const favorite = isJobFavorite(job.id);
   }
@@ -322,6 +332,9 @@ class JobList extends React.Component {
           styles.job
         )}
       >
+        {isAdmin ? (
+          <button onClick={this.onDeleteClick.bind(this, job)}>delete</button>
+        ) : null}
         {cloneElement(heartFull ? HEART_FULL_ICON : HEART_EMPTY_ICON, {
           onClick: this.onHeartClick.bind(this, job),
           onMouseEnter: this.onHeartEnter.bind(this, job),
