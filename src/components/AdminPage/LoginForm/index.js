@@ -5,7 +5,7 @@ class LoginForm extends React.Component {
     return (
       <div>
         {" "}
-        <a href="http://localhost:3000/auth/google">login with google</a>
+        <a href={`${process.env.SERVER_URL}/auth/google`}>login with google</a>
       </div>
     );
   }
