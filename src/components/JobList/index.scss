@@ -16,7 +16,9 @@
   fill: $accent-color;
 }
 
-.heartIcon {
+.heartIcon,
+.editIcon,
+.deleteIcon {
   opacity: 0;
   transition: opacity 0.2s;
   position: absolute;
@@ -25,13 +27,23 @@
   fill: $accent-color;
 }
 
+.deleteIcon {
+  right: 4.5rem;
+}
+
+.editIcon {
+  right: 6.5rem;
+}
+
 .job {
   position: relative;
   background: rgba($pale-gray, 0.5);
   transition: 0.4s;
   transform: scale3d(1, 1, 1);
   &:hover {
-    .viewIcon {
+    .viewIcon,
+    .editIcon,
+    .deleteIcon {
       opacity: 1;
     }
     .heartIcon {
@@ -43,7 +55,8 @@
     z-index: 1;
     cursor: pointer;
     box-shadow: 0 0px 2px 0 rgba(0, 0, 0, 0.14),
-      0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    0 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12);
     border-radius: 0.5rem;
     transform: scale3d(1.02, 1.02, 1);
   }

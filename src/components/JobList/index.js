@@ -18,7 +18,9 @@ import ApplyOverlay from "src/components/ApplyOverlay";
 
 import {
   heartFull as HEART_FULL_ICON,
-  heartEmpty as HEART_EMPTY_ICON
+  heartEmpty as HEART_EMPTY_ICON,
+  deleteIcon,
+  editIcon
 } from "src/components/icons";
 
 import PaginationToolbar from "src/components/PaginationToolbar";
@@ -140,6 +142,10 @@ class JobList extends React.Component {
     });
   }
 
+  refresh() {
+    this.fetchJobs(this.state.skip || 0);
+  }
+
   fetchJobs(skip = 0, props = this.props) {
     const { community, state, limit, filter } = props;
     this.setState({
@@ -202,6 +208,7 @@ class JobList extends React.Component {
         </div>
         {this.renderJobs()}
         {this.renderPostJobOverlay()}
+        {this.renderDeleteOverlay()}
         {this.showPaginationAt("bottom") ? (
           <PaginationToolbar
             skip={skip}
@@ -238,20 +245,23 @@ class JobList extends React.Component {
   }
 
   renderPostJobOverlay() {
-    if (!this.state.showPostJob) {
+    const defaultValues = this.state.jobToEdit;
+    if (!this.state.showPostJob && !defaultValues) {
       return null;
     }
     return (
       <Overlay
         closeable
         onClose={() => {
-          this.setState({ showPostJob: false });
+          this.setState({ showPostJob: false, jobToEdit: null });
         }}
       >
         <PostJobForm
+          defaultValues={defaultValues}
           onSuccess={() => {
-            this.setState({ showPostJob: false });
-            this.onSkipChange(0);
+            this.setState({ showPostJob: false, jobToEdit: null });
+
+            this.refresh();
           }}
           lang={this.props.lang}
           state={this.props.state}
@@ -294,8 +304,18 @@ class JobList extends React.Component {
     this.forceUpdate();
   }
 
-  onDeleteClick(job) {
-    deleteJob(job.id);
+  onDeleteClick(job, event) {
+    event.stopPropagation();
+    this.setState({
+      jobToDelete: job
+    });
+  }
+  onEditClick(job, event) {
+    event.stopPropagation();
+    this.setState({
+      jobToEdit: job,
+      showPostJob: true
+    });
   }
   onHeartEnter(job) {
     const favorite = isJobFavorite(job.id);
@@ -332,9 +352,18 @@ class JobList extends React.Component {
           styles.job
         )}
       >
-        {isAdmin ? (
-          <button onClick={this.onDeleteClick.bind(this, job)}>delete</button>
-        ) : null}
+        {isAdmin
+          ? cloneElement(deleteIcon, {
+              onClick: this.onDeleteClick.bind(this, job),
+              className: styles.deleteIcon
+            })
+          : null}
+        {isAdmin
+          ? cloneElement(editIcon, {
+              onClick: this.onEditClick.bind(this, job),
+              className: styles.editIcon
+            })
+          : null}
         {cloneElement(heartFull ? HEART_FULL_ICON : HEART_EMPTY_ICON, {
           onClick: this.onHeartClick.bind(this, job),
           onMouseEnter: this.onHeartEnter.bind(this, job),
@@ -361,6 +390,36 @@ class JobList extends React.Component {
           </div>
         </div>
       </div>
+    );
+  }
+
+  renderDeleteOverlay() {
+    if (!this.state.jobToDelete) {
+      return null;
+    }
+
+    const onClose = () => {
+      this.setState({ jobToDelete: null });
+    };
+
+    return (
+      <Overlay closeable onClose={onClose}>
+        <Button
+          onClick={() => {
+            deleteJob(this.state.jobToDelete.id).then(response => {
+              if (response.success) {
+                this.refresh();
+                onClose();
+              } else {
+                alert("Could not delete job!");
+              }
+            });
+          }}
+        >
+          Okay
+        </Button>
+        <Button onClick={onClose}>Cancel</Button>
+      </Overlay>
     );
   }
 

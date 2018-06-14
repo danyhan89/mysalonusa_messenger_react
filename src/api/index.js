@@ -11,7 +11,9 @@ const fetch = (url, options) => {
 const notEmpty = x => !!x;
 
 export const deleteJob = id => {
-  return fetch(`/jobs/${id}`, { method: "DELETE" });
+  return fetch(`/jobs/${id}`, { method: "DELETE" }).then(response =>
+    response.json()
+  );
 };
 
 export const fetchJobs = query => {
@@ -129,7 +131,7 @@ export const incrementBusinessView = ({ id }) => {
 };
 
 export const editJob = job => {
-  return fetch(`/editJob`, {
+  return fetch(`/jobs/${job.id}`, {
     method: "POST",
 
     body: JSON.stringify(job)

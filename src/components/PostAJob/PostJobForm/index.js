@@ -218,7 +218,7 @@ class PostJobForm extends Component {
 
     const { defaultValues, step } = props;
 
-    let currentStep = defaultValues ? 2 : 0;
+    let currentStep = 0;
 
     if (step) {
       STEPS.forEach((s, index) => {
@@ -228,13 +228,15 @@ class PostJobForm extends Component {
       });
     }
 
+    const nickname = defaultValues ? defaultValues.nickname : "";
+
     this.state = {
       uniqueNickname: global.localStorage.getItem("nickname"),
       currentStep,
-      minStep: defaultValues ? 2 : 0,
+      minStep: 0,
       community: getCommunity(props.community).value,
       state: props.state,
-      nickname: global.localStorage.getItem("alias") || "",
+      nickname: nickname || global.localStorage.getItem("alias") || "",
       email: defaultValues ? defaultValues.email : "",
       description: defaultValues ? defaultValues.description : ""
     };
