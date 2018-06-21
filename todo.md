@@ -9,6 +9,11 @@
 TODOS:
 - [X] provide min length feedback on apply to job message
 
+- [ ] Reorganize categorization/navigation of the site
+		- [languages] -> [state] -> dashboard with menu -
+			Salon Chatroom
+			Restaurant Chatroom
+
 - [ ] open up separate chatroom through the site between job seeker + job poster
 	  may require both party to create account
 - [ ] apply job through SMS texts by inputting phone number

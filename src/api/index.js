@@ -104,6 +104,16 @@ export const createBusiness = business => {
   });
 };
 
+export const editBusiness = business => {
+  return fetch(`/editBusiness`, {
+    headers: {},
+    method: "POST",
+    body: business
+  }).then(response => {
+    return response.json();
+  });
+};
+
 export const incrementJobView = ({ id }) => {
   return fetch(`/incrementJobView`, {
     method: "PATCH",
@@ -135,16 +145,6 @@ export const editJob = job => {
     method: "POST",
 
     body: JSON.stringify(job)
-  }).then(response => {
-    return response.json();
-  });
-};
-
-export const editBusiness = business => {
-  return fetch(`/editBusiness`, {
-    method: "POST",
-
-    body: JSON.stringify(business)
   }).then(response => {
     return response.json();
   });

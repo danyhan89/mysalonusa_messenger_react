@@ -95,11 +95,16 @@ export const setBusinessFavorite = (businessId, favorite) => {
 class BusinessOnSales extends React.Component {
   constructor(props) {
     super(props);
+    const loggedUser = localStorage.getItem("loggedUser")
+      ? JSON.parse(localStorage.getItem("loggedUser"))
+      : null;
+    const isAdmin = loggedUser && loggedUser.admin;
     this.state = {
       loading: true,
       skip: 0,
       initialLoading: true,
-      data: []
+      data: [],
+      isAdmin
     };
 
     this.onSkipChange = this.onSkipChange.bind(this);
@@ -225,29 +230,29 @@ class BusinessOnSales extends React.Component {
   }
 
   renderPostBusinessOverlay() {
-    if (!this.state.showPostBusiness) {
+    const { businessToEdit } = this.state;
+    if (!this.state.showPostBusiness && !businessToEdit) {
       return null;
     }
+    const close = () => {
+      this.setState({ showPostBusiness: false, businessToEdit: null });
+    };
+    const defaultValues = businessToEdit
+      ? {
+          ...businessToEdit,
+          email: businessToEdit.contact_email,
+          price: businessToEdit.price_string
+        }
+      : null;
     return (
-      <Overlay
-        closeable
-        onClose={() => {
-          this.setState({ showPostBusiness: false });
-        }}
-      >
+      <Overlay closeable onClose={close}>
         <PostBusinessForm
           onSuccess={() => {
-            this.setState({ showPostBusiness: false });
+            close();
             this.onSkipChange(0);
           }}
-          xdefaultValues={{
-            city: { id: 4, name: "a city" },
-            state: "ca",
-            title: "business title",
-            description: "business description",
-            email: "bla@business.com",
-            price: 123
-          }}
+          admin={this.state.isAdmin}
+          defaultValues={defaultValues}
           xstep="price"
           lang={this.props.lang}
           state={this.props.state}
@@ -275,6 +280,12 @@ class BusinessOnSales extends React.Component {
           event.stopPropagation();
           setBusinessFavorite(business.id, !favorite);
           this.forceUpdate();
+        }}
+        onEditClick={event => {
+          event.stopPropagation();
+          this.setState({
+            businessToEdit: business
+          });
         }}
         updateViews={this.updateViews}
         key={business.id || index}

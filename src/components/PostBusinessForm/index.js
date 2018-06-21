@@ -15,13 +15,15 @@ create_table "business_on_sales", force: :cascade do |t|
     t.integer  "city_id"
   end
   */
-import React, { Component } from "react";
+import React, { Component, cloneElement } from "react";
+
 import isEmail from "is-email";
 import Label from "@app/Label";
 import join from "@app/join";
 import ActionButton from "@app/ActionButton";
 import LoadingIcon from "@app/LoadingIcon";
 import { createBusiness, editBusiness } from "src/api";
+import { deleteIcon } from "src/components/icons";
 
 import communities, { getCommunity } from "src/communities";
 import states from "src/states";
@@ -116,11 +118,41 @@ const renderPreview = ({ state }) => {
       className={styles.imageContainer + " " + styles.label}
       key="businessImage"
     >
+      {state.image_urls
+        ? state.image_urls.map(url => {
+            return <img key={url} src={url} />;
+          })
+        : null}
       {state.images.map(({ file, data }) => {
         return <img key={file.name} src={data} />;
       })}
     </div>
   ];
+};
+
+const EDIT_VIEWS = {
+  key: "views",
+  canSkip: true,
+
+  render: ({ onChange, value }) => {
+    return [
+      <div key="label" className={styles.label} style={{ paddingBottom: 20 }}>
+        <Label>views</Label>
+      </div>,
+      <input
+        key="input"
+        type="text"
+        value={value}
+        autoFocus
+        placeholder="Number of views"
+        className={styles.input + " " + styles.field}
+        onChange={event => {
+          event.stopPropagation();
+          onChange(event.target.value);
+        }}
+      />
+    ];
+  }
 };
 
 const STEPS = [
@@ -278,8 +310,10 @@ const STEPS = [
   },
   {
     key: "images",
-    isValid: images => images && images.length > 0,
-    render: ({ onChange }) => {
+    isValid: (images, state) =>
+      (images && images.length > 0) ||
+      (state.image_urls && state.image_urls.length > 0),
+    render: ({ onChange, state, setState }) => {
       return [
         <div key="label" className={styles.label} style={{ paddingBottom: 20 }}>
           <Label>businessImage</Label>
@@ -318,7 +352,39 @@ const STEPS = [
 
             Promise.all(promises).then(files => onChange(files));
           }}
-        />
+        />,
+        <div
+          className={styles.imageContainer + " " + styles.label}
+          key="businessImage"
+        >
+          {state.image_urls
+            ? state.image_urls.map(url => {
+                return (
+                  <div style={{ position: "relative", width: "100%" }}>
+                    <img key={url} src={url} style={{ minHeight: 100 }} />
+                    <div
+                      onClick={() => {
+                        const image_urls = state.image_urls.filter(
+                          u => u && u != url
+                        );
+
+                        setState({ image_urls });
+                      }}
+                      style={{
+                        right: 20,
+                        top: 20,
+                        position: "absolute",
+                        fill: "white",
+                        cursor: "pointer"
+                      }}
+                    >
+                      {deleteIcon}
+                    </div>
+                  </div>
+                );
+              })
+            : null}
+        </div>
       ];
     }
   },
@@ -351,28 +417,41 @@ class PostBusinessForm extends Component {
   constructor(props) {
     super(props);
 
-    const { defaultValues, step } = props;
+    const { defaultValues, step, admin } = props;
+    let THIS_STEPS = [...STEPS];
+
+    if (admin) {
+      THIS_STEPS = [
+        ...THIS_STEPS.slice(0, 2),
+        EDIT_VIEWS,
+        ...THIS_STEPS.slice(2)
+      ];
+    }
 
     let currentStep = defaultValues ? 2 : 0;
 
     if (step) {
-      STEPS.forEach((s, index) => {
+      THIS_STEPS.forEach((s, index) => {
         if (s.key == step) {
           currentStep = index;
         }
       });
     }
+    const alias = global.localStorage.getItem("alias") || "";
 
     this.state = {
+      STEPS: THIS_STEPS,
       uniqueNickname: global.localStorage.getItem("nickname"),
       currentStep,
       images: [],
+      image_urls: defaultValues ? defaultValues.image_urls : null,
       minStep: defaultValues ? 2 : 0,
       community: getCommunity(props.community).value,
-      state: props.state,
+      state: defaultValues ? defaultValues.state || props.state : props.state,
       city: defaultValues ? defaultValues.city : null,
+      views: defaultValues ? defaultValues.views || 0 : 0,
       title: defaultValues ? defaultValues.title : "",
-      nickname: global.localStorage.getItem("alias") || "",
+      nickname: alias,
       email: defaultValues ? defaultValues.email : "",
       price: defaultValues ? defaultValues.price : "",
       description: defaultValues ? defaultValues.description : ""
@@ -394,6 +473,7 @@ class PostBusinessForm extends Component {
 
   next() {
     let { currentStep } = this.state;
+    const { STEPS } = this.state;
     const step = STEPS[currentStep];
 
     if (step.onClick) {
@@ -420,6 +500,10 @@ class PostBusinessForm extends Component {
 
     const formData = new FormData();
 
+    if (this.props.defaultValues) {
+      formData.append("image_urls", this.state.image_urls);
+    }
+
     Object.keys(business).forEach(key => {
       let value = business[key];
       if (key == "city") {
@@ -444,13 +528,13 @@ class PostBusinessForm extends Component {
   }
 
   render() {
-    const { currentStep } = this.state;
+    const { currentStep, STEPS } = this.state;
 
     const step = STEPS[currentStep];
     const stepValue = this.state[step.key];
     const isValid = step.isValid || returnTrue;
     const hasPrev = !step.locked && currentStep > this.props.minStep;
-    const valid = isValid(stepValue);
+    const valid = isValid(stepValue, this.state);
 
     const onChange = value => {
       this.setState({
@@ -467,7 +551,14 @@ class PostBusinessForm extends Component {
       <div className={join(styles.form)}>
         <ShadowBox>
           {this.props.children}
-          {step.render({ value: stepValue, onChange, state: this.state })}
+          {step.render({
+            value: stepValue,
+            onChange,
+            state: this.state,
+            setState: (...args) => {
+              this.setState(...args);
+            }
+          })}
           <div className="mt3 mb3">
             {currentStep > 0 && hasPrev ? (
               <Button className={styles.prevButton} onClick={() => this.prev()}>

@@ -28,12 +28,6 @@ import PaginationToolbar from "src/components/PaginationToolbar";
 import styles from "./index.scss";
 import ViewAndApply from "../ViewAndApply";
 
-const loggedUser = localStorage.getItem("loggedUser")
-  ? JSON.parse(localStorage.getItem("loggedUser"))
-  : null;
-
-const isAdmin = loggedUser && loggedUser.admin;
-
 export const getFavoriteJobs = () => {
   let favoritedJobs = localStorage.getItem("favoriteJobs") || null;
 
@@ -102,12 +96,19 @@ export const setJobFavorite = (jobId, favorite) => {
 class JobList extends React.Component {
   constructor(props) {
     super(props);
+
+    const loggedUser = localStorage.getItem("loggedUser")
+      ? JSON.parse(localStorage.getItem("loggedUser"))
+      : null;
+
+    const isAdmin = loggedUser && loggedUser.admin;
     this.state = {
       applyForJob: null,
       loading: true,
       skip: 0,
       initialLoading: true,
-      jobs: []
+      jobs: [],
+      isAdmin
     };
 
     this.onSkipChange = this.onSkipChange.bind(this);
@@ -258,6 +259,7 @@ class JobList extends React.Component {
       >
         <PostJobForm
           defaultValues={defaultValues}
+          admin={this.state.isAdmin}
           onSuccess={() => {
             this.setState({ showPostJob: false, jobToEdit: null });
 
@@ -337,6 +339,7 @@ class JobList extends React.Component {
 
     const favorite = isJobFavorite(job.id);
     const heartFull = favorite;
+    const { isAdmin } = this.state;
 
     return (
       <div
@@ -456,30 +459,6 @@ class JobList extends React.Component {
           this.updateJobViews(job);
         }}
       />
-    );
-
-    return (
-      <Overlay
-        closeable
-        onClose={() => {
-          this.setState({ applyForJob: null });
-          this.updateJobViews(job);
-        }}
-      >
-        <PostJobForm
-          step="apply"
-          defaultValues={job}
-          onApplyClick={() => {
-            this.setState({
-              applyForJob: null
-            });
-            //this.onApply(job, this.state.jobToViewMessage);
-          }}
-          lang={this.props.lang}
-          state={this.props.state}
-          community={this.props.community}
-        />
-      </Overlay>
     );
   }
 }

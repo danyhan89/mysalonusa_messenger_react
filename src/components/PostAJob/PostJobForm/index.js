@@ -86,6 +86,30 @@ const renderPreview = ({ state }) => {
   ];
 };
 
+const EDIT_VIEWS = {
+  key: "views",
+
+  render: ({ onChange, value }) => {
+    return [
+      <div key="label" style={{ paddingBottom: 20 }}>
+        <Label>views</Label>
+      </div>,
+      <input
+        key="input"
+        type="text"
+        value={value}
+        autoFocus
+        placeholder="Number of views"
+        className={styles.input}
+        onChange={event => {
+          event.stopPropagation();
+          onChange(event.target.value);
+        }}
+      />
+    ];
+  }
+};
+
 const STEPS = [
   {
     key: "community",
@@ -216,12 +240,17 @@ class PostJobForm extends Component {
   constructor(props) {
     super(props);
 
-    const { defaultValues, step } = props;
+    let THIS_STEPS = [...STEPS];
+    const { defaultValues, step, admin } = props;
 
     let currentStep = 0;
 
+    if (admin) {
+      THIS_STEPS = [EDIT_VIEWS, ...THIS_STEPS];
+    }
+
     if (step) {
-      STEPS.forEach((s, index) => {
+      THIS_STEPS.forEach((s, index) => {
         if (s.key == step) {
           currentStep = index;
         }
@@ -233,11 +262,13 @@ class PostJobForm extends Component {
     this.state = {
       uniqueNickname: global.localStorage.getItem("nickname"),
       currentStep,
+      STEPS: THIS_STEPS,
       minStep: 0,
       community: getCommunity(props.community).value,
       state: props.state,
       nickname: nickname || global.localStorage.getItem("alias") || "",
       email: defaultValues ? defaultValues.email : "",
+      views: defaultValues ? defaultValues.views || 0 : 0,
       description: defaultValues ? defaultValues.description : ""
     };
     if (defaultValues) {
@@ -257,6 +288,7 @@ class PostJobForm extends Component {
 
   next() {
     let { currentStep } = this.state;
+    const { STEPS } = this.state;
     const step = STEPS[currentStep];
 
     if (step.onClick) {
@@ -288,7 +320,7 @@ class PostJobForm extends Component {
   }
 
   render() {
-    const { currentStep } = this.state;
+    const { currentStep, STEPS } = this.state;
 
     const step = STEPS[currentStep];
     const stepValue = this.state[step.key];

@@ -20,7 +20,8 @@ const DEFAULT_IMAGE =
 
 import {
   heartFull as HEART_FULL_ICON,
-  heartEmpty as HEART_EMPTY_ICON
+  heartEmpty as HEART_EMPTY_ICON,
+  editIcon
 } from "src/components/icons";
 
 const locationIcon = (
@@ -41,7 +42,15 @@ class BusinessDetails extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    const loggedUser = localStorage.getItem("loggedUser")
+      ? JSON.parse(localStorage.getItem("loggedUser"))
+      : null;
+
+    const isAdmin = loggedUser && loggedUser.admin;
+
+    this.state = {
+      isAdmin
+    };
 
     this.onTransitionEnd = this.onTransitionEnd.bind(this);
     this.viewBusiness = this.viewBusiness.bind(this);
@@ -158,6 +167,12 @@ class BusinessDetails extends React.Component {
             "fw2 flex-none flex flex-row items-center"
           )}
         >
+          {this.state.isAdmin
+            ? cloneElement(editIcon, {
+                className: styles.editIcon,
+                onClick: this.props.onEditClick
+              })
+            : null}
           {cloneElement(heartFull ? HEART_FULL_ICON : HEART_EMPTY_ICON, {
             className: styles.heartIcon,
             onClick: this.props.onFavoriteClick
