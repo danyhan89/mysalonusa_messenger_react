@@ -284,10 +284,19 @@ class BusinessDetails extends React.Component {
         <div className="flex flex-column">
           {business.image_urls.map((url, index) => {
             return (
-              <img
-                className={join(styles.contentImage, "mb4")}
+              <div
+                className={join(
+                  "aspect-ratio aspect-ratio--16x9",
+                  styles.contentImage,
+                  "mb4"
+                )}
                 key={url}
-                src={url || DEFAULT_IMAGE}
+                style={{
+                  backgroundImage: `url('${url || DEFAULT_IMAGE}')`,
+                  backgroundSize: "contain",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat"
+                }}
               />
             );
           })}

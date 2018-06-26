@@ -36,6 +36,21 @@ import ShadowBox from "../ShadowBox";
 
 const preventDefault = e => e.preventDefault();
 
+const Img = ({ src, style }) => {
+  return (
+    <div
+      className={join("aspect-ratio aspect-ratio--16x9")}
+      style={{
+        backgroundImage: `url('${src}')`,
+        backgroundSize: "contain",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        minWidth: "50vw",
+        ...style
+      }}
+    />
+  );
+};
 class Question extends Component {
   constructor(props) {
     super(props);
@@ -120,11 +135,11 @@ const renderPreview = ({ state }) => {
     >
       {state.image_urls
         ? state.image_urls.map(url => {
-            return <img key={url} src={url} />;
+            return <Img key={url} src={url} />;
           })
         : null}
       {state.images.map(({ file, data }) => {
-        return <img key={file.name} src={data} />;
+        return <Img key={file.name} src={data} />;
       })}
     </div>
   ];
@@ -361,7 +376,7 @@ const STEPS = [
             ? state.image_urls.map(url => {
                 return (
                   <div style={{ position: "relative", width: "100%" }}>
-                    <img key={url} src={url} style={{ minHeight: 100 }} />
+                    <Img key={url} src={url} style={{ minHeight: 100 }} />
                     <div
                       onClick={() => {
                         const image_urls = state.image_urls.filter(
