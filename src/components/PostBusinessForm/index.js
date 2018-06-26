@@ -325,9 +325,11 @@ const STEPS = [
   },
   {
     key: "images",
-    isValid: (images, state) =>
-      (images && images.length > 0) ||
-      (state.image_urls && state.image_urls.length > 0),
+    isValid: (images, state, props) =>
+      props.admin
+        ? true
+        : (images && images.length > 0) ||
+          (state.image_urls && state.image_urls.length > 0),
     render: ({ onChange, state, setState }) => {
       return [
         <div key="label" className={styles.label} style={{ paddingBottom: 20 }}>
@@ -549,7 +551,7 @@ class PostBusinessForm extends Component {
     const stepValue = this.state[step.key];
     const isValid = step.isValid || returnTrue;
     const hasPrev = !step.locked && currentStep > this.props.minStep;
-    const valid = isValid(stepValue, this.state);
+    const valid = isValid(stepValue, this.state, this.props);
 
     const onChange = value => {
       this.setState({
@@ -572,7 +574,8 @@ class PostBusinessForm extends Component {
             state: this.state,
             setState: (...args) => {
               this.setState(...args);
-            }
+            },
+            props: this.props
           })}
           <div className="mt3 mb3">
             {currentStep > 0 && hasPrev ? (
