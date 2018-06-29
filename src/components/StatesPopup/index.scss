@@ -1,6 +1,7 @@
 @import "~@app/colors.scss";
 .statesPopup {
-  position: fixed;
+  //position: fixed;
+  min-height: 100%;
   top: 0px;
   bottom: 0px;
   left: 0px;
@@ -19,9 +20,9 @@
 .stateImageWrapper {
   transition: all 0.25s ease-in;
 }
+
 .stateImageWrapper:hover {
   cursor: pointer;
-
   box-shadow: 0 9px 46px 8px rgba(0, 0, 0, 0.14),
     0 11px 15px -7px rgba(0, 0, 0, 0.12), 0 24px 38px 3px rgba(0, 0, 0, 0.2);
   transform: scale3d(1.01, 1.01, 1);

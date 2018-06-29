@@ -1,8 +1,8 @@
 @import "~@app/colors.scss";
 .sidebar {
   color: inherit;
-  background: $dark-red; //$primary-color-dark;
-  color: $primary-color-text;
+  background: $blue-dark; //$primary-color-dark;
+  color: white;
   transition: opacity 0.4s;
 }
 
@@ -12,6 +12,7 @@
     opacity: 1;
   }
 }
+
 .opened {
   opacity: 1;
 }

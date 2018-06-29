@@ -1,10 +1,69 @@
 @import "~bootstrap/scss/bootstrap-reboot.scss";
 @import "~bootstrap/scss/bootstrap-grid.scss";
+@import "~@app/colors.scss";
+:global {
+  .bg-yellow-primary {
+    background: $yellow-primary;
+  }
+  .color-yellow-primary {
+    color: $yellow-primary;
+  }
+  .bg-yellow-dark {
+    background: $yellow-dark;
+  }
+  .color-yellow-dark {
+    color: $yellow-dark;
+  }
+  .bg-yellow-light {
+    background: $yellow-light;
+  }
+  .color-yellow-light {
+    color: $yellow-light;
+  }
+  .bg-blue-primary {
+    background: $blue-primary;
+  }
+  .color-blue-primary {
+    color: $blue-primary;
+  }
+  .bg-blue-dark {
+    background: $blue-dark;
+  }
+  .color-blue-dark {
+    color: $blue-dark;
+  }
+  .bg-blue-light {
+    background: $blue-light;
+  }
+  .color-blue-light {
+    color: $blue-light;
+  }
+  .bg-pink-primary {
+    background: $pink-primary;
+  }
+  .color-pink-primary {
+    color: $pink-primary;
+  }
+  .bg-pink-light {
+    background: $pink-light;
+  }
+  .color-pink-light {
+    color: $pink-light;
+  }
+  .bg-pink-dark {
+    background: $pink-dark;
+  }
+  .color-pink-dark {
+    color: $pink-dark;
+  }
+}
+
 .app {
   height: 100%;
   width: 100%;
   overflow: hidden;
 }
+
 :global {
   body,
   #root {
