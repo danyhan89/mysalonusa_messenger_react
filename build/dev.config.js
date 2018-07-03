@@ -11,7 +11,7 @@ module.exports = {
   resolve,
   plugins,
   devServer: {
-    publicPath: "/assets",
+    publicPath: "/",
     port: 8080,
     historyApiFallback: true
   }

@@ -11,9 +11,11 @@ module.exports = {
   },
   resolve,
   plugins,
+  // optimization,
   output: {
     publicPath: "/",
     path: path.resolve(__dirname, "../dist"),
-    filename: "bundle.[hash].js"
+    filename: "bundle.[hash].js",
+    chunkFilename: "[hash].[id].chunk.js"
   }
 };
