@@ -1,1 +1,3 @@
 /*    /index.html   200
+# Redirect default Netlify subdomain to primary domain
+http://broker-wrist-73327.netlify.com/* http://www.jobtalk.me/:splat 301!
