@@ -20,17 +20,19 @@ import FavoritesPage from "../FavoritesPage";
 //
 import Dashboard from "../Dashboard";
 
+import logoUrl from "src/images/logo.png";
+
 import ChatroomContent from "../ChatroomContent";
 import heartIcon from "./heartIcon";
 import styles from "./index.scss";
 
 const TABS = {
-  dashboard: 1,
-  jobs: 2,
-  chat: 3,
-  businessOnSales: 4,
-  postJob: 5,
-  postBusiness: 6
+  dashboard: 2,
+  jobs: 3,
+  chat: 4,
+  businessOnSales: 5,
+  postJob: 6,
+  postBusiness: 7
 };
 
 class CenterContainer extends React.Component {
@@ -99,17 +101,17 @@ class CenterContainer extends React.Component {
     const key = `${community}-${state}-${lang}`;
 
     const children = <ChatroomContent {...props} key={key} />;
-    const activeIndex = TABS[match.params.tab] || 1;
+    const activeIndex = TABS[match.params.tab] || 2;
 
     return (
       <TabPanel
         className=""
         activeIndex={activeIndex}
         tabTitleClassName={index => {
-          if (index == 0) {
+          if (index == 1) {
             return "dn-ns";
           }
-          if (index == 5) {
+          if (index == 6) {
             // empty "pusher" tab
             return "flex-auto " + styles.pointerEventsNone;
           }
@@ -127,6 +129,10 @@ class CenterContainer extends React.Component {
           }
         }}
       >
+        <div
+          tabIndex={-1}
+          tabTitle={<img src={logoUrl} style={{ minWidth: 200 }} />}
+        />
         <div
           tabTitle={
             <div
@@ -173,7 +179,7 @@ class CenterContainer extends React.Component {
           state={state}
           community={community}
           tabTitle={
-            <div>
+            <div className="nowrap">
               {heartIcon} <Label>favorites</Label> ({this.state
                 .favoriteJobCount + this.state.favoriteBusinessCount})
             </div>

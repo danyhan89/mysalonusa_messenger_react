@@ -9,11 +9,11 @@ import styles from "./index.scss";
 
 const preventDefault = e => e.preventDefault();
 
-const Link = ({ children, onClick }) => {
+const Link = ({ children, onClick, className }) => {
   return (
     <a
       href=""
-      className={`${styles.link} db mb2`}
+      className={`${styles.link} ${className || ""} db mb2`}
       onClick={e => {
         preventDefault(e);
         onClick();
@@ -34,9 +34,16 @@ class Footer extends React.Component {
   }
   render() {
     return (
-      <div className={`${styles.footer} ph2 tl`}>
+      <div className={`${styles.footer} tl mh5 mv3 pt3 `}>
         <div>
+          <Link to="/about" className="f6">
+            <Label>aboutUs</Label>
+          </Link>
+          <Link to="/contact" className="f6">
+            <Label>contactUs</Label>
+          </Link>
           <Link
+            className="f6"
             onClick={() => {
               this.setState({ chooseLanguage: true });
             }}
@@ -44,6 +51,7 @@ class Footer extends React.Component {
             <Label>chooseLanguage</Label>
           </Link>
           <Link
+            className="f6"
             onClick={() => {
               this.setState({ chooseState: true });
             }}

@@ -10,8 +10,12 @@ module.exports = {
   },
   resolve,
   plugins,
+  output: {
+    publicPath: "/",
+    filename: "bundle.js"
+  },
   devServer: {
-    publicPath: "/assets",
+    publicPath: "/",
     port: 8080,
     historyApiFallback: true
   }

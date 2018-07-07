@@ -1,8 +1,8 @@
 @import "~@app/colors.scss";
 .sidebar {
   color: inherit;
-  background: $dark-red; //$primary-color-dark;
-  color: $primary-color-text;
+  background: $blue-dark; //$primary-color-dark;
+  color: white;
   transition: opacity 0.4s;
 }
 
@@ -12,10 +12,28 @@
     opacity: 1;
   }
 }
+
 .opened {
   opacity: 1;
 }
 
 .chatroomSelect {
   flex: 1 0 auto;
+  background: $blue-dark;
+}
+
+.header {
+  background: $blue-primary;
+  flex: none;
+  fill: white;
+  color: white;
+}
+
+.headerItem {
+  cursor: pointer;
+}
+
+.circleIcon {
+  border-radius: 50%;
+  border: 2px solid white;
 }

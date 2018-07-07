@@ -1,14 +1,14 @@
 @import "~@app/colors.scss";
 .languagePopup {
-  position: fixed;
+  //position: fixed;
+  min-height: 100%;
   top: 0px;
   bottom: 0px;
   left: 0px;
   right: 0px;
   overflow: auto;
   overflow-scrolling: touch;
-  -webkit-overflow-scrolling: touch;
-  color: $primary-text-color;
+  -webkit-overflow-scrolling: touch; //color: $primary-text-color;
 }
 
 .langItem {
