@@ -1,10 +1,12 @@
 @import "~@app/colors.scss";
 .footer {
+  border-top: 1px solid white;
 }
 
 .link {
   color: rgba(white, 0.7);
   cursor: pointer;
+  margin-top: 10px;
   &:hover {
     text-decoration: underline;
     color: white;

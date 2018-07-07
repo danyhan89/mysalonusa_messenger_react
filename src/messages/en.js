@@ -2,6 +2,11 @@ import React from "react";
 
 export default {
   welcome: "MySalon USA, {state}",
+  myCharacter: "MY CHARACTER",
+  myChats: "MY CHATS",
+  myFavorites: "MY FAVORITES",
+  aboutUs: "About us",
+  contactUs: "Contact us",
   viewDetails: "View Details",
   selectChatroom: "Please select chatroom",
   pleaseProvideNickname: "Please enter a nickname",

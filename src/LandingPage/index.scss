@@ -1,5 +1,6 @@
 @import "~@app/breakpoints.scss";
 .landingPage {
+  z-index: 100;
   opacity: 1; ////animation: opacity-to-zero 6s ease-out forwards;
   //animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1); //cubic-bezier(0.95, 0.05, 0.795, 0.035); //cubic-bezier(0.55, 0.055, 0.675, 0.19);
   transition: opacity 3.2s cubic-bezier(0.6, -0.28, 0.735, 0.045);

@@ -3,6 +3,9 @@ import React from "react";
 import join from "@app/join";
 import Label from "@app/Label";
 import Text from "@app/Text";
+import Circle from "@app/Circle";
+
+import INDUSTRIES from "src/industries";
 
 import { pngFlags } from "src/components/LanguagePopup";
 
@@ -20,15 +23,34 @@ const ChatroomSelect = ({
 }) => {
   return (
     <div {...props}>
-      <div className={`${styles.welcome} fw3 pa2 f4 pv4`}>
+      <div
+        className={`${
+          styles.welcome
+        } fw4 pa2 flex justify-center items-center f1 tc pv4`}
+      >
+        <Circle size={50} className="bg-white mr2" />
         <Label
           values={{
             community: getCommunity(currentCommunity).label,
             state: state.toUpperCase()
           }}
         >
-          welcome
+          {state.toUpperCase()} Talk
         </Label>
+      </div>
+      <div className="flex flex-column ">
+        {INDUSTRIES.map(industry => {
+          return (
+            <div
+              key={industry.name}
+              style={{ marginLeft: "30%" }}
+              className="mb3 f6 b nowrap"
+            >
+              <Circle style={{ border: "2px solid white" }} className="mr2" />
+              <Label>{industry.label}</Label>
+            </div>
+          );
+        })}
       </div>
       <div className="mb2 fw4 ttu ph2 ">
         <Label defaultMessage="Please select chatroom">selectChatroom</Label>

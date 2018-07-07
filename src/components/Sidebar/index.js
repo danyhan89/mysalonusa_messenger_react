@@ -7,6 +7,10 @@ import { isValid as isValidState } from "src/states";
 import { isValid as isValidCommunity } from "src/communities";
 
 import join from "@app/join";
+import Label from "@app/Label";
+import Circle from "@app/Circle";
+
+import { quote, person, heartFull } from "src/components/icons";
 
 import ChatroomSelect from "../ChatroomSelect";
 import Footer from "../Footer";
@@ -131,8 +135,40 @@ class Sidebar extends Component {
 
     return (
       <div className={className}>
+        {this.renderHeader()}
         {this.renderChatroomSelect()}
         <Footer {...this.props} />
+      </div>
+    );
+  }
+
+  renderHeader() {
+    return (
+      <div className={`flex flex-row ${styles.header} pa3 justify-between`}>
+        <div
+          className={`${
+            styles.headerItem
+          } mr1 f7 flex flex-column items-center`}
+        >
+          <Circle className={`${styles.circleIcon}  mb2`}>{person}</Circle>
+          <Label>myCharacter</Label>
+        </div>
+        <div
+          className={`${
+            styles.headerItem
+          } mr1 f7 flex flex-column items-center`}
+        >
+          <Circle className={`${styles.circleIcon}  mb2`}>{quote}</Circle>
+          <Label>myChats</Label>
+        </div>
+        <div
+          className={`${
+            styles.headerItem
+          } mr1 f7 flex flex-column items-center`}
+        >
+          <Circle className={`${styles.circleIcon}  mb2`}>{heartFull}</Circle>
+          <Label>myFavorites</Label>
+        </div>
       </div>
     );
   }

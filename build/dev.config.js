@@ -10,6 +10,10 @@ module.exports = {
   },
   resolve,
   plugins,
+  output: {
+    publicPath: "/",
+    filename: "bundle.js"
+  },
   devServer: {
     publicPath: "/",
     port: 8080,
