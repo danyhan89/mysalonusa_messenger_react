@@ -32,7 +32,7 @@ const TABS = {
   chat: 4,
   businessOnSales: 5,
   postJob: 6,
-  postBusiness: 7
+  favorites: 7
 };
 
 class CenterContainer extends React.Component {
@@ -175,16 +175,7 @@ class CenterContainer extends React.Component {
           tabTitle={<Label>businessOnSales</Label>}
         />
         <div />
-        <FavoritesPage
-          state={state}
-          community={community}
-          tabTitle={
-            <div className="nowrap">
-              {heartIcon} <Label>favorites</Label> ({this.state
-                .favoriteJobCount + this.state.favoriteBusinessCount})
-            </div>
-          }
-        />
+        <FavoritesPage state={state} community={community} />
       </TabPanel>
     );
   }

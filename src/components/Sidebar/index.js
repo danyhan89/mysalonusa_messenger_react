@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { Redirect } from "react-router-dom";
+import { Redirect, NavLink, Link } from "react-router-dom";
 
 import { isValid as isValidLang } from "src/languages";
 import { isValid as isValidState } from "src/states";
@@ -143,6 +143,7 @@ class Sidebar extends Component {
   }
 
   renderHeader() {
+    const { lang, state, community } = this.props;
     return (
       <div className={`flex flex-row ${styles.header} pa3 justify-between`}>
         <div
@@ -161,14 +162,16 @@ class Sidebar extends Component {
           <Circle className={`${styles.circleIcon}  mb2`}>{quote}</Circle>
           <Label>myChats</Label>
         </div>
-        <div
+        <NavLink
+          to={`/${lang}/${state}/${community}/favorites`}
           className={`${
             styles.headerItem
           } mr1 f7 flex flex-column items-center`}
+          activeClassName={styles.headerItemSelected}
         >
           <Circle className={`${styles.circleIcon}  mb2`}>{heartFull}</Circle>
           <Label>myFavorites</Label>
-        </div>
+        </NavLink>
       </div>
     );
   }

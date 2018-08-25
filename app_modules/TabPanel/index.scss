@@ -1,10 +1,9 @@
 @import "~@app/colors.scss";
 .tabStrip {
-  background: $pale-gray;
-  color: $accent-text-color;
   z-index: 1;
   display: flex;
   flex-flow: row;
+  align-items: center;
   box-shadow: 0 0px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
 }
 
@@ -26,14 +25,17 @@
 
 .tab {
   //color: $primary-text-color; //$accent-text-color;
-  color: $gray;
+  &>*:not(img):first-child {
+    padding-bottom: 8px;
+    border-bottom: 3px solid transparent;
+  }
   &:hover {
     background: rgba(white, 0.65);
   }
 }
 
 .activeTab {
-  background: white;
-  font-weight: bold;
-  color: $accent-text-color;
+  &>*:not(img):first-child {
+    border-bottom: 3px solid $blue-primary;
+  }
 }

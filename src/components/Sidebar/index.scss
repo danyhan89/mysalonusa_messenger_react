@@ -31,6 +31,19 @@
 
 .headerItem {
   cursor: pointer;
+  fill: white;
+  color: white;
+  &:hover {
+    color: white;
+  }
+}
+
+.headerItemSelected {
+  &,
+  &:hover {
+    color: $yellow-primary;
+    fill: $yellow-primary;
+  }
 }
 
 .circleIcon {

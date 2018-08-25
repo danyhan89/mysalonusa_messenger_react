@@ -2,14 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { findDOMNode } from "react-dom";
 
-import { DateTime } from "luxon";
-
 import io from "socket.io-client";
-import uuidv4 from "uuid/v4";
-
-import communities from "src/communities";
-
-import { renderDate, renderHour } from "@app/dateUtils";
 
 import LoadingIcon from "@app/LoadingIcon";
 import Label from "@app/Label";
@@ -24,27 +17,16 @@ import { incrementJobView, fetchChats } from "src/api";
 
 import { isValid as isValidState } from "src/states";
 
-import Separator from "./Separator";
-import Job from "./Job";
-import JOB_ICON from "./jobIcon";
-import DELETE_ICON from "./deleteIcon";
-import EDIT_ICON from "./editIcon";
-
-import ApplyOverlay from "../ApplyOverlay";
+import JobMessage from "./JobMessage";
+import ChatMessage from "./ChatMessage";
 import PostJobForm from "../PostAJob/PostJobForm";
 
 import styles from "./index.scss";
 import ViewAndApply from "../ViewAndApply";
 
-const STORED_NICKNAME = global.localStorage.getItem("nickname");
+import getNickname from "./getNickname";
+
 let STORED_ALIAS = global.localStorage.getItem("alias");
-
-const NICKNAME = STORED_NICKNAME || uuidv4();
-if (!STORED_NICKNAME) {
-  global.localStorage.setItem("nickname", NICKNAME);
-}
-
-const emptyFn = () => {};
 
 const SPACER = <div className={styles.flex1} />;
 
@@ -68,22 +50,14 @@ const LIMIT = 50;
 
 const isValidAlias = alias => alias.length >= 1;
 
-const timezoneOffset = new Date().getTimezoneOffset();
-
-const getDayFormat = dateString => {
-  const date = DateTime.fromISO(dateString).plus({ minutes: -timezoneOffset });
-
-  return date.toLocaleString();
-};
-
-global.DateTime = DateTime;
-
 class ChatroomContent extends Component {
   constructor(props) {
     super(props);
 
     this.onTextChange = this.onTextChange.bind(this);
+    this.onReplyTextChange = this.onReplyTextChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.onReplySubmit = this.onReplySubmit.bind(this);
     this.renderMessage = this.renderMessage.bind(this);
     this.onMessagesScroll = this.onMessagesScroll.bind(this);
 
@@ -94,6 +68,9 @@ class ChatroomContent extends Component {
     this.inputRef = cmp => {
       this.inputNode = cmp ? findDOMNode(cmp) : null;
     };
+    this.replyInputRef = cmp => {
+      this.replyInputNode = cmp ? findDOMNode(cmp) : null;
+    };
 
     this.openSocket(chosenState);
 
@@ -102,6 +79,7 @@ class ChatroomContent extends Component {
       alias: "",
       text: "",
       skip: 0,
+      replyTexts: {},
       messages: []
     };
 
@@ -137,6 +115,7 @@ class ChatroomContent extends Component {
   }
 
   fetchMore(callback) {
+    return;
     const { props } = this;
 
     const beforeId = this.state.messages.length
@@ -155,15 +134,15 @@ class ChatroomContent extends Component {
       beforeId,
       state: props.state,
       community: props.community
-    }).then(chats => {
-      chats = chats.reverse();
-      const messages = chats.concat(this.state.messages);
+    }).then(result => {
+      const { chats, replies } = this.parseResult(result);
 
       //const viewViews = messages.filter
       this.setState(
         {
           loading: false,
-          messages
+          messages: chats,
+          replies
         },
         callback
       );
@@ -202,6 +181,19 @@ class ChatroomContent extends Component {
     }
   }
 
+  parseResult(result) {
+    //debugger;
+    let { chats, replies } = result;
+    chats = chats.reverse();
+    replies = Object.keys(replies).reduce((acc, chatId) => {
+      const value = replies[chatId];
+      acc[chatId] = value ? value.reverse() : value;
+      return acc;
+    }, {});
+
+    return { replies, chats };
+  }
+
   componentDidMount() {
     const { props } = this;
 
@@ -209,11 +201,13 @@ class ChatroomContent extends Component {
       limit: this.props.limit || LIMIT,
       state: props.state,
       community: props.community
-    }).then(chats => {
+    }).then(result => {
+      const { chats, replies } = this.parseResult(result);
       this.setState(
         {
           loading: false,
-          messages: chats.reverse()
+          messages: chats,
+          replies
         },
         this.scrollToBottom
       );
@@ -243,7 +237,35 @@ class ChatroomContent extends Component {
     this.clearText();
   }
 
+  onReplySubmit({ msg, text }) {
+    if (!text) {
+      return;
+    }
+
+    if (!STORED_ALIAS) {
+      this.setState({
+        needsAlias: true
+      });
+      return;
+    }
+    const parent = msg;
+
+    this.send(text, {
+      parent_id: parent.id,
+      ancestor_id: parent.ancestorId
+    });
+  }
+
   pushMessage(message) {
+    if (message.parent_id) {
+      const replies = { ...this.state.replies };
+      const parentReplies = [...(replies[message.parent_id] || []), message];
+      replies[message.parent_id] = parentReplies;
+      this.setState({
+        replies
+      });
+      return;
+    }
     this.setState(
       {
         messages: [...this.state.messages, message]
@@ -287,15 +309,24 @@ class ChatroomContent extends Component {
       text
     });
   }
+  onReplyTextChange(msg, replyText) {
+    this.setState({
+      replyTexts: {
+        ...this.state.replyTexts,
+        [msg.id]: replyText
+      }
+    });
+  }
 
-  send(text) {
+  send(text, { parent_id } = {}) {
     const { state, community } = this.props;
     const { editMessage } = this.state;
 
     if (editMessage) {
       const newMessage = {
         ...editMessage,
-        message: text
+        message: text,
+        parent_id
       };
       this.setState({
         editMessage: null
@@ -309,9 +340,10 @@ class ChatroomContent extends Component {
       JSON.stringify({
         state,
         community,
-        nickname: NICKNAME,
+        nickname: getNickname(),
         alias: STORED_ALIAS,
-        message: text
+        message: text,
+        parent_id
       })
     );
   }
@@ -319,6 +351,18 @@ class ChatroomContent extends Component {
     this.setState({
       text: ""
     });
+  }
+
+  clearReplyText(msg) {
+    const newState = {};
+    if (this.state.replyTo && this.state.replyTo.id === msg.id) {
+      newState.replyTo = null;
+    }
+    newState.replyTexts = {
+      ...this.state.replyTexts,
+      [msg.id]: ""
+    };
+    this.setState(newState);
   }
 
   deleteMessage(msg) {
@@ -350,7 +394,7 @@ class ChatroomContent extends Component {
   }
 
   itsMe(message) {
-    return message.nickname === NICKNAME;
+    return message.nickname === getNickname();
   }
 
   updateJobViews(job, message) {
@@ -518,7 +562,20 @@ class ChatroomContent extends Component {
             </div>
           ) : null}
           {SPACER}
-          {!empty ? this.state.messages.map(this.renderMessage) : null}
+          {!empty
+            ? this.state.messages.map((message, index, array) => {
+                return this.renderMessage(
+                  {
+                    nestingLevel: 0,
+                    last: index === array.length - 1,
+                    parent: null
+                  },
+                  message,
+                  index,
+                  array
+                );
+              })
+            : null}
         </div>
         {this.renderAliasOverlay()}
         {this.renderDeletePopup()}
@@ -612,29 +669,10 @@ class ChatroomContent extends Component {
     });
   }
 
-  renderJobMessage(job, msg, children) {
-    if (!job || typeof job != "object") {
-      return null;
-    }
-
-    const itsMe = this.itsMe(msg);
-    const timestamp = this.renderTimestamp(msg);
-
-    return (
-      <Job
-        key={job.id || index}
-        job={job}
-        className={itsMe ? "fr mt1" : "mt1"}
-        onViewClick={this.onViewJob.bind(this, job, msg)}
-        onApplyClick={this.onApply.bind(this, job, msg)}
-      />
-    );
-  }
-
   isJob(message) {
     return message.chat_type == 1;
   }
-
+  /*
   canDeleteMessage(message) {
     const isJob = this.isJob(message);
     const now = DateTime.utc();
@@ -654,111 +692,31 @@ class ChatroomContent extends Component {
     return this.canDeleteMessage(message);
   }
 
-  renderTimestamp(msg) {
-    const timestamp = (
-      <div className={join(styles.timestamp, "ttu f6 dib")}>
-        {renderHour(msg.created_at)}
-      </div>
+*/
+  renderMessage({ nestingLevel, last, parent }, msg, index) {
+    const itsMe = this.itsMe(msg);
+
+    const jobMessage = this.isJob(msg) ? JSON.parse(msg.message) : null;
+    return jobMessage ? (
+      <JobMessage
+        key={jobMessage.id || index}
+        job={jobMessage}
+        className={itsMe ? "fr mt1" : "mt1"}
+        onViewClick={this.onViewJob.bind(this, jobMessage, msg)}
+        onApplyClick={this.onApply.bind(this, jobMessage, msg)}
+      />
+    ) : (
+      <ChatMessage
+        replies={this.state.replies}
+        key={msg.id}
+        nestingLevel={nestingLevel}
+        last={last}
+        parent={parent}
+        msg={msg}
+        index={index}
+        onReplySubmit={this.onReplySubmit}
+      />
     );
-
-    return timestamp;
-  }
-
-  renderMessage(msg, index) {
-    const isJob = this.isJob(msg);
-
-    const dateString = getDayFormat(msg.created_at);
-
-    const dateSeparator =
-      this.prevDate && this.prevDate != dateString ? (
-        <Separator date={dateString} key={`${dateString}-separator`} />
-      ) : null;
-
-    this.prevDate = dateString;
-
-    let renderResult;
-    const key = msg.id || index;
-    const me = this.itsMe(msg);
-    const canEdit = this.canEditMessage(msg);
-    const canDelete = this.canDeleteMessage(msg);
-    const jobMessage = isJob ? JSON.parse(msg.message) : null;
-    const differentAuthor = this.lastAuthor != (jobMessage || msg).nickname;
-
-    const icons =
-      me && this.props.showEditIcons
-        ? [
-            DELETE_ICON({
-              size: 24,
-              onClick: this.deleteMessage.bind(this, msg),
-              className: `${styles.deleteIcon} ${
-                !canDelete ? "o-50" : ""
-              } absolute top-0 left-0`
-            }),
-            EDIT_ICON({
-              size: 24,
-              onClick: this.editMessage.bind(this, msg),
-              className: `${styles.editIcon} ${
-                !canEdit ? "o-50" : ""
-              } absolute top-0 left-0`
-            })
-          ]
-        : null;
-
-    const timestamp = (
-      <div className={join(styles.timestamp, "ttu f6 dib")}>
-        {renderHour(msg.created_at)}
-      </div>
-    );
-
-    const { message, nickname } = msg;
-    const alias = jobMessage ? jobMessage.nickname : msg.alias;
-
-    const renderedAuthor = differentAuthor ? (
-      <div>
-        <div key="author" className="b dib">
-          {alias || <Label>unknown</Label>}
-        </div>{" "}
-        {timestamp}
-      </div>
-    ) : null;
-
-    if (isJob) {
-      renderResult = this.renderJobMessage(jobMessage, msg, icons);
-    } else {
-      renderResult = [
-        <div
-          key="msg"
-          className={join(styles.message, me && styles.myMessage, "br2")}
-        >
-          <div className={join("pv1 ph2 br2 relative dib", styles.messageText)}>
-            {icons}
-            {me ? timestamp : null}
-            {message}
-          </div>
-          {!me ? timestamp : null}
-        </div>
-      ];
-    }
-
-    renderResult = (
-      <div
-        key={key}
-        className={`flex-none relative w-100 ${
-          differentAuthor ? "mt2" : ""
-        } ${join(me && styles.flexEnd)}`}
-      >
-        {renderedAuthor}
-        {renderResult}
-      </div>
-    );
-
-    if (dateSeparator) {
-      delete this.lastAuthor;
-    } else {
-      this.lastAuthor = msg.nickname;
-    }
-
-    return dateSeparator ? [dateSeparator, renderResult] : renderResult;
   }
 }
 

@@ -38,33 +38,38 @@ class TabPanel extends React.Component {
         className={join(props.className, "flex flex-column", styles.tabPanel)}
       >
         <div className={props.tabStripClassName} style={props.tabStripStyle}>
-          {titles.map((title, index) => {
-            const active = index === activeIndex;
-            const onClick = () => {
-              this.setActiveIndex(index);
-            };
-            let titleClassName;
-            if (typeof props.tabTitleClassName == "function") {
-              titleClassName = props.tabTitleClassName(index);
-            } else {
-              titleClassName = props.tabTitleClassName;
-            }
-            return (
-              <div
-                key={index}
-                onClick={onClick}
-                style={props.tabTitleStyle}
-                className={join(
-                  active && styles.activeTab,
-                  "dib",
-                  props.defaultTabTitleClassName,
-                  titleClassName
-                )}
-              >
-                {title}
-              </div>
-            );
-          })}
+          {titles
+            .map((title, index) => {
+              if (!title) {
+                return null;
+              }
+              const active = index === activeIndex;
+              const onClick = () => {
+                this.setActiveIndex(index);
+              };
+              let titleClassName;
+              if (typeof props.tabTitleClassName == "function") {
+                titleClassName = props.tabTitleClassName(index);
+              } else {
+                titleClassName = props.tabTitleClassName;
+              }
+              return (
+                <div
+                  key={index}
+                  onClick={onClick}
+                  style={props.tabTitleStyle}
+                  className={join(
+                    active && styles.activeTab,
+                    "dib",
+                    props.defaultTabTitleClassName,
+                    titleClassName
+                  )}
+                >
+                  {title}
+                </div>
+              );
+            })
+            .filter(Boolean)}
         </div>
         <div
           style={props.tabBodyStyle}
@@ -107,7 +112,7 @@ TabPanel.defaultProps = {
   tabTitleStyle: {
     cursor: "pointer"
   },
-  defaultTabTitleClassName: join("f5 ttu pa2 ph3", styles.tab),
+  defaultTabTitleClassName: join("f5 pa2 ph3", styles.tab),
   tabStripClassName: join(styles.tabStrip),
   tabBodyClassName: ""
 };

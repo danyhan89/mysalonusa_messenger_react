@@ -6,7 +6,7 @@ import ApplyButton from "src/components/ApplyButton";
 
 import styles from "./index.scss";
 
-const Job = ({ job, onApplyClick, className, onViewClick }) => {
+const JobMessage = ({ job, onApplyClick, className, onViewClick }) => {
   return (
     <div
       key={job.id || index}
@@ -48,4 +48,4 @@ const Job = ({ job, onApplyClick, className, onViewClick }) => {
   );
 };
 
-export default Job;
+export default JobMessage;

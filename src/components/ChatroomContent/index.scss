@@ -100,6 +100,20 @@ $MARGIN_TOP: 5px;
 
 .timestamp {
   color: $gray;
+  font-weight: 200;
+}
+
+.chatMessage {
+  position: relative;
+  .hoverBubble {
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: block; // none
+  }
+  &:hover .hoverBubble {
+    display: block;
+  }
 }
 
 .message {
@@ -149,4 +163,8 @@ $MARGIN_TOP: 5px;
 
 .submitButton {
   cursor: pointer;
+}
+
+.nickname {
+  text-transform: uppercase;
 }
