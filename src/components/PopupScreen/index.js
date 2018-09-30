@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 
-import MobileStepper from '@app/MobileStepper';
-import styles from './index.scss';
+import MobileStepper from "@app/MobileStepper";
+import styles from "./index.scss";
 
 const PopupScreen = ({ onChange, title, step, items }) => {
   return (

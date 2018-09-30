@@ -1,13 +1,13 @@
-import React from 'react';
+import React from "react";
 
-import LANGUAGES from 'src/languages';
+import LANGUAGES from "src/languages";
 
-import usFlag from 'src/images/us.png';
-import koFlag from 'src/images/kr.png';
-import moFlag from 'src/images/mn.png';
-import voFlag from 'src/images/vn.png';
+import usFlag from "src/images/us.png";
+import koFlag from "src/images/kr.png";
+import moFlag from "src/images/mn.png";
+import voFlag from "src/images/vn.png";
 
-import PopupScreen from '../PopupScreen';
+import PopupScreen from "../PopupScreen";
 
 export const pngFlags = {
   ko: koFlag,
@@ -16,7 +16,7 @@ export const pngFlags = {
   mo: moFlag
 };
 
-import styles from './index.scss';
+import styles from "./index.scss";
 
 const LanguagePopup = ({ onChange }) => {
   return (
@@ -34,8 +34,8 @@ const LanguagePopup = ({ onChange }) => {
                 className="mt2 aspect-ratio aspect-ratio--16x9 w-100"
                 style={{
                   background: `url(${pngFlags[lang.value]}) no-repeat`,
-                  backgroundPosition: 'center',
-                  backgroundSize: 'cover'
+                  backgroundPosition: "center",
+                  backgroundSize: "cover"
                 }}
               />
             </div>
