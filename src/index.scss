@@ -1,6 +1,7 @@
-@import "~bootstrap/scss/bootstrap-reboot.scss";
-@import "~bootstrap/scss/bootstrap-grid.scss";
-@import "~@app/colors.scss";
+@import '~bootstrap/scss/bootstrap-reboot.scss';
+@import '~bootstrap/scss/bootstrap-grid.scss';
+@import '~@app/colors.scss';
+
 :global {
   .bg-yellow-primary {
     background: $yellow-primary;
@@ -61,7 +62,7 @@
 .app {
   height: 100%;
   width: 100%;
-  overflow: hidden;
+  // overflow: hidden;
   position: relative;
 }
 
