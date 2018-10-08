@@ -257,6 +257,7 @@ class ChatroomContent extends Component {
   }
 
   pushMessage(message) {
+    const atBottom = this.isScrolledBottom();
     if (message.parent_id) {
       const replies = { ...this.state.replies };
       const parentReplies = [...(replies[message.parent_id] || []), message];
@@ -271,7 +272,7 @@ class ChatroomContent extends Component {
         messages: [...this.state.messages, message]
       },
       () => {
-        if (this.itsMe(message)) {
+        if (this.itsMe(message) || atBottom) {
           this.scrollToBottom();
         }
       }
@@ -302,6 +303,12 @@ class ChatroomContent extends Component {
 
   scrollToBottom() {
     this.messagesNode.scrollTop += this.messagesNode.scrollHeight;
+  }
+  isScrolledBottom() {
+    return (
+      this.messagesNode.scrollTop ===
+      this.messagesNode.scrollHeight - this.messagesNode.offsetHeight
+    );
   }
 
   onTextChange(text) {
