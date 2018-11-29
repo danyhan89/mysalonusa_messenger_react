@@ -13,8 +13,8 @@ import getNickname from "../getNickname";
 import styles from "./index.scss";
 import MessageAuthor from "./MessageAuthor";
 import CommentIcon from "./commentIcon";
-import BookmarkIcon from "./BookmarkIcon";
-import ReportIcon from "./ReportIcon";
+import BookmarkIcon from "./bookmarkIcon";
+import ReportIcon from "./reportIcon";
 
 const NESTING_DEPTH = 20;
 
