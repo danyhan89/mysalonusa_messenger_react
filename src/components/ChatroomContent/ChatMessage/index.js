@@ -12,6 +12,9 @@ import getNickname from "../getNickname";
 
 import styles from "./index.scss";
 import MessageAuthor from "./MessageAuthor";
+import CommentIcon from "./commentIcon";
+import BookmarkIcon from "./BookmarkIcon";
+import ReportIcon from "./ReportIcon";
 
 const NESTING_DEPTH = 20;
 
@@ -29,6 +32,27 @@ const canEditMessage = () => {
 const canDeleteMessage = () => {
   //todo fix this
   return false;
+};
+
+const Avatar = () => {
+  return (
+    <div
+      style={{ background: "gray", width: 40, height: 40 }}
+      className="br3 dib flex-none mr3"
+    />
+  );
+};
+
+const ActionItem = ({ icon: Icon, ...props }) => {
+  return (
+    <a
+      {...props}
+      className={join("dib ph2 pointer", styles.actionLink, props.className)}
+    >
+      <Icon className="mr1" />
+      {props.children}
+    </a>
+  );
 };
 
 class ChatMessage extends React.Component {
@@ -83,7 +107,9 @@ class ChatMessage extends React.Component {
               } absolute top-0 left-0`
             })
           ]
-        : null;
+        : [];
+
+    icons.push(<Avatar alias={alias} />);
 
     const { message: messageText } = msg;
     const alias = msg.alias;
@@ -92,7 +118,7 @@ class ChatMessage extends React.Component {
       <div
         key={msg.id}
         data-key={msg.id}
-        className={`flex-none relative w-100  ${
+        className={`mb3 flex-none relative w-100  ${
           differentAuthor ? "mt2" : ""
         } ${join(styles.chatMessage)}`}
       >
@@ -104,7 +130,12 @@ class ChatMessage extends React.Component {
             style={{ marginLeft: nestingLevel * NESTING_DEPTH }}
             className={join(styles.message, me && styles.myMessage, "br2")}
           >
-            <div className={join("ph2 br2 relative dib", styles.messageText)}>
+            <div
+              className={join(
+                "ph2 br2 relative dib f7 flex flex-row",
+                styles.messageText
+              )}
+            >
               {icons}
               {messageText}
             </div>
@@ -186,18 +217,25 @@ class ChatMessage extends React.Component {
   renderHoverBubble({ nestingLevel, last, parent }, msg) {
     return (
       <div
-        style={{ marginLeft: nestingLevel * NESTING_DEPTH }}
-        className={join(styles.hoverBubble)}
+        style={{ textAlign: "right", marginLeft: nestingLevel * NESTING_DEPTH }}
+        className={join(styles.hoverBubble, "mt2")}
       >
-        <a
-          className={join("dib ph2 pointer", styles.replyLink)}
+        <ActionItem
+          icon={CommentIcon}
           onClick={e => {
             e.preventDefault();
             this.onReplyToClick(msg, nestingLevel);
           }}
         >
-          reply
-        </a>
+          <Label>comment</Label>
+        </ActionItem>
+        <ActionItem icon={BookmarkIcon}>
+          <Label>bookmark</Label>
+        </ActionItem>
+
+        <ActionItem icon={ReportIcon}>
+          <Label>report</Label>
+        </ActionItem>
       </div>
     );
   }

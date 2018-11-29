@@ -6,5 +6,8 @@ export default {
   userNameForPosting: "VO - What username do you want to post job?",
   emailForPosting: "VO - What email do you want to post job?",
   jobDescription: "VO - Job description",
-  jobPost: "Job Post"
+  jobPost: "Job Post",
+  comment: "Comment",
+  report: "Report",
+  bookmark: "Bookmark"
 };
