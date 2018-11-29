@@ -90,7 +90,6 @@ class ChatMessage extends React.Component {
 
     renderResult = (
       <div
-        style={{ border: "1px solid gray" }}
         key={msg.id}
         data-key={msg.id}
         className={`flex-none relative w-100  ${
