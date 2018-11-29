@@ -185,6 +185,7 @@ class ChatroomContent extends Component {
     //debugger;
     let { chats, replies } = result;
     chats = (chats || []).reverse();
+    replies = replies || {};
     replies = Object.keys(replies).reduce((acc, chatId) => {
       const value = replies[chatId];
       acc[chatId] = value ? value.reverse() : value;
