@@ -6,8 +6,13 @@ import join from "@app/join";
 
 import styles from "./index.scss";
 
-const Timestamp = ({ time }) => (
-  <div className={join(styles.timestamp, "ttu f6 dib")}>{renderHour(time)}</div>
+const Timestamp = ({ time, ...props }) => (
+  <div
+    {...props}
+    className={join(styles.timestamp, "ttu f6 dib", props.className)}
+  >
+    {renderHour(time)}
+  </div>
 );
 
 Timestamp.propTypes = {

@@ -15,8 +15,9 @@ import MessageAuthor from "./MessageAuthor";
 import CommentIcon from "./commentIcon";
 import BookmarkIcon from "./bookmarkIcon";
 import ReportIcon from "./reportIcon";
+import Timestamp from "./Timestamp";
 
-const NESTING_DEPTH = 20;
+const NESTING_DEPTH = 25;
 
 const SHOW_MORE_REPLIES_PAGE_SIZE = 3;
 
@@ -34,14 +35,23 @@ const canDeleteMessage = () => {
   return false;
 };
 
-const Avatar = () => {
-  return (
-    <div
-      style={{ background: "gray", width: 40, height: 40 }}
-      className="br3 dib flex-none mr3"
-    />
-  );
-};
+class Avatar extends React.Component {
+  shouldComponentUpdate() {
+    return false;
+  }
+  render() {
+    const { msg } = this.props;
+    return (
+      <div className="flex-none mr3 dib">
+        <div
+          style={{ background: "gray", width: 40, height: 40 }}
+          className="br3"
+        />
+        <Timestamp time={msg.created_at} style={{ fontSize: 10 }} />
+      </div>
+    );
+  }
+}
 
 const ActionItem = ({ icon: Icon, ...props }) => {
   return (
@@ -109,7 +119,7 @@ class ChatMessage extends React.Component {
           ]
         : [];
 
-    icons.push(<Avatar alias={alias} />);
+    icons.push(<Avatar alias={alias} msg={msg} />);
 
     const { message: messageText } = msg;
     const alias = msg.alias;
@@ -227,14 +237,14 @@ class ChatMessage extends React.Component {
             this.onReplyToClick(msg, nestingLevel);
           }}
         >
-          <Label>comment</Label>
+          {!nestingLevel ? <Label>comment</Label> : null}
         </ActionItem>
         <ActionItem icon={BookmarkIcon}>
-          <Label>bookmark</Label>
+          {!nestingLevel ? <Label>bookmark</Label> : null}
         </ActionItem>
 
         <ActionItem icon={ReportIcon}>
-          <Label>report</Label>
+          {!nestingLevel ? <Label>report</Label> : null}
         </ActionItem>
       </div>
     );
