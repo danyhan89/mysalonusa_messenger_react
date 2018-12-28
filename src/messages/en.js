@@ -21,6 +21,7 @@ export default {
   close: "Close",
   prev: "Previous",
   next: "Next",
+  home: "Home",
   dashboard: "Dashboard",
   noMessages: "No messages just yet",
   chooseState: "Choose your state",
