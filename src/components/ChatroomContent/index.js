@@ -17,6 +17,7 @@ import { incrementJobView, fetchChats } from "src/api";
 
 import { isValid as isValidState } from "src/states";
 
+import ChatInput from "./ChatInput";
 import JobMessage from "./JobMessage";
 import ChatMessage from "./ChatMessage";
 import PostJobForm from "../PostAJob/PostJobForm";
@@ -54,7 +55,6 @@ class ChatroomContent extends Component {
   constructor(props) {
     super(props);
 
-    this.onTextChange = this.onTextChange.bind(this);
     this.onReplyTextChange = this.onReplyTextChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onReplySubmit = this.onReplySubmit.bind(this);
@@ -219,12 +219,12 @@ class ChatroomContent extends Component {
     this.closeSocket();
   }
 
-  onSubmit(event) {
+  onSubmit(event, text, clearText) {
     if (event) {
       event.preventDefault();
     }
 
-    if (!this.state.text) {
+    if (!text) {
       return;
     }
 
@@ -234,8 +234,8 @@ class ChatroomContent extends Component {
       });
       return;
     }
-    this.send(this.state.text);
-    this.clearText();
+    this.send(text);
+    clearText();
   }
 
   onReplySubmit({ msg, text }) {
@@ -311,12 +311,6 @@ class ChatroomContent extends Component {
       this.messagesNode.scrollHeight - this.messagesNode.offsetHeight
     );
   }
-
-  onTextChange(text) {
-    this.setState({
-      text
-    });
-  }
   onReplyTextChange(msg, replyText) {
     this.setState({
       replyTexts: {
@@ -354,11 +348,6 @@ class ChatroomContent extends Component {
         parent_id
       })
     );
-  }
-  clearText() {
-    this.setState({
-      text: ""
-    });
   }
 
   clearReplyText(msg) {
@@ -551,6 +540,7 @@ class ChatroomContent extends Component {
   }
 
   render() {
+console.log('WHOLE THING IS RENDERING: ', this.state)
     const empty = !this.state.messages.length && !this.state.loading;
     const style = {};
     if (empty) {
@@ -591,19 +581,12 @@ class ChatroomContent extends Component {
         {this.renderJobEditOverlay()}
         {this.renderJobViewOverlay()}
         {this.props.showForm ? (
-          <form onSubmit={this.onSubmit} className={`${styles.form} pb2 ph2`}>
-            <Input
-              autoFocus={false}
-              ref={this.inputRef}
-              placeholder="Your message"
-              onChange={this.onTextChange}
-              value={this.state.text}
-              className={`${styles.input} mt2 mr2`}
-            />
-            <Button disabled={!this.state.text} className={`br2 ph2 mt2`}>
-              <Label>Send</Label>
-            </Button>
-          </form>
+          <ChatInput
+            onSubmit={this.onSubmit}
+            stylesForm={styles.form}
+            stylesInput={styles.input}
+            inputRef={this.inputRef}
+          />
         ) : null}
       </div>
     );
@@ -705,6 +688,7 @@ class ChatroomContent extends Component {
     const itsMe = this.itsMe(msg);
 
     const jobMessage = this.isJob(msg) ? JSON.parse(msg.message) : null;
+
     return jobMessage ? (
       <JobMessage
         key={jobMessage.id || index}
