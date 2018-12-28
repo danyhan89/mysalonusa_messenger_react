@@ -10,7 +10,7 @@ class TabPanel extends React.Component {
     super(props);
 
     this.state = {
-      activeIndex: props.defaultActiveIndex || 0
+      activeIndex: props.defaultActiveIndex || 2
     };
   }
 

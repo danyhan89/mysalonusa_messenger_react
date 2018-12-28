@@ -27,10 +27,9 @@ import heartIcon from "./heartIcon";
 import styles from "./index.scss";
 
 const TABS = {
-  dashboard: 2,
+  chat: 2,
   jobs: 3,
-  chat: 4,
-  businessOnSales: 5,
+  businessOnSales: 4,
   postJob: 6,
   favorites: 7
 };
@@ -101,7 +100,7 @@ class CenterContainer extends React.Component {
     const key = `${community}-${state}-${lang}`;
 
     const children = <ChatroomContent {...props} key={key} />;
-    const activeIndex = TABS[match.params.tab] || 2;
+    const activeIndex = TABS[match.params.tab] || TABS.chat;
 
     return (
       <TabPanel
@@ -131,7 +130,7 @@ class CenterContainer extends React.Component {
       >
         <div
           tabIndex={-1}
-          tabTitle={<img src={logoUrl} style={{ minWidth: 200 }} />}
+          tabTitle={<img src={logoUrl} style={{ maxWidth: 200 }} />}
         />
         <div
           tabTitle={
@@ -161,21 +160,19 @@ class CenterContainer extends React.Component {
             </div>
           }
         />
-        <Dashboard {...props} tabTitle={<Label>dashboard</Label>} />
+        {/* this is chatroom */}
+        <div tabTitle={<Label>home</Label>}>{children}</div>
         <JobList
           state={state}
           community={community}
           tabTitle={<Label>jobs</Label>}
         />
-
-        <div tabTitle={<Label>chatroom</Label>}>{children}</div>
         <BusinessOnSales
           state={state}
           community={community}
           tabTitle={<Label>businessOnSales</Label>}
         />
         <div />
-        <FavoritesPage state={state} community={community} />
       </TabPanel>
     );
   }
