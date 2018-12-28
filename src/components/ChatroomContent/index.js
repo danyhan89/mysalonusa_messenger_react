@@ -184,7 +184,7 @@ class ChatroomContent extends Component {
   parseResult(result) {
     //debugger;
     let { chats, replies } = result;
-    chats = (chats || []).reverse();
+    // chats = (chats || []).reverse();
     replies = replies || {};
     replies = Object.keys(replies).reduce((acc, chatId) => {
       const value = replies[chatId];
@@ -210,7 +210,7 @@ class ChatroomContent extends Component {
           messages: chats,
           replies
         },
-        this.scrollToBottom
+        this.scrollToTop
       );
     });
   }
@@ -258,7 +258,7 @@ class ChatroomContent extends Component {
   }
 
   pushMessage(message) {
-    const atBottom = this.isScrolledBottom();
+    // const atBottom = this.isScrolledBottom();
     if (message.parent_id) {
       const replies = { ...this.state.replies };
       const parentReplies = [...(replies[message.parent_id] || []), message];
@@ -270,11 +270,11 @@ class ChatroomContent extends Component {
     }
     this.setState(
       {
-        messages: [...this.state.messages, message]
+        messages: [message, ...this.state.messages]
       },
       () => {
-        if (this.itsMe(message) || atBottom) {
-          this.scrollToBottom();
+        if (this.itsMe(message)) {
+          this.scrollToTop();;
         }
       }
     );
@@ -301,7 +301,9 @@ class ChatroomContent extends Component {
       })
     });
   }
-
+  scrollToTop() {
+    this.messagesNode.scrollTop = 0;
+  }
   scrollToBottom() {
     this.messagesNode.scrollTop += this.messagesNode.scrollHeight;
   }
@@ -540,7 +542,6 @@ class ChatroomContent extends Component {
   }
 
   render() {
-console.log('WHOLE THING IS RENDERING: ', this.state)
     const empty = !this.state.messages.length && !this.state.loading;
     const style = {};
     if (empty) {
