@@ -10,7 +10,6 @@ import getDayFormat from "../getDayFormat";
 import Separator from "../Separator";
 import getNickname from "../getNickname";
 
-import styles from "./index.scss";
 import MessageAuthor from "./MessageAuthor";
 import CommentIcon from "./commentIcon";
 import BookmarkIcon from "./bookmarkIcon";
@@ -20,6 +19,8 @@ import Timestamp from "./Timestamp";
 const NESTING_DEPTH = 25;
 
 const SHOW_MORE_REPLIES_PAGE_SIZE = 3;
+
+let styles;
 
 const itsMe = message => {
   return message.nickname === getNickname();
@@ -76,7 +77,9 @@ class ChatMessage extends React.Component {
   }
 
   render() {
-    const { nestingLevel, last, parent, msg, index } = this.props;
+    const { nestingLevel, last, parent, msg, index, chatMessageStyles } = this.props;
+    styles = chatMessageStyles;
+
     return this.renderMessage({ nestingLevel, last, parent }, msg, index);
   }
 

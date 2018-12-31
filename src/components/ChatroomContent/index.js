@@ -708,6 +708,7 @@ class ChatroomContent extends Component {
         msg={msg}
         index={index}
         onReplySubmit={this.onReplySubmit}
+        chatMessageStyles={styles}
       />
     );
   }
