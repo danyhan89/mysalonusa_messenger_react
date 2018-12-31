@@ -274,7 +274,7 @@ class ChatroomContent extends Component {
       },
       () => {
         if (this.itsMe(message)) {
-          this.scrollToTop();;
+          this.scrollToTop();
         }
       }
     );
@@ -550,6 +550,14 @@ class ChatroomContent extends Component {
     return (
       <div className={` ${styles.content} relative`}>
         {this.renderLoader()}
+        {this.props.showForm ? (
+          <ChatInput
+            onSubmit={this.onSubmit}
+            stylesForm={styles.form}
+            stylesInput={styles.input}
+            inputRef={this.inputRef}
+          />
+        ) : null}
         <div
           className={`${styles.messages} ph2 pt2`}
           style={style}
@@ -581,14 +589,6 @@ class ChatroomContent extends Component {
         {this.renderApplyOverlay()}
         {this.renderJobEditOverlay()}
         {this.renderJobViewOverlay()}
-        {this.props.showForm ? (
-          <ChatInput
-            onSubmit={this.onSubmit}
-            stylesForm={styles.form}
-            stylesInput={styles.input}
-            inputRef={this.inputRef}
-          />
-        ) : null}
       </div>
     );
   }
