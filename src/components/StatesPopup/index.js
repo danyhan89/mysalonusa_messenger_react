@@ -15,10 +15,10 @@ const IMAGES = {
   il: "https://s3.us-east-2.amazonaws.com/mysalonusa/uploads/cities/chicago.jpg"
 };
 
-const StatesPopup = ({ onChange }) => {
+const StatesPopup = ({ onChange, msg }) => {
   return (
     <PopupScreen
-      title="Please choose your state"
+      title={msg.chooseState}
       onChange={onChange}
       step={1}
       items={STATES.map((state, index) => {

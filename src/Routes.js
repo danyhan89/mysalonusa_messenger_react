@@ -100,6 +100,7 @@ export default () => (
                 onChange={state => {
                   history.push(`/${lang}/${state}`);
                 }}
+                msg={msg}
               />
             );
           } else {

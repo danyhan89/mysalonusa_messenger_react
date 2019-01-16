@@ -7,5 +7,6 @@ export default {
   comment: "Comment",
   bookmark: "Bookmark",
   report: "Report",
-  chooseLanguage: "Choose language"
+  chooseLanguage: "Choose language",
+  chooseState: "주를 정해주세요"
 };
