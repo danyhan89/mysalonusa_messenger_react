@@ -25,7 +25,7 @@ class App extends React.Component {
   render() {
     const RoutesCmp = this.state.Routes;
     return (
-      <div className={`${styles.app}`}>
+      <div className={`athelas ${styles.app}`}>
         {RoutesCmp ? <RoutesCmp /> : null}
         <LandingPage start={!!RoutesCmp} />
       </div>

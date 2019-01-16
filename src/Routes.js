@@ -26,11 +26,19 @@ class Layout extends React.Component {
   }
   render() {
     return (
+      // flex-column { flex-direction: column }
       <div className="flex flex-column" style={{ height: "100%" }}>
         <div
           className="relative flex-auto flex-ns flex-flow"
           style={{ height: "100%" }}
         >
+          {/* 
+            flex-ns (not small screen only){display: flex}
+            flex-auto { flex: 1 1 auto }
+            flex-flow { shorthand for both flex-direction & flex-wrap properties }
+            default for flex-direction: row
+            default for flex-wrap: nowrap
+           */}
           <Sidebar {...this.props} ref={this.sidebarRef} />
           <CenterContainer
             {...this.props}
@@ -53,7 +61,14 @@ export default () => (
       <Route
         path="/:lang?/:state?/:community?/:tab?"
         render={({ match, history }) => {
+          // render is used to send in props to component
+          // when component is rendered by React router, that component is passed
+          // 3 different props - location, match, history
+          // history pushes new entry onto history stack - aka redirecting user to another route
+          // history push == <Redirect />
+          // history push re-renders <Router> component
           let { lang, state, community } = match.params;
+
           if (lang) {
             lang = lang.toLowerCase();
           }

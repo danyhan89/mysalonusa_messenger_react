@@ -21,7 +21,14 @@ class LandingPage extends React.Component {
   componentDidUpdate(prevProps) {
     if (!prevProps.start && this.props.start) {
       console.timeEnd("LOADED");
+
       requestAnimationFrame(() => {
+        // http://www.javascriptkit.com/javatutors/requestanimationframe.shtml
+        // calling requestAnimationFrame communicates to browser that you wish to perform an animation
+        // requestAnimationFrame will call this cb function ONLY when screen is ready to accept next
+        //     screen repaint so that there is no animation bug
+        // requestAnimationFrame is good for executing animation or paint only
+        //     when user's browser and hardware is ready to execute animation
         this.setState({
           animate: true
         });
